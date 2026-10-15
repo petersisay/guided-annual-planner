@@ -1,0 +1,32 @@
+{
+  "name": "guided-annual-planner",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Guided Annual Planner and Personal Growth Application (MERN Stack)",
+  "workspaces": [
+    "shared",
+    "server",
+    "client"
+  ],
+  "scripts": {
+    "build:shared": "npm run build --workspace=shared",
+    "build:server": "npm run build --workspace=server",
+    "build:client": "npm run build --workspace=client",
+    "build": "npm run build:shared && npm run build:server && npm run build:client",
+    "dev:server": "npm run dev --workspace=server",
+    "dev:client": "npm run dev --workspace=client",
+    "test:server": "npm run test --workspace=server",
+    "test:client": "npm run test --workspace=client",
+    "test": "npm run test --workspace=shared && npm run test --workspace=server && npm run test --workspace=client",
+    "start": "npm run start --workspace=server"
+  },
+  "keywords": [
+    "planner",
+    "guided-planner",
+    "mern",
+    "typescript",
+    "framer-motion"
+  ],
+  "author": "",
+  "license": "ISC"
+}
