@@ -6,11 +6,11 @@
   "rewrites": [
     {
       "source": "/api/:path*",
-      "destination": "https://guided-annual-planner-api.onrender.com/api/:path*"
+      "destination": "https://guided-annual-planner.onrender.com/api/:path*"
     },
     {
       "source": "/health",
-      "destination": "https://guided-annual-planner-api.onrender.com/health"
+      "destination": "https://guided-annual-planner.onrender.com/health"
     },
     {
       "source": "/(.*)",
