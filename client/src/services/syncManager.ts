@@ -9,6 +9,7 @@ import {
   enqueueMutation,
   getPendingMutations,
   getPendingMutationsCount,
+  getConflictedMutations,
   updateMutation,
   deleteMutation,
   saveCachedRecord,
@@ -339,6 +340,41 @@ class SyncManager {
       });
       await this.syncPending();
       return;
+    }
+  }
+
+  /**
+   * Get all active conflicted mutations for the current user.
+   */
+  public async getConflictedMutations(): Promise<OfflineMutation[]> {
+    if (!this.activeUserId) return [];
+    return await getConflictedMutations(this.activeUserId);
+  }
+
+  /**
+   * Resolve all active conflicts in batch (e.g. keep all offline changes or drop all offline changes).
+   */
+  public async resolveAllConflicts(strategy: ConflictResolutionStrategy): Promise<void> {
+    if (!this.activeUserId) return;
+    const conflicted = await getConflictedMutations(this.activeUserId);
+    for (const m of conflicted) {
+      if (strategy === 'keep_server') {
+        await deleteMutation(m.id);
+      } else if (strategy === 'keep_local') {
+        await updateMutation(m.id, {
+          status: 'pending',
+          expectedUpdatedAt: undefined, // unconditional overwrite
+          serverConflict: undefined,
+        });
+      }
+    }
+    const remaining = await this.updateQueueCount();
+    if (strategy === 'keep_local' && navigator.onLine) {
+      await this.syncPending();
+    } else if (strategy === 'keep_server') {
+      if (remaining === 0) {
+        this.setSyncStatus('synced');
+      }
     }
   }
 

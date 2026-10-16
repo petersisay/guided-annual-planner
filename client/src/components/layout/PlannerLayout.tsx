@@ -21,6 +21,7 @@ import { SpiralBinding } from '../journal/SpiralBinding';
 import { getISOWeekNumber, SyncStatus } from '@planner/shared';
 import { syncManager } from '../../services/syncManager';
 import { HowItWorksModal } from '../common/HowItWorksModal';
+import { GlobalConflictModal } from '../common/GlobalConflictModal';
 
 interface PlannerLayoutProps {
   children: React.ReactNode;
@@ -36,6 +37,7 @@ export const PlannerLayout: React.FC<PlannerLayoutProps> = ({
   const [syncStatus, setSyncStatus] = useState<SyncStatus>('synced');
   const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
   const [showHowItWorks, setShowHowItWorks] = useState(false);
+  const [showConflictModal, setShowConflictModal] = useState(false);
   const location = useLocation();
 
   useEffect(() => {
@@ -129,6 +131,17 @@ export const PlannerLayout: React.FC<PlannerLayoutProps> = ({
           </span>
         </div>
         <div className="flex items-center gap-2">
+          {syncStatus === 'conflict' && (
+            <button
+              type="button"
+              onClick={() => setShowConflictModal(true)}
+              className="px-2 py-1 text-xs font-sans bg-terracotta/15 text-terracotta rounded-lg border border-terracotta/30 flex items-center gap-1 cursor-pointer font-semibold animate-pulse"
+              title="Conflict detected. Click to resolve."
+            >
+              <AlertTriangle className="w-3.5 h-3.5 text-terracotta" />
+              <span>Conflict</span>
+            </button>
+          )}
           <button
             type="button"
             onClick={() => setShowHowItWorks(true)}
@@ -240,35 +253,48 @@ export const PlannerLayout: React.FC<PlannerLayoutProps> = ({
         <div className="p-4 border-t border-border-subtle bg-paper-alt space-y-2">
           {/* Sync Health Indicator */}
           {user && (syncStatus !== 'synced' || pendingSyncCount > 0) && (
-            <div
-              className={`flex items-center justify-between px-2.5 py-1 rounded-lg text-[11px] font-sans border ${
-                syncStatus === 'conflict'
-                  ? 'bg-terracotta/10 border-terracotta/30 text-terracotta'
-                  : syncStatus === 'offline' || !navigator.onLine
-                  ? 'bg-gold-light/20 border-gold/40 text-amber-900'
-                  : 'bg-sage-surface/60 border-sage/30 text-sage-dark'
-              }`}
-            >
-              <div className="flex items-center gap-1.5 truncate">
-                {syncStatus === 'syncing' ? (
-                  <RefreshCw className="w-3 h-3 animate-spin shrink-0" />
-                ) : syncStatus === 'conflict' ? (
-                  <AlertTriangle className="w-3 h-3 shrink-0" />
-                ) : (
-                  <CloudOff className="w-3 h-3 shrink-0" />
-                )}
-                <span className="truncate">
-                  {syncStatus === 'syncing'
-                    ? 'Syncing changes…'
-                    : syncStatus === 'conflict'
-                    ? 'Conflict detected'
-                    : 'Offline mode'}
-                </span>
-              </div>
-              {pendingSyncCount > 0 && (
-                <span className="font-semibold ml-1 shrink-0 px-1.5 py-0.2 rounded-full bg-paper text-[10px]">
-                  {pendingSyncCount}
-                </span>
+            <div>
+              {syncStatus === 'conflict' ? (
+                <button
+                  type="button"
+                  onClick={() => setShowConflictModal(true)}
+                  title="Click to review and save offline notes"
+                  className="w-full flex items-center justify-between px-2.5 py-1.5 rounded-lg text-[11px] font-sans border bg-terracotta/15 hover:bg-terracotta/25 border-terracotta/40 text-terracotta cursor-pointer transition-colors shadow-2xs group text-left"
+                >
+                  <div className="flex items-center gap-1.5 truncate">
+                    <AlertTriangle className="w-3.5 h-3.5 shrink-0 text-terracotta group-hover:scale-110 transition-transform" />
+                    <span className="font-semibold truncate">Conflict detected</span>
+                  </div>
+                  <span className="text-[10px] font-sans bg-paper px-1.5 py-0.5 rounded border border-terracotta/30 text-terracotta font-semibold hover:bg-paper-alt shrink-0 ml-1">
+                    Review & Fix
+                  </span>
+                </button>
+              ) : (
+                <div
+                  className={`flex items-center justify-between px-2.5 py-1 rounded-lg text-[11px] font-sans border ${
+                    syncStatus === 'offline' || !navigator.onLine
+                      ? 'bg-gold-light/20 border-gold/40 text-amber-900'
+                      : 'bg-sage-surface/60 border-sage/30 text-sage-dark'
+                  }`}
+                >
+                  <div className="flex items-center gap-1.5 truncate">
+                    {syncStatus === 'syncing' ? (
+                      <RefreshCw className="w-3 h-3 animate-spin shrink-0" />
+                    ) : (
+                      <CloudOff className="w-3 h-3 shrink-0" />
+                    )}
+                    <span className="truncate">
+                      {syncStatus === 'syncing'
+                        ? 'Syncing changes…'
+                        : 'Offline mode'}
+                    </span>
+                  </div>
+                  {pendingSyncCount > 0 && (
+                    <span className="font-semibold ml-1 shrink-0 px-1.5 py-0.2 rounded-full bg-paper text-[10px]">
+                      {pendingSyncCount}
+                    </span>
+                  )}
+                </div>
               )}
             </div>
           )}
@@ -386,6 +412,13 @@ export const PlannerLayout: React.FC<PlannerLayoutProps> = ({
       <HowItWorksModal
         isOpen={showHowItWorks}
         onClose={() => setShowHowItWorks(false)}
+      />
+
+      {/* Global Sync Conflict Resolution Modal */}
+      <GlobalConflictModal
+        isOpen={showConflictModal}
+        onClose={() => setShowConflictModal(false)}
+        userId={user?.id}
       />
     </div>
   );

@@ -235,6 +235,59 @@ describe('Offline Database (IndexedDB Service)', () => {
       expect(userAPending).toHaveLength(0);
       expect(userBPending).toHaveLength(1);
     });
+
+    it('coalesces multiple offline PUT updates to the same entity into a single merged mutation', async () => {
+      const mut1 = await offlineDb.enqueueMutation({
+        userId: 'user-123',
+        entityType: 'monthly',
+        entityKey: '2026-10',
+        endpoint: '/api/v1/planner/monthly/2026/10',
+        method: 'PUT',
+        payload: { mustDos: [{ text: 'Task 1', checked: false }] },
+        expectedUpdatedAt: '2026-10-15T12:00:00.000Z',
+      });
+
+      const mut2 = await offlineDb.enqueueMutation({
+        userId: 'user-123',
+        entityType: 'monthly',
+        entityKey: '2026-10',
+        endpoint: '/api/v1/planner/monthly/2026/10',
+        method: 'PUT',
+        payload: { newHabits: ['Read 10 mins'] },
+        expectedUpdatedAt: '2026-10-15T12:00:00.000Z',
+      });
+
+      const pending = await offlineDb.getPendingMutations('user-123');
+      expect(pending).toHaveLength(1);
+      expect(pending[0].id).toBe(mut1.id);
+      expect(pending[0].payload.mustDos).toBeDefined();
+      expect(pending[0].payload.newHabits).toBeDefined();
+      expect(pending[0].expectedUpdatedAt).toBe('2026-10-15T12:00:00.000Z');
+    });
+
+    it('retrieves conflicted mutations for a user correctly', async () => {
+      const mut = await offlineDb.enqueueMutation({
+        userId: 'user-123',
+        entityType: 'monthly',
+        entityKey: '2026-11',
+        endpoint: '/api/v1/planner/monthly/2026/11',
+        method: 'PUT',
+        payload: { mustDos: [] },
+      });
+
+      await offlineDb.updateMutation(mut.id, {
+        status: 'conflict',
+        serverConflict: {
+          code: 'CONCURRENT_MODIFICATION_CONFLICT',
+          message: 'Conflict',
+          conflictReason: 'MODIFIED_ON_SERVER',
+        },
+      });
+
+      const conflicted = await offlineDb.getConflictedMutations('user-123');
+      expect(conflicted).toHaveLength(1);
+      expect(conflicted[0].id).toBe(mut.id);
+    });
   });
 
   describe('Cached Records Store & Offline Fallback', () => {

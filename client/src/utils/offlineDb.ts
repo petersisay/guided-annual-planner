@@ -73,7 +73,7 @@ export function getOfflineDb(): Promise<IDBDatabase> {
 }
 
 /**
- * Enqueue a new mutation to be synced when online.
+ * Enqueue a new mutation to be synced when online, or coalesce into an existing pending mutation.
  */
 export async function enqueueMutation(
   mutationData: Omit<OfflineMutation, 'id' | 'createdAt' | 'retryCount' | 'status'>
@@ -96,10 +96,45 @@ export async function enqueueMutation(
   return new Promise((resolve, reject) => {
     const tx = db.transaction('mutationQueue', 'readwrite');
     const store = tx.objectStore('mutationQueue');
-    const req = store.add(mutation);
+    const index = store.index('userId');
+    const keyRange = typeof IDBKeyRange !== 'undefined' ? IDBKeyRange.only(mutationData.userId) : (mutationData.userId as any);
+    const getReq = index.getAll(keyRange);
 
-    req.onsuccess = () => resolve(mutation);
-    req.onerror = () => reject(req.error);
+    getReq.onsuccess = () => {
+      const allUserMutations: OfflineMutation[] = getReq.result || [];
+      const existing = allUserMutations.find(
+        (m) =>
+          m.entityType === mutationData.entityType &&
+          m.entityKey === mutationData.entityKey &&
+          (m.status === 'pending' || m.status === 'failed' || m.status === 'conflict')
+      );
+
+      if (existing && mutationData.method === 'PUT') {
+        const mergedPayload = {
+          ...(existing.payload || {}),
+          ...(mutationData.payload || {}),
+        };
+        const updated: OfflineMutation = {
+          ...existing,
+          payload: mergedPayload,
+          // Retain earliest expectedUpdatedAt to avoid artificial self-conflicts
+          expectedUpdatedAt: existing.expectedUpdatedAt || mutationData.expectedUpdatedAt,
+          status: 'pending',
+          serverConflict: undefined,
+          lastError: undefined,
+        };
+
+        const putReq = store.put(updated);
+        putReq.onsuccess = () => resolve(updated);
+        putReq.onerror = () => reject(putReq.error);
+      } else {
+        const req = store.add(mutation);
+        req.onsuccess = () => resolve(mutation);
+        req.onerror = () => reject(req.error);
+      }
+    };
+
+    getReq.onerror = () => reject(getReq.error);
   });
 }
 
@@ -129,12 +164,53 @@ export async function getPendingMutations(userId: string): Promise<OfflineMutati
 }
 
 /**
- * Count pending mutations strictly scoped to the user.
+ * Retrieve mutations in conflict state strictly scoped to the specified user.
+ */
+export async function getConflictedMutations(userId: string): Promise<OfflineMutation[]> {
+  if (!isIndexedDbSupported()) return [];
+  const db = await getOfflineDb();
+
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction('mutationQueue', 'readonly');
+    const store = tx.objectStore('mutationQueue');
+    const index = store.index('userId');
+    const keyRange = typeof IDBKeyRange !== 'undefined' ? IDBKeyRange.only(userId) : (userId as any);
+    const req = index.getAll(keyRange);
+
+    req.onsuccess = () => {
+      const allUserMutations: OfflineMutation[] = req.result || [];
+      const conflicted = allUserMutations
+        .filter((m) => m.status === 'conflict')
+        .sort((a, b) => Number(a.createdAt) - Number(b.createdAt));
+      resolve(conflicted);
+    };
+    req.onerror = () => reject(req.error);
+  });
+}
+
+/**
+ * Count pending mutations strictly scoped to the user (including conflicted).
  */
 export async function getPendingMutationsCount(userId: string): Promise<number> {
   if (!isIndexedDbSupported()) return 0;
-  const pending = await getPendingMutations(userId);
-  return pending.length;
+  const db = await getOfflineDb();
+
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction('mutationQueue', 'readonly');
+    const store = tx.objectStore('mutationQueue');
+    const index = store.index('userId');
+    const keyRange = typeof IDBKeyRange !== 'undefined' ? IDBKeyRange.only(userId) : (userId as any);
+    const req = index.getAll(keyRange);
+
+    req.onsuccess = () => {
+      const allUserMutations: OfflineMutation[] = req.result || [];
+      const pending = allUserMutations.filter(
+        (m) => m.status === 'pending' || m.status === 'failed' || m.status === 'processing' || m.status === 'conflict'
+      );
+      resolve(pending.length);
+    };
+    req.onerror = () => reject(req.error);
+  });
 }
 
 /**
