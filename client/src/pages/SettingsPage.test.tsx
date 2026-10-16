@@ -133,11 +133,11 @@ describe('SettingsPage Component', () => {
       </MemoryRouter>
     );
 
-    expect(screen.getByText('Account & Preferences')).toBeInTheDocument();
+    expect(screen.getAllByText('Settings & Backup').length).toBeGreaterThanOrEqual(1);
     expect(screen.getAllByText('Sara Tesfaye').length).toBeGreaterThanOrEqual(1);
     expect(screen.getAllByText('sara@example.com').length).toBeGreaterThanOrEqual(1);
-    expect(screen.getByText('Verified Identity')).toBeInTheDocument();
-    expect(screen.getByText('Monday (ISO 8601)')).toBeInTheDocument();
+    expect(screen.getByText('Your Account')).toBeInTheDocument();
+    expect(screen.getByText('Monday')).toBeInTheDocument();
   });
 
   it('allows updating week start preference and saves to server', async () => {
@@ -171,7 +171,7 @@ describe('SettingsPage Component', () => {
       </MemoryRouter>
     );
 
-    const revisitBtn = screen.getByText('Revisit Guided Onboarding Flow');
+    const revisitBtn = screen.getByText('Open Guided Tour & Tips');
     fireEvent.click(revisitBtn);
 
     expect(mockNavigate).toHaveBeenCalledWith('/onboarding');
@@ -186,7 +186,7 @@ describe('SettingsPage Component', () => {
       </MemoryRouter>
     );
 
-    const exportBtn = screen.getByText('Export Local Mirror Only');
+    const exportBtn = screen.getByText('Save Offline Copy');
     fireEvent.click(exportBtn);
 
     expect(exportSpy).toHaveBeenCalledWith(
@@ -205,7 +205,7 @@ describe('SettingsPage Component', () => {
       </MemoryRouter>
     );
 
-    const serverExportBtn = screen.getByText('Download Complete Server Backup (JSON)');
+    const serverExportBtn = screen.getByText('Download Backup File');
     fireEvent.click(serverExportBtn);
 
     await waitFor(() => {
@@ -244,12 +244,12 @@ describe('SettingsPage Component', () => {
 
     await waitFor(() => {
       expect(screen.getByText(/Backup Verified:/i)).toBeInTheDocument();
-      expect(screen.getByText('Daily Plans')).toBeInTheDocument();
+      expect(screen.getByText('Daily Notes')).toBeInTheDocument();
       expect(screen.getByText('365')).toBeInTheDocument();
     });
 
     // Execute Restore
-    const restoreBtn = screen.getByText('Confirm and Restore');
+    const restoreBtn = screen.getByText('Restore My Planner Now');
     fireEvent.click(restoreBtn);
 
     await waitFor(() => {

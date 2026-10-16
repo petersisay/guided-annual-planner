@@ -108,7 +108,7 @@ describe('AnnualViewPage Component', () => {
     });
 
     // Switch to Habit Heatmap tab
-    const habitsTabBtn = screen.getByRole('button', { name: /Habit Consistency Heatmap/i });
+    const habitsTabBtn = screen.getByRole('button', { name: /Habits Tracker/i });
     fireEvent.click(habitsTabBtn);
 
     await waitFor(() => {

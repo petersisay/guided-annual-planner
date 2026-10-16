@@ -20,6 +20,7 @@ import { useAuth } from '../../context/AuthContext';
 import { SpiralBinding } from '../journal/SpiralBinding';
 import { getISOWeekNumber, SyncStatus } from '@planner/shared';
 import { syncManager } from '../../services/syncManager';
+import { HowItWorksModal } from '../common/HowItWorksModal';
 
 interface PlannerLayoutProps {
   children: React.ReactNode;
@@ -34,6 +35,7 @@ export const PlannerLayout: React.FC<PlannerLayoutProps> = ({
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [syncStatus, setSyncStatus] = useState<SyncStatus>('synced');
   const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
+  const [showHowItWorks, setShowHowItWorks] = useState(false);
   const location = useLocation();
 
   useEffect(() => {
@@ -70,43 +72,43 @@ export const PlannerLayout: React.FC<PlannerLayoutProps> = ({
   const navLinks = [
     {
       to: '/annual',
-      label: 'Annual Horizon',
-      sub: 'Year-at-a-Glance (202_)',
+      label: 'Yearly Goals',
+      sub: 'Big picture & vision for the year',
       icon: Calendar,
       isActive: location.pathname.startsWith('/annual'),
     },
     {
       to: `/monthly/${currentYear}/${currentMonth}`,
       label: 'Monthly Planner',
-      sub: 'Dashboard & Grid',
+      sub: 'Calendar, milestones & habit review',
       icon: CalendarDays,
       isActive: location.pathname.startsWith('/monthly'),
     },
     {
       to: `/weekly/${currentYear}/${currentWeek}`,
       label: 'Weekly Planner',
-      sub: '2-Page Spread & Rule of 3',
+      sub: '7-day overview & top 3 priorities',
       icon: LayoutGrid,
       isActive: location.pathname.startsWith('/weekly'),
     },
     {
       to: '/daily',
-      label: 'Daily Planner',
-      sub: 'Rule of 3 & Journaling',
+      label: 'Daily Journal',
+      sub: "Today's top 3 tasks & reflections",
       icon: Sun,
       isActive: location.pathname.startsWith('/daily'),
     },
     {
       to: '/story',
-      label: 'Why I Created This?',
-      sub: 'Ethiopian Origin Story',
+      label: 'About This Planner',
+      sub: 'Why and how it was created',
       icon: BookOpen,
       isActive: location.pathname === '/story',
     },
     {
       to: '/settings',
-      label: 'Account & Settings',
-      sub: 'Preferences & Backup',
+      label: 'Settings & Backup',
+      sub: 'Display choices & save your data',
       icon: Settings,
       isActive: location.pathname === '/settings',
     },
@@ -126,14 +128,25 @@ export const PlannerLayout: React.FC<PlannerLayoutProps> = ({
             Guided Annual Planner
           </span>
         </div>
-        <button
-          type="button"
-          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          className="p-1.5 text-ink-muted hover:text-ink rounded-lg cursor-pointer"
-          aria-label="Toggle navigation menu"
-        >
-          {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-        </button>
+        <div className="flex items-center gap-2">
+          <button
+            type="button"
+            onClick={() => setShowHowItWorks(true)}
+            className="px-2.5 py-1 text-xs font-serif bg-sage-surface text-forest rounded-lg border border-sage/30 flex items-center gap-1 cursor-pointer"
+            title="How This Planner Works"
+          >
+            <Sparkles className="w-3 h-3 text-sage" />
+            <span>Guide</span>
+          </button>
+          <button
+            type="button"
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            className="p-1.5 text-ink-muted hover:text-ink rounded-lg cursor-pointer"
+            aria-label="Toggle navigation menu"
+          >
+            {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+          </button>
+        </div>
       </div>
 
       {/* Sidebar Navigation */}
@@ -196,8 +209,23 @@ export const PlannerLayout: React.FC<PlannerLayoutProps> = ({
             })}
           </nav>
 
+          {/* Quick Guide Trigger Button */}
+          <button
+            type="button"
+            onClick={() => setShowHowItWorks(true)}
+            className="w-full mt-4 flex items-center justify-between px-3 py-2.5 bg-sage-surface/80 hover:bg-sage-surface border border-sage/30 rounded-xl text-xs font-serif text-forest transition-all cursor-pointer shadow-2xs group"
+          >
+            <span className="flex items-center gap-2">
+              <Sparkles className="w-4 h-4 text-sage group-hover:rotate-12 transition-transform" />
+              <span className="font-semibold">How This Planner Works</span>
+            </span>
+            <span className="text-[10px] font-sans bg-paper px-1.5 py-0.5 rounded border border-sage/20 text-ink-muted">
+              Guide
+            </span>
+          </button>
+
           {/* Daily Philosophy Quote */}
-          <div className="mt-8 p-3.5 bg-paper rounded-xl border border-border-subtle/80">
+          <div className="mt-6 p-3.5 bg-paper rounded-xl border border-border-subtle/80">
             <div className="flex items-center gap-1.5 text-sage text-[10px] uppercase tracking-wider font-sans font-semibold mb-1">
               <Sparkles className="w-3 h-3" />
               <span>Core Intention</span>
@@ -353,6 +381,12 @@ export const PlannerLayout: React.FC<PlannerLayoutProps> = ({
           </div>
         </div>
       )}
+
+      {/* How This Planner Works Modal Guide */}
+      <HowItWorksModal
+        isOpen={showHowItWorks}
+        onClose={() => setShowHowItWorks(false)}
+      />
     </div>
   );
 };

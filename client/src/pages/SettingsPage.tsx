@@ -285,11 +285,11 @@ export const SettingsPage: React.FC = () => {
           <div className="flex items-center gap-2.5">
             <Settings className="w-5 h-5 text-sage" />
             <h1 className="font-serif text-2xl sm:text-3xl font-semibold text-ink">
-              Account &amp; Preferences
+              Settings &amp; Backup
             </h1>
           </div>
           <p className="text-xs text-ink-muted font-serif mt-1">
-            Manage your personal planning rhythms, privacy, and journal settings.
+            Customize your calendar preferences, switch themes, and save a backup copy of your planner.
           </p>
         </div>
 
@@ -305,11 +305,11 @@ export const SettingsPage: React.FC = () => {
             <div className="flex items-center gap-2">
               <Shield className="w-4 h-4 text-sage" />
               <h2 className="font-serif text-lg font-medium text-ink">
-                Verified Identity
+                Your Account
               </h2>
             </div>
             <span className="text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-full bg-sage/10 text-sage font-serif font-medium">
-              Google Authenticated
+              Signed in with Google
             </span>
           </div>
 
@@ -354,7 +354,7 @@ export const SettingsPage: React.FC = () => {
           <div className="flex items-center gap-2 border-b border-border-subtle pb-3">
             <Calendar className="w-4 h-4 text-sage" />
             <h2 className="font-serif text-lg font-medium text-ink">
-              Rhythm &amp; Display Preferences
+              Calendar &amp; Appearance
             </h2>
           </div>
 
@@ -362,10 +362,10 @@ export const SettingsPage: React.FC = () => {
             {/* Week Start */}
             <div className="space-y-2">
               <label className="font-serif text-xs font-medium text-ink block">
-                First Day of the Week
+                Week Starts On
               </label>
               <p className="text-[11px] font-serif text-ink-muted">
-                Choose how weekly spreads and month mini-calendars are structured.
+                Choose whether your weekly plan and calendar start on Monday or Sunday.
               </p>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
                 <button
@@ -378,10 +378,10 @@ export const SettingsPage: React.FC = () => {
                   }`}
                 >
                   <span className="font-serif text-sm font-medium text-ink block">
-                    Monday (ISO 8601)
+                    Monday
                   </span>
                   <span className="text-[11px] font-serif text-ink-muted block">
-                    Default journal rhythm with weekends grouped together
+                    Standard workweek view (Saturday &amp; Sunday grouped together)
                   </span>
                 </button>
 
@@ -398,7 +398,7 @@ export const SettingsPage: React.FC = () => {
                     Sunday
                   </span>
                   <span className="text-[11px] font-serif text-ink-muted block">
-                    Traditional calendar format starting with Sunday
+                    Traditional calendar format starting on Sunday
                   </span>
                 </button>
               </div>
@@ -407,7 +407,7 @@ export const SettingsPage: React.FC = () => {
             {/* Paper Theme */}
             <div className="space-y-2 pt-2">
               <label className="font-serif text-xs font-medium text-ink block">
-                Paper Tone &amp; Palette
+                Page Look &amp; Color Theme
               </label>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
                 <button
@@ -423,7 +423,7 @@ export const SettingsPage: React.FC = () => {
                     Warm Linen
                   </span>
                   <span className="text-[11px] font-serif text-ink-muted block">
-                    Subtle warmth with soft sage accents (#FDFBF7)
+                    Soft, relaxing cream paper tone with gentle green accents
                   </span>
                 </button>
 
@@ -440,7 +440,7 @@ export const SettingsPage: React.FC = () => {
                     Classic Editorial
                   </span>
                   <span className="text-[11px] font-serif text-ink-muted block">
-                    Clean paper-white (#F7F5F0)
+                    Clean, crisp white paper style
                   </span>
                 </button>
               </div>
@@ -450,10 +450,10 @@ export const SettingsPage: React.FC = () => {
             <div className="pt-2 flex items-center justify-between p-3.5 rounded-xl bg-paper border border-border-subtle">
               <div>
                 <span className="font-serif text-xs font-medium text-ink block">
-                  Reduced Motion
+                  Gentle Transitions
                 </span>
                 <span className="text-[11px] font-serif text-ink-muted block">
-                  Honor motion-sensitivity preferences for transitions and modals
+                  Turn off fast page animations for a calmer, simpler screen experience
                 </span>
               </div>
               <input
@@ -490,16 +490,17 @@ export const SettingsPage: React.FC = () => {
             <div className="flex items-center gap-2">
               <Sparkles className="w-4 h-4 text-sage" />
               <h2 className="font-serif text-lg font-medium text-ink">
-                Guided Onboarding &amp; Philosophy
+                Quick Start Guide &amp; Tips
               </h2>
             </div>
             <span className="text-xs font-serif text-ink-muted capitalize">
-              Status: {user?.preferences?.onboardingStatus || 'not_started'}
+              {user?.preferences?.onboardingStatus === 'completed' ? '✓ Completed' : 'Available'}
             </span>
           </div>
 
           <p className="text-xs font-serif text-ink-muted leading-relaxed">
-            Want to re-read the guided walkthrough, review the Rule of 3 philosophy, or re-anchor your annual intention?
+            Need a reminder on how to use the Rule of 3, set yearly themes, or navigate your days?
+            Take the quick 1-minute guided tour anytime.
           </p>
 
           <button
@@ -508,28 +509,27 @@ export const SettingsPage: React.FC = () => {
             className="inline-flex items-center gap-2 px-4 py-2 bg-paper border border-border-subtle hover:bg-paper-alt text-ink rounded-xl text-xs font-serif transition-colors cursor-pointer"
           >
             <RotateCcw className="w-3.5 h-3.5 text-sage" />
-            <span>Revisit Guided Onboarding Flow</span>
+            <span>Open Guided Tour &amp; Tips</span>
           </button>
         </div>
 
-        {/* Phase 6: Complete Backup, Safe Restore & Data Portability */}
+        {/* Complete Backup, Safe Restore & Data Portability */}
         <div className="bg-paper-alt border border-border-subtle rounded-2xl p-6 shadow-xs space-y-6">
           <div className="flex items-center justify-between border-b border-border-subtle pb-3">
             <div className="flex items-center gap-2">
               <Database className="w-4 h-4 text-sage" />
               <h2 className="font-serif text-lg font-medium text-ink">
-                Data Portability &amp; Complete Backup
+                Backup &amp; Restore Your Data
               </h2>
             </div>
             <span className="text-[11px] font-serif text-forest bg-sage/10 px-2.5 py-0.5 rounded-full font-medium">
-              Version 1.0 JSON
+              Safe &amp; Private
             </span>
           </div>
 
           <p className="text-xs font-serif text-ink-muted leading-relaxed">
-            You maintain full ownership and portability over your entire planner. Export server snapshots
-            covering all seven planner categories (preferences, annual intentions, monthly dashboards,
-            weekly spreads, daily reflections, mood tracking, and habit grids), or safely restore past data.
+            Your notes and goals belong entirely to you. You can download a complete backup copy to your computer 
+            at any time, or restore your previous notes whenever you need them.
           </p>
 
           {/* Export Action Section */}
@@ -537,24 +537,23 @@ export const SettingsPage: React.FC = () => {
             <div className="flex items-center gap-2">
               <Download className="w-4 h-4 text-sage" />
               <h3 className="font-serif text-sm font-semibold text-ink">
-                Export Planner Data
+                Save a Backup to Your Computer
               </h3>
             </div>
             <p className="text-xs font-serif text-ink-muted">
-              Download a complete, verified server snapshot in structured JSON format. This file contains
-              no passwords or session credentials and is safely portable across devices.
+              Click below to download a single file containing all your yearly goals, monthly plans, 
+              weekly schedules, daily journal entries, and habit records.
             </p>
 
             {pendingSyncCount > 0 && (
               <div className="p-3.5 bg-gold-light/25 border border-gold/40 rounded-xl space-y-2">
                 <div className="flex items-center gap-2 text-amber-900 font-serif text-xs font-semibold">
                   <AlertTriangle className="w-4 h-4 text-amber-800" />
-                  <span>Unsynchronized Offline Edits Detected ({pendingSyncCount} queued)</span>
+                  <span>Unsaved Offline Notes ({pendingSyncCount} waiting to sync)</span>
                 </div>
                 <p className="text-[11px] font-serif text-ink-muted leading-relaxed">
-                  You have pending edits queued in this browser that haven&apos;t been synchronized to the cloud yet.
-                  Exporting the cloud server snapshot below will not reflect these unsynced changes.
-                  You can download an offline rescue backup immediately below to preserve them:
+                  You made edits while offline that haven&apos;t reached the server yet. 
+                  You can download a quick offline backup below to make sure nothing is lost:
                 </p>
                 <button
                   type="button"
@@ -564,7 +563,7 @@ export const SettingsPage: React.FC = () => {
                   className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-paper border border-gold/60 text-amber-900 hover:bg-gold-light/30 rounded-lg text-xs font-serif font-medium cursor-pointer shadow-2xs"
                 >
                   <Download className="w-3.5 h-3.5" />
-                  <span>Download Unsynced Edits Rescue Backup (.json)</span>
+                  <span>Download Unsynced Offline Notes (.json)</span>
                 </button>
               </div>
             )}
@@ -579,17 +578,17 @@ export const SettingsPage: React.FC = () => {
                 {exportingServerBackup ? (
                   <>
                     <RefreshCw className="w-3.5 h-3.5 animate-spin" />
-                    <span>Generating Snapshot...</span>
+                    <span>Preparing Download...</span>
                   </>
                 ) : serverExportSuccess ? (
                   <>
                     <Check className="w-3.5 h-3.5" />
-                    <span>Snapshot Downloaded</span>
+                    <span>Backup Saved to Computer!</span>
                   </>
                 ) : (
                   <>
                     <Download className="w-3.5 h-3.5" />
-                    <span>Download Complete Server Backup (JSON)</span>
+                    <span>Download Backup File</span>
                   </>
                 )}
               </button>
@@ -601,7 +600,7 @@ export const SettingsPage: React.FC = () => {
                 title="Exports cached browser records as a local fallback"
               >
                 <Download className="w-3 h-3 text-ink-muted" />
-                <span>Export Local Mirror Only</span>
+                <span>Save Offline Copy</span>
               </button>
             </div>
           </div>
@@ -611,12 +610,12 @@ export const SettingsPage: React.FC = () => {
             <div className="flex items-center gap-2">
               <Upload className="w-4 h-4 text-sage" />
               <h3 className="font-serif text-sm font-semibold text-ink">
-                Restore &amp; Import Planner Data
+                Restore Notes from a Backup File
               </h3>
             </div>
             <p className="text-xs font-serif text-ink-muted">
-              Upload a previously exported Guided Annual Planner backup JSON file (up to 5MB).
-              The system inspects and validates the file structure before applying changes.
+              Choose a backup file you saved earlier to restore your goals, habits, and notes. 
+              The app checks the file first and lets you preview what will be restored.
             </p>
 
             {/* Hidden file input */}
@@ -636,14 +635,14 @@ export const SettingsPage: React.FC = () => {
                 className="inline-flex items-center gap-2 px-4 py-2.5 bg-paper-alt border border-dashed border-sage/50 hover:border-sage text-ink rounded-xl text-xs font-serif transition-all cursor-pointer"
               >
                 <Upload className="w-4 h-4 text-sage" />
-                <span>Select Backup JSON File to Inspect</span>
+                <span>Choose Backup File to Restore</span>
               </button>
             )}
 
             {isValidatingBackup && (
               <div className="flex items-center gap-2 p-3 bg-sage/5 rounded-xl border border-sage/20 text-xs font-serif text-sage">
                 <RefreshCw className="w-3.5 h-3.5 animate-spin" />
-                <span>Verifying and parsing backup data...</span>
+                <span>Checking backup file...</span>
               </div>
             )}
 
@@ -661,12 +660,12 @@ export const SettingsPage: React.FC = () => {
                   <span>{restoreResult.message}</span>
                 </div>
                 <div className="text-[11px] text-ink-muted grid grid-cols-2 sm:grid-cols-3 gap-1 pt-1">
-                  <span>Annual Plans: {restoreResult.restoredCounts.annualPlans}</span>
+                  <span>Yearly Goals: {restoreResult.restoredCounts.annualPlans}</span>
                   <span>Monthly Plans: {restoreResult.restoredCounts.monthlyPlans}</span>
                   <span>Weekly Plans: {restoreResult.restoredCounts.weeklyPlans}</span>
-                  <span>Daily Plans: {restoreResult.restoredCounts.dailyPlans}</span>
+                  <span>Daily Journal Notes: {restoreResult.restoredCounts.dailyPlans}</span>
                   <span>Mood Entries: {restoreResult.restoredCounts.moods}</span>
-                  <span>Habits: {restoreResult.restoredCounts.habits}</span>
+                  <span>Habit Trackers: {restoreResult.restoredCounts.habits}</span>
                 </div>
               </div>
             )}
@@ -682,18 +681,18 @@ export const SettingsPage: React.FC = () => {
                     </span>
                   </div>
                   <span className="text-[10px] font-serif bg-forest/10 text-forest px-2 py-0.5 rounded-md font-medium">
-                    {validationPreview.metadata?.format ?? (validationPreview as any).format ?? 'guided-annual-planner-backup'} ({validationPreview.metadata?.version ?? (validationPreview as any).version ?? '1.0.0'})
+                    Valid Backup
                   </span>
                 </div>
 
                 {/* Record Counts Table */}
                 <div className="space-y-1.5">
                   <span className="text-[11px] font-serif font-medium text-ink block">
-                    Snapshot Record Breakdown:
+                    What is inside this backup:
                   </span>
                   <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 text-xs font-serif">
                     <div className="p-2 rounded-lg bg-paper border border-border-subtle flex justify-between">
-                      <span className="text-ink-muted">Annual Plans</span>
+                      <span className="text-ink-muted">Yearly Goals</span>
                       <span className="font-semibold text-ink">{validationPreview.counts.annualPlans}</span>
                     </div>
                     <div className="p-2 rounded-lg bg-paper border border-border-subtle flex justify-between">
@@ -701,11 +700,11 @@ export const SettingsPage: React.FC = () => {
                       <span className="font-semibold text-ink">{validationPreview.counts.monthlyPlans}</span>
                     </div>
                     <div className="p-2 rounded-lg bg-paper border border-border-subtle flex justify-between">
-                      <span className="text-ink-muted">Weekly Spreads</span>
+                      <span className="text-ink-muted">Weekly Plans</span>
                       <span className="font-semibold text-ink">{validationPreview.counts.weeklyPlans}</span>
                     </div>
                     <div className="p-2 rounded-lg bg-paper border border-border-subtle flex justify-between">
-                      <span className="text-ink-muted">Daily Plans</span>
+                      <span className="text-ink-muted">Daily Notes</span>
                       <span className="font-semibold text-ink">{validationPreview.counts.dailyPlans}</span>
                     </div>
                     <div className="p-2 rounded-lg bg-paper border border-border-subtle flex justify-between">
@@ -713,7 +712,7 @@ export const SettingsPage: React.FC = () => {
                       <span className="font-semibold text-ink">{validationPreview.counts.moods}</span>
                     </div>
                     <div className="p-2 rounded-lg bg-paper border border-border-subtle flex justify-between">
-                      <span className="text-ink-muted">Habit Trackers</span>
+                      <span className="text-ink-muted">Habits</span>
                       <span className="font-semibold text-ink">{validationPreview.counts.habits}</span>
                     </div>
                   </div>
@@ -730,7 +729,7 @@ export const SettingsPage: React.FC = () => {
                 {/* Restore Mode Radio Selection */}
                 <div className="space-y-2 pt-2 border-t border-border-subtle">
                   <span className="font-serif text-xs font-medium text-ink block">
-                    Choose Restore Strategy:
+                    Choose How to Restore:
                   </span>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <label
@@ -750,11 +749,11 @@ export const SettingsPage: React.FC = () => {
                           className="text-sage focus:ring-sage"
                         />
                         <span className="font-serif text-xs font-semibold text-ink">
-                          Non-Destructive Merge (Recommended)
+                          Combine with Current Notes (Recommended)
                         </span>
                       </div>
                       <span className="text-[11px] font-serif text-ink-muted pl-5">
-                        Imports records by natural date keys. Preserves any existing filled days and adds missing ones.
+                        Keeps all your current notes and adds any missing entries from the backup. Nothing is deleted.
                       </span>
                     </label>
 
@@ -775,11 +774,11 @@ export const SettingsPage: React.FC = () => {
                           className="text-terracotta focus:ring-terracotta"
                         />
                         <span className="font-serif text-xs font-semibold text-ink">
-                          Full Planner Replacement
+                          Replace All Current Notes
                         </span>
                       </div>
                       <span className="text-[11px] font-serif text-ink-muted pl-5">
-                        Wipes existing planner data for this account and replaces them with this backup. Account login remains safe.
+                        Clears your current planner entries and restores this backup file as a fresh start. Your Google login remains safe.
                       </span>
                     </label>
                   </div>
@@ -797,7 +796,7 @@ export const SettingsPage: React.FC = () => {
                         className="w-4 h-4 mt-0.5 text-terracotta rounded border-stone-300 focus:ring-terracotta cursor-pointer"
                       />
                       <label htmlFor="confirmReplaceCheckbox" className="font-serif text-xs text-ink cursor-pointer">
-                        I understand this is a destructive replacement. My current annual, monthly, weekly, and daily entries will be replaced with this backup file.
+                        I understand this will replace my current entries with the contents of this backup file.
                       </label>
                     </div>
                   </div>
@@ -814,12 +813,12 @@ export const SettingsPage: React.FC = () => {
                     {isRestoring ? (
                       <>
                         <RefreshCw className="w-3.5 h-3.5 animate-spin" />
-                        <span>Restoring Data...</span>
+                        <span>Restoring Notes...</span>
                       </>
                     ) : (
                       <>
                         <Check className="w-3.5 h-3.5" />
-                        <span>Confirm and Restore</span>
+                        <span>Restore My Planner Now</span>
                       </>
                     )}
                   </button>

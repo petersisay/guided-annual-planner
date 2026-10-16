@@ -306,7 +306,7 @@ export const AnnualViewPage: React.FC = () => {
               }`}
             >
               <Calendar className="w-3.5 h-3.5 text-sage" />
-              <span>12-Month Calendar & Intentions</span>
+              <span>12-Month Calendar &amp; Goals</span>
             </button>
 
             <button
@@ -332,7 +332,7 @@ export const AnnualViewPage: React.FC = () => {
               }`}
             >
               <CheckCircle2 className="w-3.5 h-3.5 text-sage" />
-              <span>Habit Consistency Heatmap</span>
+              <span>Habits Tracker</span>
             </button>
           </div>
 
