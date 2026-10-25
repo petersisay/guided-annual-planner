@@ -16,6 +16,8 @@ import {
   Download,
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
+import { useLanguage } from '../../context/LanguageContext';
+import { LanguageSelector } from '../common/LanguageSelector';
 import { SpiralBinding } from '../journal/SpiralBinding';
 import { getISOWeekNumber, SyncStatus } from '@planner/shared';
 import { syncManager } from '../../services/syncManager';
@@ -32,6 +34,7 @@ export const PlannerLayout: React.FC<PlannerLayoutProps> = ({
   currentYear: propYear,
 }) => {
   const { user, logout, loading, pendingSyncCount } = useAuth();
+  const { language, t } = useLanguage();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [syncStatus, setSyncStatus] = useState<SyncStatus>('synced');
   const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
@@ -73,43 +76,43 @@ export const PlannerLayout: React.FC<PlannerLayoutProps> = ({
   const navLinks = [
     {
       to: '/annual',
-      label: 'Yearly Goals',
-      sub: 'Big picture & vision for the year',
+      label: language === 'am' ? 'ዓመታዊ ግቦች' : 'Yearly Goals',
+      sub: language === 'am' ? 'የዓመቱ አጠቃላይ ራዕይ እና እቅድ' : 'Big picture & vision for the year',
       icon: Calendar,
       isActive: location.pathname.startsWith('/annual'),
     },
     {
       to: `/monthly/${currentYear}/${currentMonth}`,
-      label: 'Monthly Planner',
-      sub: 'Calendar, milestones & habit review',
+      label: language === 'am' ? 'ወርሃዊ እቅድ' : 'Monthly Planner',
+      sub: language === 'am' ? 'የቀን መቁጠሪያ እና የልማድ ግምገማ' : 'Calendar, milestones & habit review',
       icon: CalendarDays,
       isActive: location.pathname.startsWith('/monthly'),
     },
     {
       to: `/weekly/${currentYear}/${currentWeek}`,
-      label: 'Weekly Planner',
-      sub: '7-day overview & top 3 priorities',
+      label: language === 'am' ? 'ሳምንታዊ እቅድ' : 'Weekly Planner',
+      sub: language === 'am' ? 'የ7 ቀን አጠቃላይ እይታ እና 3ቱ ቅድሚያዎች' : '7-day overview & top 3 priorities',
       icon: LayoutGrid,
       isActive: location.pathname.startsWith('/weekly'),
     },
     {
       to: '/daily',
-      label: 'Daily Journal',
-      sub: "Today's top 3 tasks & reflections",
+      label: language === 'am' ? 'ዕለታዊ ማስታወሻ' : 'Daily Journal',
+      sub: language === 'am' ? 'የዛሬ 3 ዋና ተግባራት እና ማሰላሰል' : "Today's top 3 tasks & reflections",
       icon: Sun,
       isActive: location.pathname.startsWith('/daily'),
     },
     {
       to: '/story',
-      label: 'About This Planner',
-      sub: 'Why and how it was created',
+      label: language === 'am' ? 'ስለ እቅድ አውጪው' : 'About This Planner',
+      sub: language === 'am' ? 'ለምን እና እንዴት እንደተፈጠረ' : 'Why and how it was created',
       icon: BookOpen,
       isActive: location.pathname === '/story',
     },
     {
       to: '/settings',
-      label: 'Settings & Backup',
-      sub: 'Display choices & save your data',
+      label: language === 'am' ? 'ቅንብሮች እና ምትኬ' : 'Settings & Backup',
+      sub: language === 'am' ? 'ምርጫዎች እና የውሂብ ማስቀመጫ' : 'Display choices & save your data',
       icon: Settings,
       isActive: location.pathname === '/settings',
     },
@@ -141,6 +144,7 @@ export const PlannerLayout: React.FC<PlannerLayoutProps> = ({
               <span>Conflict</span>
             </button>
           )}
+          <LanguageSelector />
           <button
             type="button"
             onClick={() => setShowHowItWorks(true)}
@@ -148,7 +152,7 @@ export const PlannerLayout: React.FC<PlannerLayoutProps> = ({
             title="How This Planner Works"
           >
             <BookOpen className="w-3 h-3 text-sage" />
-            <span>Guide</span>
+            <span>{t.guide}</span>
           </button>
           <button
             type="button"
@@ -174,7 +178,7 @@ export const PlannerLayout: React.FC<PlannerLayoutProps> = ({
 
         <div className="p-6">
           {/* Planner Emblem & Title */}
-          <div className="flex items-center gap-3 mb-8">
+          <div className="flex items-center gap-3 mb-4">
             <img
               src="/images/gp-monogram.png"
               alt="Guided Annual Planner Logo"
@@ -182,13 +186,15 @@ export const PlannerLayout: React.FC<PlannerLayoutProps> = ({
             />
             <div>
               <span className="font-serif font-semibold text-ink text-base block leading-tight">
-                Guided Annual Planner
+                {t.appName}
               </span>
               <span className="text-[10px] text-ink-muted font-serif italic block">
-                Mindful Growth Edition
+                {t.appTagline}
               </span>
             </div>
           </div>
+
+          <LanguageSelector className="w-full justify-center mb-6" />
 
           {/* Navigation Links */}
           <nav className="space-y-1.5" aria-label="Planner Sections">

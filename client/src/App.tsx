@@ -2,6 +2,7 @@ import React, { Suspense, lazy, useState, useEffect } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import { AuthProvider, useAuth } from './context/AuthContext';
+import { LanguageProvider } from './context/LanguageContext';
 import { HomePage } from './pages/HomePage';
 import { MissingGoogleConfigCard } from './components/auth/MissingGoogleConfigCard';
 import { PaperPageSpinner } from './components/common/PaperPageSpinner';
@@ -155,7 +156,9 @@ export const App: React.FC = () => {
   return (
     <GoogleOAuthProvider clientId={googleClientId}>
       <AuthProvider>
-        <AppContent />
+        <LanguageProvider>
+          <AppContent />
+        </LanguageProvider>
       </AuthProvider>
     </GoogleOAuthProvider>
   );

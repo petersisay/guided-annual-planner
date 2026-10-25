@@ -19,6 +19,7 @@ import {
 } from 'lucide-react';
 import { PlannerLayout } from '../components/layout/PlannerLayout';
 import { useAuth } from '../context/AuthContext';
+import { useLanguage } from '../context/LanguageContext';
 import {
   WeekStartPreference,
   RestoreMode,
@@ -30,6 +31,7 @@ import { syncManager } from '../services/syncManager';
 
 export const SettingsPage: React.FC = () => {
   const { user, logout, refreshUser, updateUser, pendingSyncCount } = useAuth();
+  const { language, setLanguage, t } = useLanguage();
   const navigate = useNavigate();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const avatarInputRef = useRef<HTMLInputElement>(null);
@@ -624,6 +626,51 @@ export const SettingsPage: React.FC = () => {
                 onChange={(e) => setPrefersReducedMotion(e.target.checked)}
                 className="w-4 h-4 text-sage rounded border-stone-300 focus:ring-sage cursor-pointer"
               />
+            </div>
+
+            {/* Language Selection */}
+            <div className="space-y-2 pt-2 border-t border-border-subtle">
+              <label className="font-serif text-xs font-medium text-ink block">
+                {t.languageLabel}
+              </label>
+              <p className="text-[11px] font-serif text-ink-muted">
+                Choose your preferred interface language between English and Amharic (አማርኛ).
+              </p>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
+                <button
+                  type="button"
+                  onClick={() => setLanguage('en')}
+                  className={`p-3 rounded-xl border text-left cursor-pointer transition-all ${
+                    language === 'en'
+                      ? 'bg-paper border-sage ring-1 ring-sage'
+                      : 'bg-paper/40 border-border-subtle'
+                  }`}
+                >
+                  <span className="font-serif text-sm font-medium text-ink block">
+                    🇺🇸 English (Default)
+                  </span>
+                  <span className="text-[11px] font-serif text-ink-muted block">
+                    Full English planner interface
+                  </span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => setLanguage('am')}
+                  className={`p-3 rounded-xl border text-left cursor-pointer transition-all ${
+                    language === 'am'
+                      ? 'bg-paper border-sage ring-1 ring-sage'
+                      : 'bg-paper/40 border-border-subtle'
+                  }`}
+                >
+                  <span className="font-serif text-sm font-medium text-ink block">
+                    🇪🇹 አማርኛ (Amharic)
+                  </span>
+                  <span className="text-[11px] font-serif text-ink-muted block">
+                    የአማርኛ ቋንቋ አማራጭ እና አሰሳ
+                  </span>
+                </button>
+              </div>
             </div>
 
             <div className="flex items-center gap-3 pt-2">

@@ -11,10 +11,13 @@ import {
   Compass,
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
+import { useLanguage } from '../context/LanguageContext';
 import { LandingAnimatedBackground } from '../components/common/LandingAnimatedBackground';
+import { LanguageSelector } from '../components/common/LanguageSelector';
 
 export const HomePage: React.FC = () => {
   const { user } = useAuth();
+  const { t } = useLanguage();
 
   return (
     <div className="min-h-screen bg-paper text-ink flex flex-col antialiased selection:bg-sage/20 selection:text-ink">
@@ -39,23 +42,24 @@ export const HomePage: React.FC = () => {
 
           <nav className="hidden md:flex items-center gap-8 font-serif text-sm">
             <a href="#horizons" className="text-ink-muted hover:text-ink transition-colors">
-              The Horizons
+              {t.theHorizons}
             </a>
             <a href="#philosophy" className="text-ink-muted hover:text-ink transition-colors">
-              Philosophy
+              {t.philosophy}
             </a>
             <Link to="/story" className="text-ink-muted hover:text-ink transition-colors">
-              Creator Story
+              {t.creatorStory}
             </Link>
           </nav>
 
           <div className="flex items-center gap-3">
+            <LanguageSelector />
             {user ? (
               <Link
                 to="/annual"
                 className="inline-flex items-center gap-2 px-4 py-2 bg-sage hover:bg-sage-dark text-white rounded-xl font-serif text-sm font-medium transition-all shadow-xs"
               >
-                <span>Enter Planner</span>
+                <span>{t.enterPlanner}</span>
                 <ArrowRight className="w-4 h-4" />
               </Link>
             ) : (
@@ -64,13 +68,13 @@ export const HomePage: React.FC = () => {
                   to="/login"
                   className="px-3.5 py-1.5 text-sm font-serif text-ink-muted hover:text-ink transition-colors"
                 >
-                  Sign In
+                  {t.signIn}
                 </Link>
                 <Link
                   to="/login"
                   className="inline-flex items-center gap-1.5 px-4 py-2 bg-sage hover:bg-sage-dark text-white rounded-xl font-serif text-sm font-medium transition-all shadow-xs"
                 >
-                  <span>Get Started</span>
+                  <span>{t.getStarted}</span>
                   <ArrowRight className="w-3.5 h-3.5" />
                 </Link>
               </>
