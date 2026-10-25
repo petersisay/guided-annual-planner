@@ -1,7 +1,6 @@
 export type SupportedLanguage = 'en' | 'am';
 
 export interface TranslationDictionary {
-  // Brand & Shell
   appName: string;
   appTagline: string;
   theHorizons: string;
@@ -17,115 +16,18 @@ export interface TranslationDictionary {
   readCreatorStory: string;
   guide: string;
   howItWorks: string;
-  howItWorksSub: string;
   coreIntention: string;
-  aboutThisPlanner: string;
-
-  // 4 Horizons
   annualVision: string;
-  annualVisionDesc: string;
   monthlyRhythm: string;
-  monthlyRhythmDesc: string;
   weeklySpread: string;
-  weeklySpreadDesc: string;
   dailyFocus: string;
-  dailyFocusDesc: string;
-
-  // Philosophy & Landing Details
-  corePhilosophy: string;
-  whyPaperMatters: string;
-  whyPaperMattersDesc: string;
-  ethiopianOrigin: string;
-  planWithIntention: string;
-  liveWithClarity: string;
-  heroSubheadline: string;
-  compoundingQuote: string;
-  fourHorizonsHeadline: string;
-  fourHorizonsSubheadline: string;
-  openJournal: string;
-  getStartedPlanner: string;
-  readOriginStory: string;
-  guidingPrincipleSub: string;
-  unifiedArchitecture: string;
-  guidingPhilosophy: string;
-  whySmallStepsMatter: string;
-  whySmallStepsDesc: string;
-  theRuleOfThreeTitle: string;
-  theRuleOfThreeDesc: string;
-  nonGuiltTitle: string;
-  nonGuiltDesc: string;
-  compoundingImpactTitle: string;
-  compoundingImpactDesc: string;
-  craftedForMindfulCreators: string;
-  beginGuidedJourney: string;
-  beginGuidedJourneySub: string;
-  getStartedFree: string;
-
-  // Creator Story
-  creatorName: string;
-  creatorRole: string;
-  creatorQuote: string;
-  creatorStoryTitle: string;
-  creatorStorySubtitle: string;
-  creatorStoryBadge: string;
-  creatorStoryP1: string;
-  creatorStoryP2: string;
-  creatorStoryP3: string;
-  creatorStoryP4: string;
-  creatorStoryQuoteBox: string;
-
-  // How it works modal
-  howItWorksWhatIs: string;
-  howItWorksWhatIsDesc: string;
-  howItWorksFourStepRhythm: string;
-  howItWorksStep1Title: string;
-  howItWorksStep1Desc: string;
-  howItWorksStep2Title: string;
-  howItWorksStep2Desc: string;
-  howItWorksStep3Title: string;
-  howItWorksStep3Desc: string;
-  howItWorksStep4Title: string;
-  howItWorksStep4Desc: string;
-  howItWorksRuleOf3Title: string;
-  howItWorksRuleOf3Desc: string;
-  howItWorksPrivacyTitle: string;
-  howItWorksPrivacyDesc: string;
-  howItWorksGotIt: string;
-
-  // Guide Steps
-  guideStep1Title: string;
-  guideStep1Desc: string;
-  guideStep2Title: string;
-  guideStep2Desc: string;
-  guideStep3Title: string;
-  guideStep3Desc: string;
-
-  // Days & Months
-  daysShort: string[];
-  daysFull: string[];
-  months: string[];
-
-  // Settings & Preferences
   settings: string;
   settingsAndBackup: string;
   account: string;
   planningPreferences: string;
-  calendarAndAppearance: string;
   weekStartsOn: string;
-  weekStartsOnDesc: string;
   monday: string;
-  mondayDesc: string;
   sunday: string;
-  sundayDesc: string;
-  themeLabel: string;
-  themeWarm: string;
-  themeWarmDesc: string;
-  themeEditorial: string;
-  themeEditorialDesc: string;
-  gentleTransitions: string;
-  gentleTransitionsDesc: string;
-  savePreferences: string;
-  savedToProfile: string;
   topPriorities: string;
   secondaryTasks: string;
   dailyJournal: string;
@@ -138,9 +40,98 @@ export interface TranslationDictionary {
   removePhoto: string;
   languageLabel: string;
   languageSelect: string;
-  languageDesc: string;
-  englishOption: string;
-  amharicOption: string;
+  ethiopianOrigin: string;
+  planWithIntention: string;
+  liveWithClarity: string;
+  heroSubheadline: string;
+  compoundingQuote: string;
+
+  // Calendar
+  months: string[];
+  daysShort: string[];
+  daysFull: string[];
+  monthHeadingPrefix: string;
+  leapYearBadge: string;
+  notesForDate: string;
+  dayMilestoneLabel: string;
+  notesPlaceholder: string;
+  openDailyPage: string;
+  cancel: string;
+  saveNote: string;
+  todayLabel: string;
+
+  // Landing Page Sections
+  unifiedArchitecture: string;
+  fourHorizonsHeadline: string;
+  fourHorizonsSubtitle: string;
+  openYourJournal: string;
+  getStartedWithPlanner: string;
+  readOriginStory: string;
+  corePhilosophyLabel: string;
+  guidingPrincipleLabel: string;
+
+  // Horizon Cards
+  h1Title: string;
+  h1Desc: string;
+  h1Point1: string;
+  h1Point2: string;
+  h1Point3: string;
+
+  h2Title: string;
+  h2Desc: string;
+  h2Point1: string;
+  h2Point2: string;
+  h2Point3: string;
+
+  h3Title: string;
+  h3Desc: string;
+  h3Point1: string;
+  h3Point2: string;
+  h3Point3: string;
+
+  h4Title: string;
+  h4Desc: string;
+  h4Point1: string;
+  h4Point2: string;
+  h4Point3: string;
+
+  // Philosophy Section
+  quietIntentionHeading: string;
+  philosophyBody1: string;
+  philosophyBody2: string;
+  founderQuote: string;
+  founderName: string;
+  founderRole: string;
+
+  // How It Works Guide
+  guideSubtitle: string;
+  whatIsPlannerTitle: string;
+  whatIsPlannerBody: string;
+  fourStepRhythmTitle: string;
+  step1Name: string;
+  step1Detail: string;
+  step2Name: string;
+  step2Detail: string;
+  step3Name: string;
+  step3Detail: string;
+  step4Name: string;
+  step4Detail: string;
+  ruleOf3SecretTitle: string;
+  ruleOf3SecretBody: string;
+  privacyProtectedTitle: string;
+  privacyProtectedBody: string;
+  gotItLetsPlan: string;
+
+  // Creator Story
+  creatorStoryHeading: string;
+  creatorStorySubheading: string;
+  originNarrativeBadge: string;
+  craftedForCreators: string;
+  storyP1: string;
+  storyP2: string;
+  storyP3: string;
+  storyP4: string;
+  storyQuote: string;
 }
 
 export const translations: Record<SupportedLanguage, TranslationDictionary> = {
@@ -160,137 +151,18 @@ export const translations: Record<SupportedLanguage, TranslationDictionary> = {
     readCreatorStory: 'Read the Complete Creator Story',
     guide: 'Guide',
     howItWorks: 'How This Planner Works',
-    howItWorksSub: 'A simple guide to calm, focused planning',
     coreIntention: 'Core Intention',
-    aboutThisPlanner: 'About This Planner',
-
     annualVision: 'Annual Vision',
-    annualVisionDesc:
-      'Capture lifetime ambitions, annual theme words, and overarching quarterly milestones on a single, expansive view.',
     monthlyRhythm: 'Monthly Rhythm',
-    monthlyRhythmDesc:
-      'Full-month calendar dashboard, habit consistency heatmaps, and emotional reflections with zero clutter.',
     weeklySpread: 'Weekly 2-Page Spread',
-    weeklySpreadDesc:
-      'Tactile physical 2-page spread featuring the Rule of 3, daily scheduling blocks, and dedicated notes.',
     dailyFocus: 'Daily Focus & Journal',
-    dailyFocusDesc:
-      'Deep daily execution. Top 3 non-negotiables, hour-by-hour timeline, gratitude, and evening reflection.',
-
-    corePhilosophy: 'Core Philosophy',
-    whyPaperMatters: 'Why Paper-Inspired Planning Matters',
-    whyPaperMattersDesc:
-      'Digital tools often fragment attention with endless notifications. This planner preserves the serene, deliberate feel of putting pen to paper while giving you effortless synchronization.',
-    ethiopianOrigin: 'Mindful Journaling • Ethiopian Origin Story',
-    planWithIntention: 'Plan with Intention.',
-    liveWithClarity: 'Live with Quiet Clarity.',
-    heroSubheadline:
-      'A paper-inspired sanctuary designed to bridge your daily focus, weekly momentum, monthly clarity, and annual horizon into a lifetime legacy.',
-    compoundingQuote:
-      'Doing small things before taking major steps compounds over time to create a huge impact.',
-    fourHorizonsHeadline: 'Four Horizons, One Continuous Journey',
-    fourHorizonsSubheadline:
-      'Most productivity tools fragment your attention. The Guided Annual Planner connects every moment to your overarching vision.',
-    openJournal: 'Open Your Journal',
-    getStartedPlanner: 'Get Started with Your Planner',
-    readOriginStory: 'Read the Origin Story',
-    guidingPrincipleSub: 'The Guiding Principle of the Guided Annual Planner',
-    unifiedArchitecture: 'Unified Architecture',
-    guidingPhilosophy: 'The Guiding Philosophy',
-    whySmallStepsMatter: 'Why Small Steps Matter',
-    whySmallStepsDesc:
-      'Grand resolutions without daily architecture fade quickly. Our system grounds you in intentional rhythm.',
-    theRuleOfThreeTitle: 'The Rule of 3',
-    theRuleOfThreeDesc:
-      'When everything is a priority, nothing is. Limiting each day to 3 meaningful focus items creates sustainable momentum without cognitive exhaustion.',
-    nonGuiltTitle: 'Non-Guilt Consistency',
-    nonGuiltDesc:
-      'Life is nonlinear. Our habit matrix and mood trackers are designed for gentle self-awareness, not punitive streak-breaking anxiety.',
-    compoundingImpactTitle: 'Compounding Impact',
-    compoundingImpactDesc:
-      'Completing three intentional actions daily yields over 1,000 meaningful milestones in a year. Small, quiet faithfulness compounds into your lifetime legacy.',
-    craftedForMindfulCreators: 'Crafted for mindful creators everywhere',
-    beginGuidedJourney: 'Begin Your Guided Journey Today',
-    beginGuidedJourneySub:
-      'Take the first small, deliberate step toward clarity, steady progress, and mindful living.',
-    getStartedFree: 'Get Started — It’s Free',
-
-    creatorName: 'Peter Sisay',
-    creatorRole: 'Creator • Addis Ababa, Ethiopia',
-    creatorQuote:
-      'In Ethiopia, it’s nearly impossible to find a journal that’s more than just plain pages. Planning and journaling aren’t just habits for me; they’re how I leave a mark on my life. I created this planner to provide something that is guided, meaningful, and designed for people who want to document their journey and grow.',
-    creatorStoryTitle: 'Why I Created This?',
-    creatorStorySubtitle: 'From Addis Ababa with love & deliberate intention',
-    creatorStoryBadge: 'The Origin Narrative',
-    creatorStoryP1:
-      'In Ethiopia, it’s nearly impossible to find a journal that’s more than just plain pages. I’ve always been big on planning—whatever I do, I make sure to put everything on paper. But finding a guided planner here has been a real challenge. For years, I had to buy planners from other countries just to get something that matched my needs.',
-    creatorStoryP2:
-      'Planning and journaling aren’t just habits for me; they’re how I leave a mark on my life. Every time I plan, I document my journey, and with each reflection, I see where I’ve been and where I need to go. It’s a process of constant growth and self-improvement.',
-    creatorStoryP3:
-      'But as much as I loved using those imported planners, they never felt truly mine. They didn’t reflect my culture, experiences, or how I wanted to live my life. That’s why I decided to create my own planner—one that’s guided, meaningful, and designed for people like me who want to leave a legacy of their journey, to look back, learn, and grow.',
-    creatorStoryP4:
-      'Whenever I take out my journal, people often ask me how I do it, and I realize that others could benefit from the same guidance I was searching for. That’s when I made it my mission to fulfill those requests and provide something that I, too, struggled to find.',
-    creatorStoryQuoteBox:
-      'I hope this planner will not only help you stay organized but also inspire you to document your life in a way that feels authentic and personal, just like it has for me.',
-
-    howItWorksWhatIs: 'What is the Guided Annual Planner?',
-    howItWorksWhatIsDesc:
-      'Most planner apps give you endless, stressful to-do lists that leave you feeling behind. This planner is different: it is a calm, private journal designed to help you focus on just 3 meaningful priorities each day while keeping your bigger life dreams in sight.',
-    howItWorksFourStepRhythm: 'The 4-Step Rhythm (From Big Dreams to Daily Action)',
-    howItWorksStep1Title: '1. Yearly Goals',
-    howItWorksStep1Desc:
-      'Choose a theme word for your year (e.g., “Growth”, “Peace”) and write down 2–3 big goals for health, career, and relationships.',
-    howItWorksStep2Title: '2. Monthly Planner',
-    howItWorksStep2Desc:
-      'Break big yearly goals into 1–3 concrete monthly milestones. Track books you read and habit streaks across the days.',
-    howItWorksStep3Title: '3. Weekly Planner',
-    howItWorksStep3Desc:
-      'Every Sunday or Monday, look ahead at your 7 days. Pick your top 3 weekly outcomes and check off habits like exercise or meditation.',
-    howItWorksStep4Title: '4. Daily Journal',
-    howItWorksStep4Desc:
-      'Each morning, write your Top 3 Priorities. That’s all you need to win the day. In the evening, write one thing you are grateful for.',
-    howItWorksRuleOf3Title: 'The “Rule of 3” Secret',
-    howItWorksRuleOf3Desc:
-      'If you have 10 priorities, you have none. By picking only three important tasks each morning, you eliminate decision fatigue and feel genuine accomplishment by sunset.',
-    howItWorksPrivacyTitle: 'Your Privacy & Data Are Always Protected',
-    howItWorksPrivacyDesc:
-      'Everything you write is saved automatically to your private account. It works even when your internet drops, and you can download a full backup copy to your computer anytime from Settings & Backup.',
-    howItWorksGotIt: 'Got it, Let’s Plan!',
-
-    guideStep1Title: '1. Set Your Annual Vision',
-    guideStep1Desc: 'Begin each year with your anchor word and core intentions.',
-    guideStep2Title: '2. Monthly Rhythms',
-    guideStep2Desc: 'Track your daily mood and habits over all 365 days.',
-    guideStep3Title: '3. The Rule of 3',
-    guideStep3Desc: 'Focus on exactly 3 vital priorities each morning to compound real momentum.',
-
-    daysShort: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-    daysFull: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
-    months: [
-      'January', 'February', 'March', 'April', 'May', 'June',
-      'July', 'August', 'September', 'October', 'November', 'December'
-    ],
-
     settings: 'Settings',
     settingsAndBackup: 'Settings & Backup',
     account: 'Your Account',
     planningPreferences: 'Planning Preferences',
-    calendarAndAppearance: 'Calendar & Appearance',
     weekStartsOn: 'Week Starts On',
-    weekStartsOnDesc: 'Choose whether your weekly plan and calendar start on Monday or Sunday.',
     monday: 'Monday',
-    mondayDesc: 'Standard workweek view (Saturday & Sunday grouped together)',
     sunday: 'Sunday',
-    sundayDesc: 'Traditional calendar format starting on Sunday',
-    themeLabel: 'Page Look & Color Theme',
-    themeWarm: 'Warm Linen',
-    themeWarmDesc: 'Soft, relaxing cream paper tone with gentle green accents',
-    themeEditorial: 'Classic Editorial',
-    themeEditorialDesc: 'Clean, crisp white paper style',
-    gentleTransitions: 'Gentle Transitions',
-    gentleTransitionsDesc: 'Turn off fast page animations for a calmer, simpler screen experience',
-    savePreferences: 'Save Preferences',
-    savedToProfile: 'Saved to Profile',
     topPriorities: 'Top 3 Priorities',
     secondaryTasks: 'Secondary Tasks',
     dailyJournal: 'Daily Journal & Reflection',
@@ -303,10 +175,135 @@ export const translations: Record<SupportedLanguage, TranslationDictionary> = {
     removePhoto: 'Remove',
     languageLabel: 'Language / ቋንቋ',
     languageSelect: 'Select Language',
-    languageDesc: 'Choose your preferred interface language between English and Amharic (አማርኛ).',
-    englishOption: '🇺🇸 English (Default)',
-    amharicOption: '🇪🇹 አማርኛ (Amharic)',
+    ethiopianOrigin: 'Mindful Journaling • Ethiopian Origin Story',
+    planWithIntention: 'Plan with Intention.',
+    liveWithClarity: 'Live with Quiet Clarity.',
+    heroSubheadline:
+      'A paper-inspired sanctuary designed to bridge your daily focus, weekly momentum, monthly clarity, and annual horizon into a lifetime legacy.',
+    compoundingQuote:
+      'Doing small things before taking major steps compounds over time to create a huge impact.',
+
+    // Calendar
+    months: [
+      'January',
+      'February',
+      'March',
+      'April',
+      'May',
+      'June',
+      'July',
+      'August',
+      'September',
+      'October',
+      'November',
+      'December',
+    ],
+    daysShort: ['MO', 'TU', 'WE', 'TH', 'FR', 'SA', 'SU'],
+    daysFull: [
+      'Monday',
+      'Tuesday',
+      'Wednesday',
+      'Thursday',
+      'Friday',
+      'Saturday',
+      'Sunday',
+    ],
+    monthHeadingPrefix: 'MONTH',
+    leapYearBadge: 'Leap Year • 29 Days',
+    notesForDate: 'Notes for',
+    dayMilestoneLabel: 'Day Milestone & Commitments',
+    notesPlaceholder: 'Write focus items, events, appointments, or journal notes...',
+    openDailyPage: 'Open Full Daily Page →',
+    cancel: 'Cancel',
+    saveNote: 'Save Note',
+    todayLabel: 'Today',
+
+    // Landing Page Sections
+    unifiedArchitecture: 'Unified Architecture',
+    fourHorizonsHeadline: 'Four Horizons, One Continuous Journey',
+    fourHorizonsSubtitle:
+      'Most productivity tools fragment your attention. The Guided Annual Planner connects every moment to your overarching vision.',
+    openYourJournal: 'Open Your Journal',
+    getStartedWithPlanner: 'Get Started with Your Planner',
+    readOriginStory: 'Read the Origin Story',
+    corePhilosophyLabel: 'Core Philosophy',
+    guidingPrincipleLabel: 'The Guiding Principle of the Guided Annual Planner',
+
+    // Horizon Cards
+    h1Title: 'Annual Vision',
+    h1Desc: 'Year-at-a-glance calendar, overarching Word of the Year, lifetime intentions, bookshelf, and year-end celebrations.',
+    h1Point1: 'Anchor Word & Theme',
+    h1Point2: 'Reading Bookshelf',
+    h1Point3: '365-Day Mood Matrix',
+
+    h2Title: 'Monthly Rhythm',
+    h2Desc: 'Monthly dashboard with high-priority Must-Dos, habit tracker overview, key events, and structured lined journaling.',
+    h2Point1: 'Monthly Must-Dos',
+    h2Point2: 'Habit Consistency Grid',
+    h2Point3: 'Lined Reflection Notes',
+
+    h3Title: 'Weekly 2-Page Spread',
+    h3Desc: 'Authentic 2-page notebook spread with ISO Monday start, Rule of 3 daily tasks, weekly priorities, and next-week horizons.',
+    h3Point1: 'Rule of 3 Focus',
+    h3Point2: 'ISO 8601 Monday Start',
+    h3Point3: 'Weekly Notes & Reminders',
+
+    h4Title: 'Daily Focus & Reflection',
+    h4Desc: 'Start with 3 non-negotiable priorities, hourly structure, morning intention, gratitude, and evening check-out.',
+    h4Point1: 'Rule of 3 Priority System',
+    h4Point2: 'Mindful Morning Intention',
+    h4Point3: 'Evening Gratitude & Closure',
+
+    // Philosophy Section
+    quietIntentionHeading: 'Designed with Quiet Intention',
+    philosophyBody1:
+      'Most digital productivity apps are engineered like noisy casinos—flooding you with notifications, artificial streaks, and robotic metrics that induce guilt instead of peace.',
+    philosophyBody2:
+      'The Guided Annual Planner is built as a sanctuary. Inspired by physical, thread-bound notebooks and Ethiopian traditions of thoughtful patience, it encourages you to write by hand or type mindfully, focusing on the small compounding rituals that truly shape a life.',
+    founderQuote:
+      '«When you connect daily actions to lifelong purpose, even quiet moments become profound.»',
+    founderName: 'Peter Sisay',
+    founderRole: 'Creator & Guide, Addis Ababa',
+
+    // How It Works Guide
+    guideSubtitle: 'A simple guide to calm, focused planning',
+    whatIsPlannerTitle: 'What is the Guided Annual Planner?',
+    whatIsPlannerBody:
+      'Most planner apps give you endless, stressful to-do lists that leave you feeling behind. This planner is different: it is a calm, private journal designed to help you focus on just 3 meaningful priorities each day while keeping your bigger life dreams in sight.',
+    fourStepRhythmTitle: 'The 4-Step Rhythm (From Big Dreams to Daily Action)',
+    step1Name: '1. Yearly Goals',
+    step1Detail: 'Choose a theme word for your year (e.g., “Growth”, “Peace”) and write down 2–3 big goals for health, career, and relationships.',
+    step2Name: '2. Monthly Planner',
+    step2Detail: 'Break big yearly goals into 1–3 concrete monthly milestones. Track books you read and habit streaks across the days.',
+    step3Name: '3. Weekly Planner',
+    step3Detail: 'Every Sunday or Monday, look ahead at your 7 days. Pick your top 3 weekly outcomes and check off habits like exercise or meditation.',
+    step4Name: '4. Daily Journal',
+    step4Detail: 'Each morning, write your Top 3 Priorities. That’s all you need to win the day. In the evening, write one thing you are grateful for.',
+    ruleOf3SecretTitle: 'The “Rule of 3” Secret',
+    ruleOf3SecretBody:
+      'If you have 10 priorities, you have none. By picking only three important tasks each morning, you eliminate decision fatigue and feel genuine accomplishment by sunset.',
+    privacyProtectedTitle: 'Your Privacy & Data Are Always Protected',
+    privacyProtectedBody:
+      'Everything you write is saved automatically to your private account. It works even when your internet drops, and you can download a full backup copy to your computer anytime from Settings & Backup.',
+    gotItLetsPlan: 'Got it, Let’s Plan!',
+
+    // Creator Story
+    creatorStoryHeading: 'Why I Created This?',
+    creatorStorySubheading: 'From Addis Ababa with love & deliberate intention',
+    originNarrativeBadge: 'The Origin Narrative',
+    craftedForCreators: 'Crafted for mindful creators',
+    storyP1:
+      'In Ethiopia, it’s nearly impossible to find a journal that’s more than just plain pages. I’ve always been big on planning—whatever I do, I make sure to put everything on paper. But finding a guided planner here has been a real challenge. For years, I had to buy planners from other countries just to get something that matched my needs.',
+    storyP2:
+      'Planning and journaling aren’t just habits for me; they’re how I leave a mark on my life. Every time I plan, I document my journey, and with each reflection, I see where I’ve been and where I need to go. It’s a process of constant growth and self-improvement.',
+    storyP3:
+      'But as much as I loved using those imported planners, they never felt truly mine. They didn’t reflect my culture, experiences, or how I wanted to live my life. That’s why I decided to create my own planner—one that’s guided, meaningful, and designed for people like me who want to leave a legacy of their journey, to look back, learn, and grow.',
+    storyP4:
+      'Whenever I take out my journal, people often ask me how I do it, and I realize that others could benefit from the same guidance I was searching for. That’s when I made it my mission to fulfill those requests and provide something that I, too, struggled to find.',
+    storyQuote:
+      '“I hope this planner will not only help you stay organized but also inspire you to document your life in a way that feels authentic and personal, just like it has for me.”',
   },
+
   am: {
     appName: 'መሪ ዓመታዊ እቅድ አውጪ',
     appTagline: 'የማሰላሰል እና እድገት እትም',
@@ -323,137 +320,18 @@ export const translations: Record<SupportedLanguage, TranslationDictionary> = {
     readCreatorStory: 'ሙሉውን የፈጣሪ ታሪክ ያንብቡ',
     guide: 'መመሪያ',
     howItWorks: 'ይህ እቅድ አውጪ እንዴት ይሰራል?',
-    howItWorksSub: 'ለረጋ እና ውጤታማ እቅድ አጭር መመሪያ',
     coreIntention: 'ዋና ዓላማ',
-    aboutThisPlanner: 'ስለ እቅድ አውጪው',
-
     annualVision: 'ዓመታዊ ራዕይ',
-    annualVisionDesc:
-      'የህይወት ዘመን ምኞቶችዎን፣ የዓመቱን መሪ ቃል እና ዋና ዋና ሩብ ዓመታዊ ግቦችን በአንድ ሰፊ እይታ ይመልከቱ።',
     monthlyRhythm: 'ወርሃዊ ምት',
-    monthlyRhythmDesc:
-      'ሙሉ የወር የቀን መቁጠሪያ፣ የልማድ ወጥነት ሰንጠረዥ እና ከስሜት ውጣ ውረድ የጸዳ ማሰላሰያ።',
     weeklySpread: 'ሳምንታዊ ባለሁለት ገጽ እቅድ',
-    weeklySpreadDesc:
-      'የ3ቱን ዋና ቅድሚያዎች ህግ፣ ዕለታዊ የሰዓት መደቦችን እና ማስታወሻዎችን የያዘ ማራኪ ባለሁለት ገጽ እቅድ።',
     dailyFocus: 'ዕለታዊ ትኩረት እና ማስታወሻ',
-    dailyFocusDesc:
-      'ዕለታዊ ጥልቅ አፈፃፀም። 3 ዋና ዋና ተግባራት፣ የሰዓት በሰዓት የጊዜ ሰሌዳ፣ ምስጋና እና የምሽት ማጠቃለያ።',
-
-    corePhilosophy: 'ዋና ፍልስፍና',
-    whyPaperMatters: 'በወረቀት መንፈስ የታነጸ እቅድ ለምን አስፈለገ?',
-    whyPaperMattersDesc:
-      'ዲጂታል መሳሪያዎች በብዙ ማሳወቂያዎች ትኩረትን ይበታትናሉ። ይህ እቅድ አውጪ ብዕር በወረቀት ላይ የማሳረፍን ረጋ ያለ ስሜት ከዘመናዊ የቴክኖሎጂ አጠቃቀም ጋር ያጣምራል።',
-    ethiopianOrigin: 'አስተዋይ ማስታወሻ • የኢትዮጵያ መነሻ ታሪክ',
-    planWithIntention: 'በዓላማ ያቅዱ።',
-    liveWithClarity: 'በመረጋጋት እና በግልፅነት ይኑሩ።',
-    heroSubheadline:
-      'ዕለታዊ ትኩረትዎን፣ ሳምንታዊ ጥረትዎን፣ ወርሃዊ ግልጽነትዎን እና ዓመታዊ ራዕይዎን ወደ ዘላቂ የህይወት ቅርስ ለማስተሳሰር የተነደፈ የወረቀት መንፈስ ያለው መድረክ።',
-    compoundingQuote:
-      'ትላልቅ እርምጃዎችን ከመውሰዳችን በፊት ጥቃቅን መልካም ነገሮችን በየቀኑ ማከናወን ውሎ አድሮ ትልቅ ለውጥ ያመጣል።',
-    fourHorizonsHeadline: 'አራት አድማሶች፣ አንድ ቀጣይነት ያለው ጉዞ',
-    fourHorizonsSubheadline:
-      'አብዛኛዎቹ የቴክኖሎጂ መተግበሪያዎች ትኩረትን ይበታትናሉ። ይህ መሪ ዓመታዊ እቅድ አውጪ እያንዳንዱን ቅጽበት ከዋናው ራዕይዎ ጋር ያገናኛል።',
-    openJournal: 'ማስታወሻዎን ይክፈቱ',
-    getStartedPlanner: 'በእቅድ አውጪዎ ይጀምሩ',
-    readOriginStory: 'የመነሻ ታሪኩን ያንብቡ',
-    guidingPrincipleSub: 'የመሪ ዓመታዊ እቅድ አውጪው መመሪያ መርህ',
-    unifiedArchitecture: 'የተዋሃደ መዋቅር',
-    guidingPhilosophy: 'መሪ ፍልስፍና',
-    whySmallStepsMatter: 'ጥቃቅን እርምጃዎች ለምን ወሳኝ ሆኑ?',
-    whySmallStepsDesc:
-      'ያለ ዕለታዊ ስርአት ትላልቅ ውሳኔዎች በፍጥነት ይደበዝዛሉ። የእኛ ስርአት በረጋ እና በታሰበበት ምት ያቆይዎታል።',
-    theRuleOfThreeTitle: 'የ3ቱ ቅድሚያዎች ህግ',
-    theRuleOfThreeDesc:
-      'ሁሉም ነገር ቅድሚያ ሲሆን፣ ምንም ቅድሚያ የሚሰጠው አይኖርም። ዕለታዊ ትኩረትን በ3 ወሳኝ ጉዳዮች መገደብ ያለ አእምሮ ድካም ቀጣይነት ያለው ጉልበት ይፈጥራል።',
-    nonGuiltTitle: 'ከጸጸት የጸዳ ወጥነት',
-    nonGuiltDesc:
-      'ህይወት ቀጥተኛ አይደለም። የእኛ የልማድ እና የስሜት መከታተያዎች ለረጋ ራስን ማወቅ የተነደፉ ናቸው እንጂ ለጭንቀት አይደለም።',
-    compoundingImpactTitle: 'የሚደራረብ ተጽእኖ',
-    compoundingImpactDesc:
-      'በየቀኑ 3 የታሰበባቸውን ተግባራት ማከናወን በዓመት ውስጥ ከ1,000 በላይ ትርጉም ያላቸው ስኬቶችን ያመጣል። ጥቃቅን ዕለታዊ ጥረቶች ወደ ዘላቂ የህይወት ቅርስ ያድጋሉ።',
-    craftedForMindfulCreators: 'በጥንቃቄ ለሚያስቡ ፈጣሪዎች በሙሉ የተዘጋጀ',
-    beginGuidedJourney: 'የተመራ ጉዞዎን ዛሬ ይጀምሩ',
-    beginGuidedJourneySub:
-      'ወደ ግልጽነት፣ የተረጋጋ እድገት እና አስተዋይ አኗኗር የመጀመሪያውን የታሰበበትን እርምጃ ይውሰዱ።',
-    getStartedFree: 'ይጀምሩ — ነፃ ነው',
-
-    creatorName: 'Peter Sisay',
-    creatorRole: 'ፈጣሪ • አዲስ አበባ፣ ኢትዮጵያ',
-    creatorQuote:
-      'በኢትዮጵያ ውስጥ ባዶ ገጾች ካሏቸው ደብተሮች ውጭ የተመራ እና የተቀናጀ ማስታወሻ ማግኘት በጣም ከባድ ነው። ለእኔ ማቀድ እና መፃፍ ልማድ ብቻ አይደሉም፤ በህይወቴ ላይ የራሴን አሻራ የማሳርፍበት መንገድ ነው። ይህንን እቅድ አውጪ የፈጠርኩት ትርጉም ያለው፣ የተመራ እና ጉዟቸውን መዝግበው ማደግ ለሚፈልጉ ሁሉ ነው።',
-    creatorStoryTitle: 'ይህን ለምን ፈጠርኩት?',
-    creatorStorySubtitle: 'ከአዲስ አበባ በፍቅር እና በታሰበበት ዓላማ',
-    creatorStoryBadge: 'የመነሻ ታሪክ',
-    creatorStoryP1:
-      'በኢትዮጵያ ውስጥ ባዶ ገጾች ካሏቸው ደብተሮች ውጭ የተመራ እና የተቀናጀ ማስታወሻ ማግኘት በጣም ከባድ ነው። ለእቅድ ሁልጊዜም ትልቅ ቦታ እሰጣለሁ — ምንም የማደርገው ነገር ቢኖር ሁሉንም ነገር በወረቀት ላይ ማስፈር እመርጣለሁ። ነገር ግን እዚህ አገር ፍላጎቴን የሚያሟላ መሪ እቅድ አውጪ ማግኘት እውነተኛ ፈተና ሆኖብኝ ቆይቷል። ለዓመታት ከውጭ አገር እቅድ አውጪዎችን ለማስመጣት እገደድ ነበር።',
-    creatorStoryP2:
-      'ለእኔ ማቀድ እና ማስታወሻ መያዝ ልማድ ብቻ አይደሉም፤ በህይወቴ ላይ የራሴን አሻራ የማሳርፍበት መንገድ ነው። ባቀድኩ ቁጥር ጉዞዬን እመዘግባለሁ፣ በየቀኑ ሳሰላስልም የት እንደነበርኩ እና ወዴት መሄድ እንዳለብኝ አያለሁ። ይህ ቀጣይነት ያለው እድገት እና ራስን የማሻሻል ሂደት ነው።',
-    creatorStoryP3:
-      'ነገር ግን እነዚያን ከውጭ የመጡ እቅድ አውጪዎችን ብጠቀምባቸውም፣ በፍፁም የእኔ እንደሆኑ ተሰምቶኝ አያውቅም። የእኔን ባህል፣ ልምዶች ወይም ህይወቴን እንዴት መምራት እንደምፈልግ አያንፀባርቁም ነበር። ለዚህም ነው የራሴን እቅድ አውጪ ለመፍጠር የወሰንኩት — መሪ የሆነ፣ ትርጉም ያለው፣ እና እንደ እኔ ጉዟቸውን መዝግበው ማደግ እና የህይወት አሻራቸውን ማሳረፍ ለሚፈልጉ የተዘጋጀ።',
-    creatorStoryP4:
-      'ማስታወሻዬን ሳወጣ ሰዎች እንዴት እንደማቅድ ይጠይቁኛል፤ እኔ እፈልገው ከነበረው መመሪያ ሌሎችም ሊጠቀሙ እንደሚችሉ ተረዳሁ። ያኔ ነበር እኔም ለማግኘት እቸገርበት የነበረውን ይህንን መሪ እቅድ አውጪ ለሁሉም ማቅረብን አላማዬ ያደረግኩት።',
-    creatorStoryQuoteBox:
-      'ይህ እቅድ አውጪ ስራዎን እንዲያደራጁ ብቻ ሳይሆን፣ ለእኔ እንደሆነው ሁሉ ህይወትዎን ትክክለኛ እና ግላዊ በሆነ መንገድ እንዲመዘግቡ ያነሳሳዎታል ብዬ ተስፋ አደርጋለሁ።',
-
-    howItWorksWhatIs: 'መሪ ዓመታዊ እቅድ አውጪ ምንድን ነው?',
-    howItWorksWhatIsDesc:
-      'አብዛኛዎቹ የእቅድ መተግበሪያዎች አእምሮን የሚያጨናንቁ ረጅም የስራ ዝርዝሮችን ይሰጣሉ። ይህ እቅድ አውጪ ግን የተለየ ነው፤ ትላልቅ የህይወት ህልሞችዎ ሳይዘነጉ በየቀኑ በ3 ወሳኝ ቅድሚያዎች ላይ ብቻ እንዲያተኩሩ የተነደፈ ረጋ ያለ የግል ማስታወሻ ነው።',
-    howItWorksFourStepRhythm: 'የ4ቱ ደረጃዎች ምት (ከትላልቅ ህልሞች ወደ ዕለታዊ ተግባር)',
-    howItWorksStep1Title: '1. ዓመታዊ ግቦች',
-    howItWorksStep1Desc:
-      'ለዓመትዎ መሪ ቃል ይምረጡ (ለምሳሌ፡ “እድገት”፣ “ሰላም”) እና ለጤና፣ ለስራ እና ለግንኙነቶች 2–3 ዋና ዋና ግቦችን ያስቀምጡ።',
-    howItWorksStep2Title: '2. ወርሃዊ እቅድ',
-    howItWorksStep2Desc:
-      'ትላልቅ ዓመታዊ ግቦችን ወደ 1–3 ተጨባጭ ወርሃዊ ውጤቶች ይከፋፍሉ። የሚያነቧቸውን መጽሐፍት እና የልማድ ወጥነትን ይከታተሉ።',
-    howItWorksStep3Title: '3. ሳምንታዊ እቅድ',
-    howItWorksStep3Desc:
-      'በየእሑዱ ወይም ሰኞ የሚቀጥሉትን 7 ቀናት አስቀድመው ይመልከቱ። 3 ዋና ዋና ሳምንታዊ ውጤቶችን ይምረጡ እና እንደ ስፖርት ወይም ማሰላሰል ያሉ ልማዶችን ያረጋግጡ።',
-    howItWorksStep4Title: '4. ዕለታዊ ማስታወሻ',
-    howItWorksStep4Desc:
-      'በየማለዳው 3ቱን ዋና ዋና ቅድሚያዎችዎን ይፃፉ። ቀኑን በስኬት ለማጠናቀቅ ይሄ በቂ ነው። በምሽት ደግሞ ያመሰገኑበትን አንድ ነገር ይፃፉ።',
-    howItWorksRuleOf3Title: 'የ “3ቱ ቅድሚያዎች ህግ” ሚስጥር',
-    howItWorksRuleOf3Desc:
-      '10 ቅድሚያ የሚሰጣቸው ነገሮች ካሉዎት፣ ምንም ቅድሚያ የለዎትም። በየማለዳው 3 ዋና ዋና ተግባራትን ብቻ በመምረጥ ውሳኔ የማሳለፍ ድካምን ያስወግዳሉ፤ ምሽት ላይም እውነተኛ የእርካታ ስሜት ይሰማዎታል።',
-    howItWorksPrivacyTitle: 'የእርስዎ ግላዊነት እና መረጃ ሁልጊዜ የተጠበቁ ናቸው',
-    howItWorksPrivacyDesc:
-      'የሚጽፉት ነገር ሁሉ በራስ-ሰር ወደ ግል መለያዎ ይቀመጣል። ኢንተርኔት በማይኖርበት ጊዜም ይሰራል፤ እንዲሁም በማንኛውም ጊዜ ከቅንብሮች እና ምትኬ ሙሉውን የመረጃዎን ኮፒ ወደ ኮምፒውተርዎ ማውረድ ይችላሉ።',
-    howItWorksGotIt: 'ተረድቻለሁ፣ ማቀድ እንጀምር!',
-
-    guideStep1Title: '1. ዓመታዊ ራዕይዎን ያስቀምጡ',
-    guideStep1Desc: 'ዓመቱን በመሪ ቃልዎ እና በዋና ዋና ዓላማዎችዎ ይጀምሩ።',
-    guideStep2Title: '2. የወርሃዊ ምት',
-    guideStep2Desc: 'የዕለት ተዕለት ስሜትዎን እና ልማዶችዎን በዓመቱ ሙሉ ይከታተሉ።',
-    guideStep3Title: '3. የ3ቱ ዋና ቅድሚያዎች ህግ',
-    guideStep3Desc: 'ከመጠን በላይ በሆኑ ዝርዝሮች ከመጨናነቅ ይልቅ በየቀኑ በ3 ዋና ዋና ውጤቶች ላይ ብቻ ያተኩሩ።',
-
-    daysShort: ['ሰኞ', 'ማክሰ', 'ረቡዕ', 'ሐሙስ', 'አርብ', 'ቅዳሜ', 'እሑድ'],
-    daysFull: ['ሰኞ', 'ማክሰኞ', 'ረቡዕ', 'ሐሙስ', 'አርብ', 'ቅዳሜ', 'እሑድ'],
-    months: [
-      'ጃንዋሪ', 'ፌብሩዋሪ', 'ማርች', 'ኤፕሪል', 'ሜይ', 'ጁን',
-      'ጁላይ', 'ኦገስት', 'ሴፕቴምበር', 'ኦክቶበር', 'ኖቬምበር', 'ዲሴምበር'
-    ],
-
     settings: 'ቅንብሮች',
     settingsAndBackup: 'ቅንብሮች እና ምትኬ',
     account: 'የእርስዎ መለያ',
     planningPreferences: 'የእቅድ ምርጫዎች',
-    calendarAndAppearance: 'የቀን መቁጠሪያ እና ገጽታ',
     weekStartsOn: 'ሳምንት የሚጀምርበት ቀን',
-    weekStartsOnDesc: 'ሳምንታዊ እቅድዎ እና የቀን መቁጠሪያዎ በሰኞ ወይም በእሑድ እንዲጀምር ይምረጡ።',
     monday: 'ሰኞ',
-    mondayDesc: 'መደበኛ የስራ ሳምንት እይታ (ቅዳሜ እና እሑድ በአንድ ላይ)',
     sunday: 'እሑድ',
-    sundayDesc: 'የተለመደው በእሑድ የሚጀምር የቀን መቁጠሪያ ቅርጸት',
-    themeLabel: 'የገጽታ እና የቀለም ምርጫ',
-    themeWarm: 'ሞቅ ያለ ወረቀት',
-    themeWarmDesc: 'ለስላሳ የክሬም ወረቀት ቀለም ከረጋ አረንጓዴ ጋር',
-    themeEditorial: 'ክላሲክ ነጭ',
-    themeEditorialDesc: 'ንጹህ እና ጥርት ያለ የነጭ ወረቀት ዘይቤ',
-    gentleTransitions: 'ረጋ ያሉ ሽግግሮች',
-    gentleTransitionsDesc: 'ለቀላል እና ለረጋ የተጠቃሚ ስሜት ፈጣን አኒሜሽኖችን ይቀንሱ',
-    savePreferences: 'ምርጫዎችን አስቀምጥ',
-    savedToProfile: 'በመገለጫው ላይ ተቀምጧል',
     topPriorities: '3ቱ ዋና ዋና ቅድሚያዎች',
     secondaryTasks: 'ሁለተኛ ደረጃ ተግባራት',
     dailyJournal: 'ዕለታዊ ማስታወሻ እና ማሰላሰል',
@@ -466,8 +344,132 @@ export const translations: Record<SupportedLanguage, TranslationDictionary> = {
     removePhoto: 'አስወግድ',
     languageLabel: 'ቋንቋ / Language',
     languageSelect: 'ቋንቋ ይምረጡ',
-    languageDesc: 'የመተግበሪያውን ቋንቋ በእንግሊዝኛ እና በአማርኛ መካከል ይምረጡ።',
-    englishOption: '🇺🇸 English (Default)',
-    amharicOption: '🇪🇹 አማርኛ (Amharic)',
+    ethiopianOrigin: 'አስተዋይ ማስታወሻ • የኢትዮጵያ መነሻ ታሪክ',
+    planWithIntention: 'በዓላማ ያቅዱ።',
+    liveWithClarity: 'በመረጋጋት እና በግልፅነት ይኑሩ።',
+    heroSubheadline:
+      'ዕለታዊ ትኩረትዎን፣ ሳምንታዊ ጥረትዎን፣ ወርሃዊ ግልጽነትዎን እና ዓመታዊ ራዕይዎን ወደ ዘላቂ የህይወት ቅርስ ለማስተሳሰር የተነደፈ የወረቀት መንፈስ ያለው መድረክ።',
+    compoundingQuote:
+      'ትላልቅ እርምጃዎችን ከመውሰዳችን በፊት ጥቃቅን መልካም ነገሮችን በየቀኑ ማከናወን ውሎ አድሮ ትልቅ ለውጥ ያመጣል።',
+
+    // Calendar
+    months: [
+      'ጃንዋሪ (ጥር)',
+      'ፌብሩዋሪ (የካቲት)',
+      'ማርች (መጋቢት)',
+      'ኤፕሪል (ሚያዝያ)',
+      'ሜይ (ግንቦት)',
+      'ጁን (ሰኔ)',
+      'ጁላይ (ሐምሌ)',
+      'ኦገስት (ነሐሴ)',
+      'ሴፕቴምበር (መስከረም)',
+      'ኦክቶበር (ጥቅምት)',
+      'ኖቬምበር (ኅዳር)',
+      'ዲሴምበር (ታኅሣሥ)',
+    ],
+    daysShort: ['ሰኞ', 'ማክ', 'ረቡዕ', 'ሐሙ', 'አርብ', 'ቅዳ', 'እሑድ'],
+    daysFull: [
+      'ሰኞ',
+      'ማክሰኞ',
+      'ረቡዕ',
+      'ሐሙስ',
+      'አርብ',
+      'ቅዳሜ',
+      'እሑድ',
+    ],
+    monthHeadingPrefix: 'ወር',
+    leapYearBadge: 'የዘመን መለወጫ ድርብ ዓመት • 29 ቀናት',
+    notesForDate: 'ማስታወሻ ለ',
+    dayMilestoneLabel: 'የቀኑ ዋና ዋና ተግባራት እና ግዴታዎች',
+    notesPlaceholder: 'ዋና ዋና ተግባራትን፣ ቀጠሮዎችን ወይም ማስታወሻዎችን እዚህ ይጻፉ...',
+    openDailyPage: 'ሙሉውን የዕለት ገጽ ክፈት →',
+    cancel: 'ሰርዝ',
+    saveNote: 'አስቀምጥ',
+    todayLabel: 'ዛሬ',
+
+    // Landing Page Sections
+    unifiedArchitecture: 'የተቀናጀ መዋቅር',
+    fourHorizonsHeadline: 'አራት አድማሶች፣ አንድ ቀጣይ ጉዞ',
+    fourHorizonsSubtitle:
+      'አብዛኛዎቹ ዲጂታል መሳሪያዎች ትኩረትዎን ይበታትኑታል። መሪ ዓመታዊ እቅድ አውጪ እያንዳንዱን ቅጽበት ከዋናው ራዕይዎ ጋር ያስተሳስራል።',
+    openYourJournal: 'የግል ማስታወሻዎን ይክፈቱ',
+    getStartedWithPlanner: 'በእቅድ አውጪዎ ይጀምሩ',
+    readOriginStory: 'የመነሻ ታሪኩን ያንብቡ',
+    corePhilosophyLabel: 'ዋና ፍልስፍና',
+    guidingPrincipleLabel: 'የመሪ ዓመታዊ እቅድ አውጪ መሪ መርህ',
+
+    // Horizon Cards
+    h1Title: 'ዓመታዊ ራዕይ',
+    h1Desc: 'የዓመቱ አጠቃላይ የቀን መቁጠሪያ፣ የዓመቱ መሪ ቃል፣ የህይወት ዘመን ግቦች፣ የመጽሐፍ መደርደሪያ እና የዓመት መጨረሻ በዓላት።',
+    h1Point1: 'የዓመቱ መሪ ቃል እና ጭብጥ',
+    h1Point2: 'የንባብ መጽሐፍ መደርደሪያ',
+    h1Point3: 'የ365 ቀናት የስሜት ማትሪክስ',
+
+    h2Title: 'ወርሃዊ ምት',
+    h2Desc: 'የወሩ ዋና ዋና ግዴታዎች፣ የልማድ ወጥነት መከታተያ፣ ቁልፍ ኩነቶች እና የተሰመረበት ማስታወሻ ማሰላሰያ።',
+    h2Point1: 'የወሩ የማይታለፉ ግቦች',
+    h2Point2: 'የልማድ ወጥነት መረብ',
+    h2Point3: 'የተሰመረበት ማሰላሰያ ማስታወሻ',
+
+    h3Title: 'ሳምንታዊ ባለሁለት ገጽ እቅድ',
+    h3Desc: 'ከሰኞ የሚጀምር እውነተኛ ባለሁለት ገጽ ማስታወሻ፣ የ3ቱ ዋና ተግባራት መርህ፣ ሳምንታዊ ቅድሚያዎች እና የቀጣይ ሳምንት አድማስ።',
+    h3Point1: 'የ3ቱ ዋና ዋና ተግባራት ትኩረት',
+    h3Point2: 'ከሰኞ የሚጀምር ሳምንት',
+    h3Point3: 'ሳምንታዊ ማስታወሻዎች እና ማሳሰቢያዎች',
+
+    h4Title: 'ዕለታዊ ትኩረት እና ማሰላሰል',
+    h4Desc: 'በ3 የማይደራደሩባቸው ቅድሚያዎች፣ የሰዓት ክፍፍል፣ የማለዳ ዓላማ፣ ምስጋና እና የምሽት ግምገማ ይጀምሩ።',
+    h4Point1: 'የ3ቱ ዋና ዋና ቅድሚያዎች ስርዓት',
+    h4Point2: 'አስተዋይ የማለዳ ዓላማ',
+    h4Point3: 'የምሽት ምስጋና እና ማጠቃለያ',
+
+    // Philosophy Section
+    quietIntentionHeading: 'በመረጋጋት እና በዓላማ የተነደፈ',
+    philosophyBody1:
+      'አብዛኛዎቹ ዲጂታል ምርታማነት አፖች እንደ ጫጫታ ካሲኖ የተነደፉ ናቸው—በማሳወቂያዎች፣ በሰው ሰራሽ ሩጫዎች እና በሮቦታዊ መለኪያዎች ከሰላም ይልቅ የጥፋተኝነት ስሜት ይፈጥራሉ።',
+    philosophyBody2:
+      'መሪ ዓመታዊ እቅድ አውጪ እንደ ጸጥተኛ መጠለያ የተገነባ ነው። በእጅ ከተሰፉ ባህላዊ ማስታወሻ ደብተሮች እና በኢትዮጵያ አስተዋይ የትዕግስት ወጎች ተመስርቶ፣ ህይወትን በእውነት የሚቀርፁ ጥቃቅን እና ተከታታይ ልማዶች ላይ እንዲያተኩሩ ያበረታታዎታል።',
+    founderQuote:
+      '«ዕለታዊ ተግባራትን ከህይወት ዘመን ዓላማ ጋር ሲያስተሳስሩ፣ ጸጥተኛ የሆኑት ቅጽበቶች እንኳ ጥልቅ ትርጉም ይኖራቸዋል።»',
+    founderName: 'ፒተር ሲሳይ',
+    founderRole: 'ፈጣሪ እና መሪ፣ አዲስ አበባ',
+
+    // How It Works Guide
+    guideSubtitle: 'ለተረጋጋ እና ግልጽ እቅድ ቀላል መመሪያ',
+    whatIsPlannerTitle: 'መሪ ዓመታዊ እቅድ አውጪ ምንድን ነው?',
+    whatIsPlannerBody:
+      'አብዛኛዎቹ የእቅድ መተግበሪያዎች ከኋላ የቀሩ እንደሆኑ እንዲሰማዎት የሚያደርጉ ማለቂያ የሌላቸው አስጨናቂ የስራ ዝርዝሮችን ይሰጡዎታል። ይህ እቅድ አውጪ የተለየ ነው፡ ትልልቅ የህይወት ህልሞችዎን እያዩ በየቀኑ በ3 ትርጉም ባላቸው ቅድሚያዎች ላይ ብቻ እንዲያተኩሩ የተነደፈ የተረጋጋ የግል ማስታወሻ ነው።',
+    fourStepRhythmTitle: 'የ4ቱ ደረጃዎች ምት (ከትልልቅ ህልሞች እስከ ዕለታዊ ተግባር)',
+    step1Name: '1. ዓመታዊ ግቦች',
+    step1Detail: 'ለዓመቱ መሪ ቃል ይምረጡ (ለምሳሌ፡ «እድገት»፣ «ሰላም») እና ለጤና፣ ለስራ እና ለግንኙነት 2-3 ትልልቅ ግቦችን ይጻፉ።',
+    step2Name: '2. ወርሃዊ እቅድ',
+    step2Detail: 'ትልልቅ ዓመታዊ ግቦችን ወደ 1-3 ተጨባጭ ወርሃዊ ውጤቶች ይከፋፍሉ። የሚያነቧቸውን መጻሕፍት እና የልማድ ቀጣይነትን በቀናት ውስጥ ይከታተሉ።',
+    step3Name: '3. ሳምንታዊ እቅድ',
+    step3Detail: 'በየሳምንቱ እሑድ ወይም ሰኞ፣ መጪዎቹን 7 ቀናት ይመልከቱ። 3ቱን ዋና ዋና ውጤቶች ይምረጡ እና እንደ አካል ብቃት ወይም ማሰላሰል ያሉ ልማዶችን ምልክት ያድርጉ።',
+    step4Name: '4. ዕለታዊ ማስታወሻ',
+    step4Detail: 'በየማለዳው 3ቱን ዋና ዋና ቅድሚያዎችዎን ይጻፉ። ቀኑን በድል ለማጠናቀቅ የሚያስፈልግዎት ያ ብቻ ነው። በምሽት ደግሞ የሚያመሰግኑበትን አንድ ነገር ይጻፉ።',
+    ruleOf3SecretTitle: 'የ«3ቱ ቅድሚያዎች» ሚስጥር',
+    ruleOf3SecretBody:
+      '10 ቅድሚያዎች ካሉዎት ምንም ቅድሚያ የለዎትም። በየማለዳው ሶስት አስፈላጊ ተግባራትን ብቻ በመምረጥ፣ የመወሰን ድካምን ያስወግዳሉ እንዲሁም ፀሐይ ስትጠልቅ እውነተኛ የስኬት ስሜት ይሰማዎታል።',
+    privacyProtectedTitle: 'የእርስዎ ግላዊነት እና መረጃ ሁልጊዜ የተጠበቀ ነው',
+    privacyProtectedBody:
+      'የሚጽፉት ነገር ሁሉ በግል መለያዎ ውስጥ በራስ-ሰር ይቀመጣል። ኢንተርኔት በሚቋረጥበት ጊዜም እንኳን ይሰራል፣ እና ከቅንብሮች እና ምትኬ ገጽ በማንኛውም ጊዜ ሙሉ የመጠባበቂያ ቅጂ ወደ ኮምፒውተርዎ ማውረድ ይችላሉ።',
+    gotItLetsPlan: 'ተረድቻለሁ፣ ማቀድ እንጀምር!',
+
+    // Creator Story
+    creatorStoryHeading: 'ይህን ለምን ፈጠርኩት?',
+    creatorStorySubheading: 'ከአዲስ አበባ በፍቅር እና በታሰበበት ዓላማ',
+    originNarrativeBadge: 'የመነሻ ትረካ',
+    craftedForCreators: 'ለአስተዋይ ፈጣሪዎች የተዘጋጀ',
+    storyP1:
+      'በኢትዮጵያ ውስጥ ከተራ ነጭ ገጾች የበለጠ የሆነ እቅድ ማውጪያ ማስታወሻ ማግኘት ፈጽሞ የማይቻል ነው። እኔ ሁልጊዜ በእቅድ የማምን ሰው ነኝ—የማደርገውን ማንኛውንም ነገር በወረቀት ላይ ማስፈር እመርጣለሁ። ነገር ግን እዚህ አገር መሪ እቅድ አውጪ ማግኘት ትልቅ ፈተና ነበር። ለዓመታት ፍላጎቴን የሚያሟላ ነገር ለማግኘት ከሌሎች አገሮች ማዘዝ ነበረብኝ።',
+    storyP2:
+      'ማቀድ እና ማስታወሻ መጻፍ ለእኔ ልማዶች ብቻ አይደሉም፤ በህይወቴ ላይ አሻራዬን የማስቀምጥበት መንገድ ናቸው። ባቀድኩ ቁጥር ጉዞዬን እመዘግባለሁ፣ በእያንዳንዱ ማሰላሰልም የት እንደነበርኩ እና የት መሄድ እንዳለብኝ አያለሁ። ይህ ቀጣይነት ያለው እድገት እና ራስን የማሻሻል ሂደት ነው።',
+    storyP3:
+      'ነገር ግን እነዚያን ከውጭ የሚመጡ እቅድ አውጪዎች ብጠቀምባቸውም፣ መቼም የራሴ እንደሆኑ ተሰምቶኝ አያውቅም። ባህሌን፣ ልምዶቼን ወይም ህይወቴን እንዴት መምራት እንደምፈልግ አያንጸባርቁም ነበር። ለዚህም ነው የራሴን እቅድ አውጪ ለመፍጠር የወሰንኩት—የሚመራ፣ ትርጉም ያለው፣ እና እንደ እኔ የጉዟቸውን ቅርስ ለማስቀረት፣ ወደ ኋላ ተመልክተው ለመማር እና ለማደግ ለሚፈልጉ ሰዎች የተነደፈ።',
+    storyP4:
+      'ማስታወሻዬን ሳወጣ ሰዎች ሁልጊዜ እንዴት እንደማደርገው ይጠይቁኛል፣ እና እኔ ስፈልገው የነበረው መመሪያ ለሌሎችም እንደሚጠቅም ተገነዘብኩ። እኔም ለማግኘት የተቸገርኩትን ነገር ለማቅረብ እና እነዚያን ጥያቄዎች ለመመለስ አላማ አድርጌ ተነሳሁ።',
+    storyQuote:
+      '«ይህ እቅድ አውጪ የተደራጁ እንዲሆኑ ብቻ ሳይሆን፣ ለእኔ እንደሆነው ሁሉ ህይወትዎን እውነተኛ እና ግላዊ በሆነ መንገድ እንዲመዘግቡ ያነሳሳዎታል ብዬ ተስፋ አደርጋለሁ።»',
   },
 };
