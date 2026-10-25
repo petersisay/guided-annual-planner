@@ -33,9 +33,9 @@ export default {
         },
       },
       fontFamily: {
-        serif: ['Cinzel', 'Cormorant Garamond', 'Georgia', 'serif'],
+        serif: ['Cinzel', 'Cormorant Garamond', 'Noto Serif Ethiopic', 'Georgia', 'serif'],
         script: ['Caveat', 'cursive'],
-        sans: ['Inter', 'system-ui', 'sans-serif'],
+        sans: ['Inter', 'Noto Sans Ethiopic', 'system-ui', 'sans-serif'],
       },
       boxShadow: {
         paper: '0 4px 20px -2px rgba(26, 26, 26, 0.05), 0 2px 6px -1px rgba(26, 26, 26, 0.02)',
