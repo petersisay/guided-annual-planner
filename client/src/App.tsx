@@ -7,6 +7,7 @@ import { MissingGoogleConfigCard } from './components/auth/MissingGoogleConfigCa
 import { PaperPageSpinner } from './components/common/PaperPageSpinner';
 import { PwaUpdatePrompt } from './components/common/PwaUpdatePrompt';
 import { GlobalClickAnimation } from './components/common/GlobalClickAnimation';
+import { GlobalCursorMovement } from './components/common/GlobalCursorMovement';
 import { register } from './serviceWorkerRegistration';
 
 // Lazy-loaded route components for optimal initial bundle performance
@@ -138,6 +139,7 @@ export const AppContent: React.FC = () => {
       />
 
       <GlobalClickAnimation />
+      <GlobalCursorMovement />
     </BrowserRouter>
   );
 };
