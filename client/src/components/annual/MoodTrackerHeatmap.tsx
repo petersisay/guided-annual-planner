@@ -330,6 +330,9 @@ export const MoodTrackerHeatmap: React.FC<MoodTrackerHeatmapProps> = ({ year }) 
         {selectedDate && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-ink/20 backdrop-blur-xs">
             <motion.div
+              role="dialog"
+              aria-modal="true"
+              aria-labelledby="mood-logger-title"
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
@@ -338,13 +341,15 @@ export const MoodTrackerHeatmap: React.FC<MoodTrackerHeatmapProps> = ({ year }) 
               <div className="flex items-center justify-between mb-4 pb-2 border-b border-border-subtle">
                 <div className="flex items-center gap-2">
                   <Heart className="w-4 h-4 text-sage" />
-                  <span className="font-serif text-lg font-medium text-ink">
+                  <span id="mood-logger-title" className="font-serif text-lg font-medium text-ink">
                     {selectedDate}
                   </span>
                 </div>
                 <button
+                  type="button"
                   onClick={() => setSelectedDate(null)}
                   className="text-ink-muted hover:text-ink p-1 rounded-full"
+                  aria-label="Close mood logger"
                 >
                   <X className="w-4 h-4" />
                 </button>

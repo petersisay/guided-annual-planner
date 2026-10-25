@@ -27,7 +27,11 @@ export const LanguageSelector: React.FC<LanguageSelectorProps> = ({
           : 'bg-paper-alt hover:bg-paper border-border-subtle text-ink-muted hover:text-ink'
       } ${className}`}
       title={language === 'en' ? 'Switch to Amharic (አማርኛ)' : 'Switch to English'}
-      aria-label="Toggle language option"
+      aria-label={
+        language === 'en'
+          ? 'Switch interface language to Amharic'
+          : 'ቋንቋን ወደ እንግሊዝኛ ቀይር (Switch to English)'
+      }
     >
       <Globe className="w-3.5 h-3.5 text-sage flex-shrink-0" />
       <span className="flex items-center gap-1">

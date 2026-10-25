@@ -158,7 +158,9 @@ export const PlannerLayout: React.FC<PlannerLayoutProps> = ({
             type="button"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             className="p-1.5 text-ink-muted hover:text-ink rounded-lg cursor-pointer"
-            aria-label="Toggle navigation menu"
+            aria-label={mobileMenuOpen ? 'Close navigation menu' : 'Open navigation menu'}
+            aria-expanded={mobileMenuOpen}
+            aria-controls="planner-sidebar-navigation"
           >
             {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
           </button>
@@ -167,6 +169,7 @@ export const PlannerLayout: React.FC<PlannerLayoutProps> = ({
 
       {/* Sidebar Navigation */}
       <aside
+        id="planner-sidebar-navigation"
         className={`${
           mobileMenuOpen ? 'flex' : 'hidden'
         } md:flex flex-col justify-between w-full md:w-64 bg-paper-alt border-r border-border-subtle relative z-30 flex-shrink-0 md:min-h-screen`}
