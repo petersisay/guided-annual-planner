@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { RefreshCw, X, Sparkles, AlertCircle } from 'lucide-react';
+import { RefreshCw, X, AlertCircle } from 'lucide-react';
 import { applyUpdate } from '../../serviceWorkerRegistration';
 import { syncManager } from '../../services/syncManager';
 import { getPendingMutationsCount } from '../../utils/offlineDb';
@@ -99,7 +99,7 @@ export const PwaUpdatePrompt: React.FC<PwaUpdatePromptProps> = ({
     >
       <div className="flex items-start gap-3">
         <div className="w-8 h-8 rounded-full bg-sage-surface border border-sage/30 flex items-center justify-center shrink-0 text-sage mt-0.5">
-          <Sparkles className="w-4 h-4" />
+          <RefreshCw className="w-4 h-4" />
         </div>
 
         <div className="flex-1">

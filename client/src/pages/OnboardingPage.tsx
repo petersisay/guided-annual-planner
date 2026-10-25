@@ -6,7 +6,7 @@ import {
   ArrowLeft,
   CheckCircle2,
   Calendar,
-  Sparkles,
+  BookOpen,
   Heart,
   Sun,
   X,
@@ -161,7 +161,7 @@ export const OnboardingPage: React.FC = () => {
           {step === 1 && (
             <div className="space-y-6 text-center">
               <div className="w-14 h-14 rounded-full bg-sage-surface border border-sage/30 text-sage mx-auto flex items-center justify-center">
-                <Sparkles className="w-7 h-7" />
+                <Compass className="w-7 h-7" />
               </div>
               <div className="space-y-2">
                 <h1 className="font-serif text-2xl sm:text-3xl font-medium text-ink">

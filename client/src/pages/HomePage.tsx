@@ -5,7 +5,6 @@ import {
   CalendarDays,
   LayoutGrid,
   Sun,
-  Sparkles,
   Heart,
   ArrowRight,
   CheckCircle2,
@@ -84,7 +83,7 @@ export const HomePage: React.FC = () => {
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-8">
           {/* Botanical Badge */}
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-sage-surface border border-sage/30 text-sage text-xs font-serif font-medium shadow-xs">
-            <Sparkles className="w-3.5 h-3.5" />
+            <Compass className="w-3.5 h-3.5" />
             <span>Mindful Journaling &bull; Ethiopian Origin Story</span>
           </div>
 

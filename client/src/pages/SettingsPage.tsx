@@ -4,7 +4,7 @@ import {
   Settings,
   Shield,
   Calendar,
-  Sparkles,
+  BookOpen,
   Download,
   Upload,
   LogOut,
@@ -488,7 +488,7 @@ export const SettingsPage: React.FC = () => {
         <div className="bg-paper-alt border border-border-subtle rounded-2xl p-6 shadow-xs space-y-4">
           <div className="flex items-center justify-between border-b border-border-subtle pb-3">
             <div className="flex items-center gap-2">
-              <Sparkles className="w-4 h-4 text-sage" />
+              <BookOpen className="w-4 h-4 text-sage" />
               <h2 className="font-serif text-lg font-medium text-ink">
                 Quick Start Guide &amp; Tips
               </h2>

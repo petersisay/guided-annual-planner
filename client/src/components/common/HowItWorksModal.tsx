@@ -1,5 +1,5 @@
 import React from 'react';
-import { X, Calendar, CalendarDays, LayoutGrid, Sun, CheckCircle2, ShieldCheck, Heart, Sparkles } from 'lucide-react';
+import { X, Calendar, CalendarDays, LayoutGrid, Sun, CheckCircle2, ShieldCheck, Heart, BookOpen } from 'lucide-react';
 
 interface HowItWorksModalProps {
   isOpen: boolean;
@@ -21,7 +21,7 @@ export const HowItWorksModal: React.FC<HowItWorksModalProps> = ({ isOpen, onClos
         <div className="px-6 py-4 border-b border-border-subtle flex items-center justify-between bg-paper">
           <div className="flex items-center gap-2.5">
             <div className="w-8 h-8 rounded-full bg-sage-surface border border-sage/40 flex items-center justify-center text-sage">
-              <Sparkles className="w-4 h-4" />
+              <BookOpen className="w-4 h-4" />
             </div>
             <div>
               <h2 id="how-it-works-title" className="font-serif text-lg font-semibold text-ink leading-tight">

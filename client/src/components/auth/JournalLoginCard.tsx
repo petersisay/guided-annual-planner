@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { GoogleLogin, CredentialResponse } from '@react-oauth/google';
-import { BookOpen, Calendar, Sparkles, CheckCircle2, ShieldCheck, AlertCircle } from 'lucide-react';
+import { BookOpen, Calendar, CheckCircle2, ShieldCheck, AlertCircle } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 
 export const JournalLoginCard: React.FC = () => {
@@ -114,7 +114,7 @@ export const JournalLoginCard: React.FC = () => {
           {/* Header */}
           <div className="mb-8">
             <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-sage-surface border border-sage/30 text-sage text-xs font-medium mb-3">
-              <Sparkles className="w-3.5 h-3.5" />
+              <BookOpen className="w-3.5 h-3.5" />
               <span>Step 1: Open Your Journal</span>
             </div>
             <h2 className="font-serif text-2xl md:text-3xl font-medium text-ink mb-2">
@@ -183,7 +183,7 @@ export const JournalLoginCard: React.FC = () => {
                   disabled={loading}
                   className="w-full inline-flex items-center justify-center gap-2 py-2.5 px-4 rounded-lg bg-sage/10 hover:bg-sage/20 border border-sage/40 text-sage font-serif font-medium text-xs transition-colors cursor-pointer"
                 >
-                  <Sparkles className="w-3.5 h-3.5" />
+                  <BookOpen className="w-3.5 h-3.5" />
                   <span>Enter Local Demo Journal (Developer Mode)</span>
                 </button>
               </div>

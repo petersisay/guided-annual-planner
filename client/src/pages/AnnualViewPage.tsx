@@ -11,7 +11,7 @@ import {
   CalendarDays,
   LayoutGrid,
   BookOpen,
-  Sparkles,
+  Compass,
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { AnnualPlan, isLeapYear, getISOWeekNumber } from '@planner/shared';
@@ -272,7 +272,7 @@ export const AnnualViewPage: React.FC = () => {
         {user?.preferences?.onboardingStatus === 'not_started' && (
           <div className="p-4 sm:p-5 bg-sage-surface border border-sage/30 rounded-2xl flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-xs">
             <div className="flex items-start sm:items-center gap-3">
-              <Sparkles className="w-5 h-5 text-sage flex-shrink-0 mt-0.5 sm:mt-0" />
+              <Compass className="w-5 h-5 text-sage flex-shrink-0 mt-0.5 sm:mt-0" />
               <div>
                 <span className="font-serif font-semibold text-sm text-ink block">
                   Welcome to Your Guided Annual Planner!

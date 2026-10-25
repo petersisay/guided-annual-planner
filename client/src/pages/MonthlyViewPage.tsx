@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { ChevronLeft, ChevronRight, LayoutDashboard, Calendar, Sparkles, Heart } from 'lucide-react';
+import { ChevronLeft, ChevronRight, LayoutDashboard, Calendar, BookOpen, Heart } from 'lucide-react';
 import { MonthlyPlan, getMonthName } from '@planner/shared';
 import { PlannerLayout } from '../components/layout/PlannerLayout';
 import { MonthlyDashboard } from '../components/monthly/MonthlyDashboard';
@@ -298,7 +298,7 @@ export const MonthlyViewPage: React.FC = () => {
             {viewMode === 'trackers' && (
               <div className="space-y-8">
                 <div className="p-4 bg-paper-alt border border-border-subtle rounded-xl flex items-center gap-3">
-                  <Sparkles className="w-4 h-4 text-sage flex-shrink-0" />
+                  <BookOpen className="w-4 h-4 text-sage flex-shrink-0" />
                   <p className="font-serif text-xs text-ink-muted">
                     Your monthly habit consistency and daily emotions automatically aggregate into your
                     annual journal below, ensuring zero duplicate records.

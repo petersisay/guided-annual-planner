@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Smile, CheckSquare, Target, Sparkles, ExternalLink } from 'lucide-react';
+import { Smile, CheckSquare, Target, Compass, ExternalLink } from 'lucide-react';
 import { DailyContext } from '@planner/shared';
 
 interface DailyContextSummaryProps {
@@ -23,7 +23,7 @@ export const DailyContextSummary: React.FC<DailyContextSummaryProps> = ({
       {/* Header */}
       <div className="flex items-center justify-between border-b border-border-subtle pb-3">
         <div className="flex items-center gap-2">
-          <Sparkles className="w-4 h-4 text-sage" />
+          <Compass className="w-4 h-4 text-sage" />
           <h2 className="font-serif text-lg font-semibold text-ink">
             Journal Companion
           </h2>

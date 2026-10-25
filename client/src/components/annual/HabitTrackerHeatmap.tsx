@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Check, Plus, Trash2, Edit2, Sparkles, X, Flame } from 'lucide-react';
+import { Check, Plus, Trash2, Edit2, X, Flame } from 'lucide-react';
 import { Habit, getMonthName, getDaysInMonth, formatDateStr, isLeapYear } from '@planner/shared';
 import { useAuth } from '../../context/AuthContext';
 import { syncManager } from '../../services/syncManager';
@@ -438,7 +438,7 @@ export const HabitTrackerHeatmap: React.FC<HabitTrackerHeatmapProps> = ({ year }
             >
               <div className="flex items-center justify-between mb-4 pb-2 border-b border-border-subtle">
                 <div className="flex items-center gap-2">
-                  <Sparkles className="w-4 h-4 text-sage" />
+                  <Flame className="w-4 h-4 text-sage" />
                   <span className="font-serif text-lg font-medium text-ink">
                     New Annual Habit
                   </span>

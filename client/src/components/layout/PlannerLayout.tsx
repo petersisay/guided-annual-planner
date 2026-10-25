@@ -10,7 +10,6 @@ import {
   LogOut,
   Menu,
   X,
-  Sparkles,
   CloudOff,
   RefreshCw,
   AlertTriangle,
@@ -148,7 +147,7 @@ export const PlannerLayout: React.FC<PlannerLayoutProps> = ({
             className="px-2.5 py-1 text-xs font-serif bg-sage-surface text-forest rounded-lg border border-sage/30 flex items-center gap-1 cursor-pointer"
             title="How This Planner Works"
           >
-            <Sparkles className="w-3 h-3 text-sage" />
+            <BookOpen className="w-3 h-3 text-sage" />
             <span>Guide</span>
           </button>
           <button
@@ -229,7 +228,7 @@ export const PlannerLayout: React.FC<PlannerLayoutProps> = ({
             className="w-full mt-4 flex items-center justify-between px-3 py-2.5 bg-sage-surface/80 hover:bg-sage-surface border border-sage/30 rounded-xl text-xs font-serif text-forest transition-all cursor-pointer shadow-2xs group"
           >
             <span className="flex items-center gap-2">
-              <Sparkles className="w-4 h-4 text-sage group-hover:rotate-12 transition-transform" />
+              <BookOpen className="w-4 h-4 text-sage group-hover:scale-105 transition-transform" />
               <span className="font-semibold">How This Planner Works</span>
             </span>
             <span className="text-[10px] font-sans bg-paper px-1.5 py-0.5 rounded border border-sage/20 text-ink-muted">
@@ -240,7 +239,7 @@ export const PlannerLayout: React.FC<PlannerLayoutProps> = ({
           {/* Daily Philosophy Quote */}
           <div className="mt-6 p-3.5 bg-paper rounded-xl border border-border-subtle/80">
             <div className="flex items-center gap-1.5 text-sage text-[10px] uppercase tracking-wider font-sans font-semibold mb-1">
-              <Sparkles className="w-3 h-3" />
+              <Sun className="w-3 h-3" />
               <span>Core Intention</span>
             </div>
             <p className="font-script text-ink-muted text-sm leading-snug">

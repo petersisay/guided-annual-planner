@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Compass, Plus, Trash2, Check, Sparkles } from 'lucide-react';
+import { Compass, Plus, Trash2, Check } from 'lucide-react';
 import { AnnualPlan } from '@planner/shared';
 
 interface AnnualIntentionCardProps {
@@ -102,7 +102,7 @@ export const AnnualIntentionCard: React.FC<AnnualIntentionCardProps> = ({
         <div>
           <div className="flex items-center justify-between mb-3">
             <div className="flex items-center gap-2">
-              <Sparkles className="w-4 h-4 text-sage" />
+              <Compass className="w-4 h-4 text-sage" />
               <h3 className="font-serif text-lg text-ink font-semibold">
                 Core Intentions & Commitments
               </h3>
