@@ -65,6 +65,32 @@ export interface TranslationDictionary {
   creatorName: string;
   creatorRole: string;
   creatorQuote: string;
+  creatorStoryTitle: string;
+  creatorStorySubtitle: string;
+  creatorStoryBadge: string;
+  creatorStoryP1: string;
+  creatorStoryP2: string;
+  creatorStoryP3: string;
+  creatorStoryP4: string;
+  creatorStoryQuoteBox: string;
+
+  // How it works modal
+  howItWorksWhatIs: string;
+  howItWorksWhatIsDesc: string;
+  howItWorksFourStepRhythm: string;
+  howItWorksStep1Title: string;
+  howItWorksStep1Desc: string;
+  howItWorksStep2Title: string;
+  howItWorksStep2Desc: string;
+  howItWorksStep3Title: string;
+  howItWorksStep3Desc: string;
+  howItWorksStep4Title: string;
+  howItWorksStep4Desc: string;
+  howItWorksRuleOf3Title: string;
+  howItWorksRuleOf3Desc: string;
+  howItWorksPrivacyTitle: string;
+  howItWorksPrivacyDesc: string;
+  howItWorksGotIt: string;
 
   // Guide Steps
   guideStep1Title: string;
@@ -193,6 +219,43 @@ export const translations: Record<SupportedLanguage, TranslationDictionary> = {
     creatorRole: 'Creator • Addis Ababa, Ethiopia',
     creatorQuote:
       'In Ethiopia, it’s nearly impossible to find a journal that’s more than just plain pages. Planning and journaling aren’t just habits for me; they’re how I leave a mark on my life. I created this planner to provide something that is guided, meaningful, and designed for people who want to document their journey and grow.',
+    creatorStoryTitle: 'Why I Created This?',
+    creatorStorySubtitle: 'From Addis Ababa with love & deliberate intention',
+    creatorStoryBadge: 'The Origin Narrative',
+    creatorStoryP1:
+      'In Ethiopia, it’s nearly impossible to find a journal that’s more than just plain pages. I’ve always been big on planning—whatever I do, I make sure to put everything on paper. But finding a guided planner here has been a real challenge. For years, I had to buy planners from other countries just to get something that matched my needs.',
+    creatorStoryP2:
+      'Planning and journaling aren’t just habits for me; they’re how I leave a mark on my life. Every time I plan, I document my journey, and with each reflection, I see where I’ve been and where I need to go. It’s a process of constant growth and self-improvement.',
+    creatorStoryP3:
+      'But as much as I loved using those imported planners, they never felt truly mine. They didn’t reflect my culture, experiences, or how I wanted to live my life. That’s why I decided to create my own planner—one that’s guided, meaningful, and designed for people like me who want to leave a legacy of their journey, to look back, learn, and grow.',
+    creatorStoryP4:
+      'Whenever I take out my journal, people often ask me how I do it, and I realize that others could benefit from the same guidance I was searching for. That’s when I made it my mission to fulfill those requests and provide something that I, too, struggled to find.',
+    creatorStoryQuoteBox:
+      'I hope this planner will not only help you stay organized but also inspire you to document your life in a way that feels authentic and personal, just like it has for me.',
+
+    howItWorksWhatIs: 'What is the Guided Annual Planner?',
+    howItWorksWhatIsDesc:
+      'Most planner apps give you endless, stressful to-do lists that leave you feeling behind. This planner is different: it is a calm, private journal designed to help you focus on just 3 meaningful priorities each day while keeping your bigger life dreams in sight.',
+    howItWorksFourStepRhythm: 'The 4-Step Rhythm (From Big Dreams to Daily Action)',
+    howItWorksStep1Title: '1. Yearly Goals',
+    howItWorksStep1Desc:
+      'Choose a theme word for your year (e.g., “Growth”, “Peace”) and write down 2–3 big goals for health, career, and relationships.',
+    howItWorksStep2Title: '2. Monthly Planner',
+    howItWorksStep2Desc:
+      'Break big yearly goals into 1–3 concrete monthly milestones. Track books you read and habit streaks across the days.',
+    howItWorksStep3Title: '3. Weekly Planner',
+    howItWorksStep3Desc:
+      'Every Sunday or Monday, look ahead at your 7 days. Pick your top 3 weekly outcomes and check off habits like exercise or meditation.',
+    howItWorksStep4Title: '4. Daily Journal',
+    howItWorksStep4Desc:
+      'Each morning, write your Top 3 Priorities. That’s all you need to win the day. In the evening, write one thing you are grateful for.',
+    howItWorksRuleOf3Title: 'The “Rule of 3” Secret',
+    howItWorksRuleOf3Desc:
+      'If you have 10 priorities, you have none. By picking only three important tasks each morning, you eliminate decision fatigue and feel genuine accomplishment by sunset.',
+    howItWorksPrivacyTitle: 'Your Privacy & Data Are Always Protected',
+    howItWorksPrivacyDesc:
+      'Everything you write is saved automatically to your private account. It works even when your internet drops, and you can download a full backup copy to your computer anytime from Settings & Backup.',
+    howItWorksGotIt: 'Got it, Let’s Plan!',
 
     guideStep1Title: '1. Set Your Annual Vision',
     guideStep1Desc: 'Begin each year with your anchor word and core intentions.',
@@ -319,6 +382,43 @@ export const translations: Record<SupportedLanguage, TranslationDictionary> = {
     creatorRole: 'ፈጣሪ • አዲስ አበባ፣ ኢትዮጵያ',
     creatorQuote:
       'በኢትዮጵያ ውስጥ ባዶ ገጾች ካሏቸው ደብተሮች ውጭ የተመራ እና የተቀናጀ ማስታወሻ ማግኘት በጣም ከባድ ነው። ለእኔ ማቀድ እና መፃፍ ልማድ ብቻ አይደሉም፤ በህይወቴ ላይ የራሴን አሻራ የማሳርፍበት መንገድ ነው። ይህንን እቅድ አውጪ የፈጠርኩት ትርጉም ያለው፣ የተመራ እና ጉዟቸውን መዝግበው ማደግ ለሚፈልጉ ሁሉ ነው።',
+    creatorStoryTitle: 'ይህን ለምን ፈጠርኩት?',
+    creatorStorySubtitle: 'ከአዲስ አበባ በፍቅር እና በታሰበበት ዓላማ',
+    creatorStoryBadge: 'የመነሻ ታሪክ',
+    creatorStoryP1:
+      'በኢትዮጵያ ውስጥ ባዶ ገጾች ካሏቸው ደብተሮች ውጭ የተመራ እና የተቀናጀ ማስታወሻ ማግኘት በጣም ከባድ ነው። ለእቅድ ሁልጊዜም ትልቅ ቦታ እሰጣለሁ — ምንም የማደርገው ነገር ቢኖር ሁሉንም ነገር በወረቀት ላይ ማስፈር እመርጣለሁ። ነገር ግን እዚህ አገር ፍላጎቴን የሚያሟላ መሪ እቅድ አውጪ ማግኘት እውነተኛ ፈተና ሆኖብኝ ቆይቷል። ለዓመታት ከውጭ አገር እቅድ አውጪዎችን ለማስመጣት እገደድ ነበር።',
+    creatorStoryP2:
+      'ለእኔ ማቀድ እና ማስታወሻ መያዝ ልማድ ብቻ አይደሉም፤ በህይወቴ ላይ የራሴን አሻራ የማሳርፍበት መንገድ ነው። ባቀድኩ ቁጥር ጉዞዬን እመዘግባለሁ፣ በየቀኑ ሳሰላስልም የት እንደነበርኩ እና ወዴት መሄድ እንዳለብኝ አያለሁ። ይህ ቀጣይነት ያለው እድገት እና ራስን የማሻሻል ሂደት ነው።',
+    creatorStoryP3:
+      'ነገር ግን እነዚያን ከውጭ የመጡ እቅድ አውጪዎችን ብጠቀምባቸውም፣ በፍፁም የእኔ እንደሆኑ ተሰምቶኝ አያውቅም። የእኔን ባህል፣ ልምዶች ወይም ህይወቴን እንዴት መምራት እንደምፈልግ አያንፀባርቁም ነበር። ለዚህም ነው የራሴን እቅድ አውጪ ለመፍጠር የወሰንኩት — መሪ የሆነ፣ ትርጉም ያለው፣ እና እንደ እኔ ጉዟቸውን መዝግበው ማደግ እና የህይወት አሻራቸውን ማሳረፍ ለሚፈልጉ የተዘጋጀ።',
+    creatorStoryP4:
+      'ማስታወሻዬን ሳወጣ ሰዎች እንዴት እንደማቅድ ይጠይቁኛል፤ እኔ እፈልገው ከነበረው መመሪያ ሌሎችም ሊጠቀሙ እንደሚችሉ ተረዳሁ። ያኔ ነበር እኔም ለማግኘት እቸገርበት የነበረውን ይህንን መሪ እቅድ አውጪ ለሁሉም ማቅረብን አላማዬ ያደረግኩት።',
+    creatorStoryQuoteBox:
+      'ይህ እቅድ አውጪ ስራዎን እንዲያደራጁ ብቻ ሳይሆን፣ ለእኔ እንደሆነው ሁሉ ህይወትዎን ትክክለኛ እና ግላዊ በሆነ መንገድ እንዲመዘግቡ ያነሳሳዎታል ብዬ ተስፋ አደርጋለሁ።',
+
+    howItWorksWhatIs: 'መሪ ዓመታዊ እቅድ አውጪ ምንድን ነው?',
+    howItWorksWhatIsDesc:
+      'አብዛኛዎቹ የእቅድ መተግበሪያዎች አእምሮን የሚያጨናንቁ ረጅም የስራ ዝርዝሮችን ይሰጣሉ። ይህ እቅድ አውጪ ግን የተለየ ነው፤ ትላልቅ የህይወት ህልሞችዎ ሳይዘነጉ በየቀኑ በ3 ወሳኝ ቅድሚያዎች ላይ ብቻ እንዲያተኩሩ የተነደፈ ረጋ ያለ የግል ማስታወሻ ነው።',
+    howItWorksFourStepRhythm: 'የ4ቱ ደረጃዎች ምት (ከትላልቅ ህልሞች ወደ ዕለታዊ ተግባር)',
+    howItWorksStep1Title: '1. ዓመታዊ ግቦች',
+    howItWorksStep1Desc:
+      'ለዓመትዎ መሪ ቃል ይምረጡ (ለምሳሌ፡ “እድገት”፣ “ሰላም”) እና ለጤና፣ ለስራ እና ለግንኙነቶች 2–3 ዋና ዋና ግቦችን ያስቀምጡ።',
+    howItWorksStep2Title: '2. ወርሃዊ እቅድ',
+    howItWorksStep2Desc:
+      'ትላልቅ ዓመታዊ ግቦችን ወደ 1–3 ተጨባጭ ወርሃዊ ውጤቶች ይከፋፍሉ። የሚያነቧቸውን መጽሐፍት እና የልማድ ወጥነትን ይከታተሉ።',
+    howItWorksStep3Title: '3. ሳምንታዊ እቅድ',
+    howItWorksStep3Desc:
+      'በየእሑዱ ወይም ሰኞ የሚቀጥሉትን 7 ቀናት አስቀድመው ይመልከቱ። 3 ዋና ዋና ሳምንታዊ ውጤቶችን ይምረጡ እና እንደ ስፖርት ወይም ማሰላሰል ያሉ ልማዶችን ያረጋግጡ።',
+    howItWorksStep4Title: '4. ዕለታዊ ማስታወሻ',
+    howItWorksStep4Desc:
+      'በየማለዳው 3ቱን ዋና ዋና ቅድሚያዎችዎን ይፃፉ። ቀኑን በስኬት ለማጠናቀቅ ይሄ በቂ ነው። በምሽት ደግሞ ያመሰገኑበትን አንድ ነገር ይፃፉ።',
+    howItWorksRuleOf3Title: 'የ “3ቱ ቅድሚያዎች ህግ” ሚስጥር',
+    howItWorksRuleOf3Desc:
+      '10 ቅድሚያ የሚሰጣቸው ነገሮች ካሉዎት፣ ምንም ቅድሚያ የለዎትም። በየማለዳው 3 ዋና ዋና ተግባራትን ብቻ በመምረጥ ውሳኔ የማሳለፍ ድካምን ያስወግዳሉ፤ ምሽት ላይም እውነተኛ የእርካታ ስሜት ይሰማዎታል።',
+    howItWorksPrivacyTitle: 'የእርስዎ ግላዊነት እና መረጃ ሁልጊዜ የተጠበቁ ናቸው',
+    howItWorksPrivacyDesc:
+      'የሚጽፉት ነገር ሁሉ በራስ-ሰር ወደ ግል መለያዎ ይቀመጣል። ኢንተርኔት በማይኖርበት ጊዜም ይሰራል፤ እንዲሁም በማንኛውም ጊዜ ከቅንብሮች እና ምትኬ ሙሉውን የመረጃዎን ኮፒ ወደ ኮምፒውተርዎ ማውረድ ይችላሉ።',
+    howItWorksGotIt: 'ተረድቻለሁ፣ ማቀድ እንጀምር!',
 
     guideStep1Title: '1. ዓመታዊ ራዕይዎን ያስቀምጡ',
     guideStep1Desc: 'ዓመቱን በመሪ ቃልዎ እና በዋና ዋና ዓላማዎችዎ ይጀምሩ።',
