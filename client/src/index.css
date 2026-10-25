@@ -37,6 +37,16 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
+/* Authentic Amharic (Ethiopic) Typography */
+html[lang="am"] body {
+  font-family: 'Noto Sans Ethiopic', 'Nyala', 'Abyssinica SIL', system-ui, -apple-system, sans-serif;
+  line-height: 1.6;
+}
+
+html[lang="am"] .font-serif {
+  font-family: 'Noto Serif Ethiopic', 'Nyala', 'Abyssinica SIL', Georgia, serif;
+}
+
 @keyframes clickRipple {
   0% {
     width: 4px;
