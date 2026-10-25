@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { generateMonthGrid, getMonthName } from '@planner/shared';
 import { SpiralBinding } from '../journal/SpiralBinding';
+import { useLanguage } from '../../context/LanguageContext';
 
 interface MonthlyCalendarGridProps {
   year: number;
@@ -16,6 +17,7 @@ export const MonthlyCalendarGrid: React.FC<MonthlyCalendarGridProps> = ({
   calendarNotes,
   onUpdateNotes,
 }) => {
+  const { t, language } = useLanguage();
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
   const [editingText, setEditingText] = useState('');
 
@@ -31,16 +33,19 @@ export const MonthlyCalendarGrid: React.FC<MonthlyCalendarGridProps> = ({
   }, [selectedDate]);
 
   const tiles = generateMonthGrid(year, month, 'monday');
-  const monthName = getMonthName(month);
-  const weekdays = [
-    'MONDAY',
-    'TUESDAY',
-    'WEDNESDAY',
-    'THURSDAY',
-    'FRIDAY',
-    'SATURDAY',
-    'SUNDAY',
-  ];
+  const monthName = language === 'am' && t.months[month - 1] ? t.months[month - 1] : getMonthName(month);
+  const weekdays =
+    language === 'am' && t.daysFull
+      ? t.daysFull.map((d) => d.toUpperCase())
+      : [
+          'MONDAY',
+          'TUESDAY',
+          'WEDNESDAY',
+          'THURSDAY',
+          'FRIDAY',
+          'SATURDAY',
+          'SUNDAY',
+        ];
 
   const handleCellClick = (dateStr: string) => {
     setSelectedDate(dateStr);
@@ -71,10 +76,10 @@ export const MonthlyCalendarGrid: React.FC<MonthlyCalendarGridProps> = ({
       {/* Top Header matching reference image 122526.png: "MONTH 1" */}
       <div className="flex items-center justify-between mb-6 pb-2">
         <h2 className="font-serif text-2xl sm:text-3xl font-medium tracking-wide text-ink uppercase">
-          MONTH {month} <span className="text-stone-400 font-light text-xl">| {monthName} {year}</span>
+          {language === 'am' ? `ወር ${month} (MONTH ${month})` : `MONTH ${month}`} <span className="text-stone-400 font-light text-xl">| {monthName} {year}</span>
         </h2>
         <span className="text-xs font-serif text-ink-muted hidden sm:inline-block">
-          Landscape Overview & Compounding Milestones
+          {language === 'am' ? 'የወሩ አጠቃላይ እይታ እና ዋና ዋና ኩነቶች' : 'Landscape Overview & Compounding Milestones'}
         </span>
       </div>
 
@@ -166,7 +171,7 @@ export const MonthlyCalendarGrid: React.FC<MonthlyCalendarGridProps> = ({
           <div className="bg-paper border border-border-subtle rounded-xl shadow-paper-lg p-5 w-full max-w-md space-y-4">
             <div className="flex items-center justify-between border-b border-border-subtle pb-2">
               <h4 id="cell-modal-title" className="font-serif font-semibold text-ink text-base">
-                Notes for {selectedDate}
+                {language === 'am' ? `ማስታወሻ ለ ${selectedDate}` : `Notes for ${selectedDate}`}
               </h4>
               <button
                 type="button"
@@ -180,14 +185,18 @@ export const MonthlyCalendarGrid: React.FC<MonthlyCalendarGridProps> = ({
 
             <div>
               <label htmlFor="calendar-day-note-input" className="block text-xs font-serif uppercase tracking-wider text-ink-muted mb-1">
-                Day Milestone & Commitments
+                {language === 'am' ? 'የቀኑ ዋና ዋና ተግባራት እና ግዴታዎች' : 'Day Milestone & Commitments'}
               </label>
               <textarea
                 id="calendar-day-note-input"
                 value={editingText}
                 onChange={(e) => setEditingText(e.target.value)}
                 rows={4}
-                placeholder="Write focus items, events, appointments, or journal notes..."
+                placeholder={
+                  language === 'am'
+                    ? 'ዋና ዋና ተግባራትን፣ ቀጠሮዎችን ወይም ማስታወሻዎችን እዚህ ይጻፉ...'
+                    : 'Write focus items, events, appointments, or journal notes...'
+                }
                 autoFocus
                 className="w-full bg-paper-alt border border-border-subtle rounded-lg p-3 text-sm font-serif text-ink focus:outline-none focus:border-sage resize-none"
               />
@@ -199,7 +208,7 @@ export const MonthlyCalendarGrid: React.FC<MonthlyCalendarGridProps> = ({
                 className="text-xs font-serif text-sage hover:text-sage-dark hover:underline flex items-center gap-1"
                 title="Navigate to full daily planner and journal for this day"
               >
-                <span>Open Full Daily Page &rarr;</span>
+                <span>{language === 'am' ? 'ሙሉውን የዕለት ገጽ ክፈት →' : 'Open Full Daily Page →'}</span>
               </Link>
               <div className="flex items-center gap-2">
                 <button
@@ -207,14 +216,14 @@ export const MonthlyCalendarGrid: React.FC<MonthlyCalendarGridProps> = ({
                   onClick={() => setSelectedDate(null)}
                   className="px-3 py-1.5 text-xs font-serif text-ink-muted hover:text-ink cursor-pointer"
                 >
-                  Cancel
+                  {language === 'am' ? 'ሰርዝ' : 'Cancel'}
                 </button>
                 <button
                   type="button"
                   onClick={handleSaveNote}
                   className="px-4 py-1.5 text-xs font-serif font-medium bg-sage text-white rounded-lg hover:bg-sage-dark transition-colors cursor-pointer shadow-xs"
                 >
-                  Save Note
+                  {language === 'am' ? 'አስቀምጥ' : 'Save Note'}
                 </button>
               </div>
             </div>

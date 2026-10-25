@@ -1,5 +1,6 @@
 import type { FC, KeyboardEvent } from 'react';
 import { generateMonthGrid, getMonthName, isLeapYear } from '@planner/shared';
+import { useLanguage } from '../../context/LanguageContext';
 
 interface YearCalendarGridProps {
   year: number;
@@ -14,10 +15,20 @@ export const YearCalendarGrid: FC<YearCalendarGridProps> = ({
   onDateClick,
   onMonthClick,
 }) => {
+  const { t, language } = useLanguage();
+
   const weekdays =
-    weekStart === 'monday'
-      ? ['MO', 'TU', 'WE', 'TH', 'FR', 'SA', 'SU']
-      : ['SU', 'MO', 'TU', 'WE', 'TH', 'FR', 'SA'];
+    language === 'am' && t.daysShort
+      ? weekStart === 'monday'
+        ? [t.daysShort[0], t.daysShort[1], t.daysShort[2], t.daysShort[3], t.daysShort[4], t.daysShort[5], t.daysShort[6]]
+        : [t.daysShort[6], t.daysShort[0], t.daysShort[1], t.daysShort[2], t.daysShort[3], t.daysShort[4], t.daysShort[5]]
+      : weekStart === 'monday'
+        ? ['MO', 'TU', 'WE', 'TH', 'FR', 'SA', 'SU']
+        : ['SU', 'MO', 'TU', 'WE', 'TH', 'FR', 'SA'];
+
+  const getCardMonthName = (m: number) => {
+    return language === 'am' && t.months[m - 1] ? t.months[m - 1] : getMonthName(m);
+  };
 
   const todayStr = new Date().toISOString().split('T')[0];
 
@@ -59,10 +70,10 @@ export const YearCalendarGrid: FC<YearCalendarGridProps> = ({
                 className="text-center mb-3 cursor-pointer group focus:outline-none focus-visible:ring-2 focus-visible:ring-sage rounded-md p-1"
                 role="button"
                 tabIndex={0}
-                aria-label={`Open ${getMonthName(month)} ${year} monthly planner`}
+                aria-label={`Open ${getCardMonthName(month)} ${year} monthly planner`}
               >
                 <h3 className="font-serif text-sm sm:text-base font-semibold uppercase tracking-widest text-ink group-hover:text-sage transition-colors">
-                  {getMonthName(month)}
+                  {getCardMonthName(month)}
                 </h3>
                 {month === 2 && isLeapYear(year) && (
                   <span className="text-[10px] font-sans text-sage font-medium block mt-0.5">
