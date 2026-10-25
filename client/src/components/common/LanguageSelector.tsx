@@ -5,12 +5,10 @@ import { SupportedLanguage } from '../../i18n/translations';
 
 interface LanguageSelectorProps {
   className?: string;
-  variant?: 'minimal' | 'button' | 'badge';
 }
 
 export const LanguageSelector: React.FC<LanguageSelectorProps> = ({
   className = '',
-  variant = 'badge',
 }) => {
   const { language, setLanguage } = useLanguage();
 

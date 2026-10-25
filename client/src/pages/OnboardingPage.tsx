@@ -6,7 +6,6 @@ import {
   ArrowLeft,
   CheckCircle2,
   Calendar,
-  BookOpen,
   Heart,
   Sun,
   X,
