@@ -12,6 +12,7 @@ interface AuthContextType {
   loginDev: () => Promise<boolean>;
   logout: () => Promise<void>;
   refreshUser: () => Promise<void>;
+  updateUser: (updatedFields: Partial<UserProfile>) => void;
   clearError: () => void;
 }
 
@@ -24,6 +25,10 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const [pendingSyncCount, setPendingSyncCount] = useState<number>(0);
 
   const clearError = () => setError(null);
+
+  const updateUser = (updatedFields: Partial<UserProfile>) => {
+    setUser((prev) => (prev ? { ...prev, ...updatedFields } : null));
+  };
 
   const refreshUser = async () => {
     try {
@@ -157,6 +162,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         loginDev,
         logout,
         refreshUser,
+        updateUser,
         clearError,
       }}
     >

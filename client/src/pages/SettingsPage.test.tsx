@@ -47,6 +47,7 @@ describe('SettingsPage Component', () => {
       loginDev: vi.fn(),
       logout: logoutMock,
       refreshUser: refreshUserMock,
+      updateUser: vi.fn(),
       clearError: vi.fn(),
     });
 

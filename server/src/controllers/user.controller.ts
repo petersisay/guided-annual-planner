@@ -64,6 +64,7 @@ export class UserController {
       if (updates.onboardingStatus !== undefined) user.preferences.onboardingStatus = updates.onboardingStatus;
       if (updates.onboardingStep !== undefined) user.preferences.onboardingStep = updates.onboardingStep;
       if (updates.defaultYear !== undefined) user.preferences.defaultYear = updates.defaultYear;
+      if (updates.avatarUrl !== undefined) user.avatarUrl = updates.avatarUrl;
 
       await user.save();
 

@@ -22,6 +22,7 @@ export const updatePreferencesSchema = z.object({
   onboardingStatus: z.enum(['not_started', 'in_progress', 'completed', 'skipped']).optional(),
   onboardingStep: z.number().int().min(1).max(5).optional(),
   defaultYear: z.number().int().min(2020).max(2099).optional(),
+  avatarUrl: z.string().optional(),
 });
 
 export type UpdatePreferencesInput = z.infer<typeof updatePreferencesSchema>;

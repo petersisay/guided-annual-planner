@@ -14,6 +14,8 @@ import {
   FileCheck,
   RefreshCw,
   Database,
+  Camera,
+  Trash2,
 } from 'lucide-react';
 import { PlannerLayout } from '../components/layout/PlannerLayout';
 import { useAuth } from '../context/AuthContext';
@@ -27,9 +29,111 @@ import { exportJournalAsJsonFile } from '../utils/localStorageBackup';
 import { syncManager } from '../services/syncManager';
 
 export const SettingsPage: React.FC = () => {
-  const { user, logout, refreshUser, pendingSyncCount } = useAuth();
+  const { user, logout, refreshUser, updateUser, pendingSyncCount } = useAuth();
   const navigate = useNavigate();
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const avatarInputRef = useRef<HTMLInputElement>(null);
+
+  // Avatar upload states
+  const [avatarUploading, setAvatarUploading] = useState(false);
+  const [avatarSuccess, setAvatarSuccess] = useState(false);
+  const [avatarError, setAvatarError] = useState<string | null>(null);
+
+  const handleAvatarUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (!file.type.startsWith('image/')) {
+      setAvatarError('Please select a valid image file (PNG, JPG, WEBP).');
+      return;
+    }
+
+    setAvatarUploading(true);
+    setAvatarError(null);
+
+    try {
+      const dataUrl = await new Promise<string>((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = (event) => {
+          const img = document.createElement('img');
+          img.onload = () => {
+            const canvas = document.createElement('canvas');
+            const maxDimension = 256;
+            let width = img.width;
+            let height = img.height;
+
+            if (width > height) {
+              if (width > maxDimension) {
+                height = Math.round((height * maxDimension) / width);
+                width = maxDimension;
+              }
+            } else {
+              if (height > maxDimension) {
+                width = Math.round((width * maxDimension) / height);
+                height = maxDimension;
+              }
+            }
+
+            canvas.width = width;
+            canvas.height = height;
+            const ctx = canvas.getContext('2d');
+            if (!ctx) {
+              resolve(event.target?.result as string);
+              return;
+            }
+            ctx.drawImage(img, 0, 0, width, height);
+            resolve(canvas.toDataURL('image/jpeg', 0.88));
+          };
+          img.onerror = reject;
+          img.src = event.target?.result as string;
+        };
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+      });
+
+      updateUser?.({ avatarUrl: dataUrl });
+
+      await fetch('/api/v1/user/preferences', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Planner-Client': 'WebApp',
+        },
+        credentials: 'include',
+        body: JSON.stringify({ avatarUrl: dataUrl }),
+      });
+
+      setAvatarSuccess(true);
+      setTimeout(() => setAvatarSuccess(false), 3000);
+    } catch {
+      setAvatarError('Failed to process and update profile image.');
+    } finally {
+      setAvatarUploading(false);
+      if (avatarInputRef.current) {
+        avatarInputRef.current.value = '';
+      }
+    }
+  };
+
+  const handleRemoveAvatar = async () => {
+    setAvatarUploading(true);
+    try {
+      updateUser?.({ avatarUrl: undefined });
+      await fetch('/api/v1/user/preferences', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Planner-Client': 'WebApp',
+        },
+        credentials: 'include',
+        body: JSON.stringify({ avatarUrl: '' }),
+      });
+      setAvatarSuccess(true);
+      setTimeout(() => setAvatarSuccess(false), 3000);
+    } finally {
+      setAvatarUploading(false);
+    }
+  };
 
   // Preference states
   const [weekStart, setWeekStart] = useState<WeekStartPreference>(
@@ -315,19 +419,39 @@ export const SettingsPage: React.FC = () => {
 
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div className="flex items-center gap-3.5">
-              {user?.avatarUrl ? (
-                <img
-                  src={user.avatarUrl}
-                  alt={user.name}
-                  className="w-12 h-12 rounded-full border border-border-strong flex-shrink-0"
+              <div className="relative group">
+                {user?.avatarUrl ? (
+                  <img
+                    src={user.avatarUrl}
+                    alt={user.name}
+                    className="w-14 h-14 rounded-full border-2 border-sage/60 object-cover flex-shrink-0 shadow-xs"
+                  />
+                ) : (
+                  <img
+                    src="/images/gp-monogram.png"
+                    alt="Avatar"
+                    className="w-14 h-14 rounded-full object-contain bg-sage-surface/60 border border-sage/40 p-1 flex-shrink-0"
+                  />
+                )}
+                <button
+                  type="button"
+                  onClick={() => avatarInputRef.current?.click()}
+                  disabled={avatarUploading}
+                  className="absolute inset-0 bg-ink/40 text-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer"
+                  title="Change profile image"
+                  aria-label="Change profile photo"
+                >
+                  <Camera className="w-5 h-5" />
+                </button>
+                <input
+                  ref={avatarInputRef}
+                  type="file"
+                  accept="image/*"
+                  onChange={handleAvatarUpload}
+                  className="hidden"
+                  aria-label="Upload profile image"
                 />
-              ) : (
-                <img
-                  src="/images/gp-monogram.png"
-                  alt="Avatar"
-                  className="w-12 h-12 rounded-full object-contain bg-sage-surface/60 border border-sage/40 p-1 flex-shrink-0"
-                />
-              )}
+              </div>
               <div>
                 <span className="font-serif font-semibold text-ink text-base block">
                   {user?.name}
@@ -335,6 +459,31 @@ export const SettingsPage: React.FC = () => {
                 <span className="text-xs font-sans text-ink-muted block">
                   {user?.email}
                 </span>
+                <div className="flex items-center gap-2 mt-1.5">
+                  <button
+                    type="button"
+                    onClick={() => avatarInputRef.current?.click()}
+                    disabled={avatarUploading}
+                    className="inline-flex items-center gap-1 text-[11px] font-serif text-sage hover:text-sage-dark font-medium transition-colors cursor-pointer"
+                  >
+                    <Camera className="w-3 h-3" />
+                    <span>{user?.avatarUrl ? 'Change Photo' : 'Add Profile Photo'}</span>
+                  </button>
+                  {user?.avatarUrl && (
+                    <>
+                      <span className="text-ink-muted text-xs">&bull;</span>
+                      <button
+                        type="button"
+                        onClick={handleRemoveAvatar}
+                        disabled={avatarUploading}
+                        className="inline-flex items-center gap-1 text-[11px] font-serif text-terracotta hover:underline transition-colors cursor-pointer"
+                      >
+                        <Trash2 className="w-3 h-3" />
+                        <span>Remove</span>
+                      </button>
+                    </>
+                  )}
+                </div>
               </div>
             </div>
 
@@ -347,6 +496,19 @@ export const SettingsPage: React.FC = () => {
               <span>Log Out</span>
             </button>
           </div>
+
+          {avatarSuccess && (
+            <div className="p-2.5 rounded-lg bg-sage-surface border border-sage/30 text-xs font-serif text-forest flex items-center gap-1.5">
+              <Check className="w-3.5 h-3.5 text-sage" />
+              <span>Profile image updated successfully!</span>
+            </div>
+          )}
+          {avatarError && (
+            <div className="p-2.5 rounded-lg bg-red-50 border border-red-200 text-xs font-serif text-red-700 flex items-center gap-1.5">
+              <AlertTriangle className="w-3.5 h-3.5 text-red-600" />
+              <span>{avatarError}</span>
+            </div>
+          )}
         </div>
 
         {/* Planning Preferences Form */}
