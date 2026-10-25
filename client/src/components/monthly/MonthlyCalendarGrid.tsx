@@ -33,7 +33,7 @@ export const MonthlyCalendarGrid: React.FC<MonthlyCalendarGridProps> = ({
   }, [selectedDate]);
 
   const tiles = generateMonthGrid(year, month, 'monday');
-  const monthName = language === 'am' && t.months[month - 1] ? t.months[month - 1] : getMonthName(month);
+  const monthName = language === 'am' && t.months?.[month - 1] ? t.months[month - 1] : getMonthName(month);
   const weekdays =
     language === 'am' && t.daysFull
       ? t.daysFull.map((d) => d.toUpperCase())
@@ -76,7 +76,10 @@ export const MonthlyCalendarGrid: React.FC<MonthlyCalendarGridProps> = ({
       {/* Top Header matching reference image 122526.png: "MONTH 1" */}
       <div className="flex items-center justify-between mb-6 pb-2">
         <h2 className="font-serif text-2xl sm:text-3xl font-medium tracking-wide text-ink uppercase">
-          {language === 'am' ? `ወር ${month} (MONTH ${month})` : `MONTH ${month}`} <span className="text-stone-400 font-light text-xl">| {monthName} {year}</span>
+          {language === 'am' ? `ወር ${month} (MONTH ${month})` : `MONTH ${month}`}{' '}
+          <span className="text-stone-400 font-light text-xl">
+            | {monthName} {year}
+          </span>
         </h2>
         <span className="text-xs font-serif text-ink-muted hidden sm:inline-block">
           {language === 'am' ? 'የወሩ አጠቃላይ እይታ እና ዋና ዋና ኩነቶች' : 'Landscape Overview & Compounding Milestones'}
@@ -103,52 +106,59 @@ export const MonthlyCalendarGrid: React.FC<MonthlyCalendarGridProps> = ({
             const note = calendarNotes[tile.dateStr];
             const isToday = tile.dateStr === new Date().toISOString().split('T')[0];
 
+            if (!tile.isCurrentMonth) {
+              return (
+                <div
+                  key={idx}
+                  className="min-h-[105px] sm:min-h-[135px] border-b border-r last:border-r-0 border-stone-800/40 bg-stone-100/50 p-2 opacity-30 select-none"
+                  aria-hidden="true"
+                />
+              );
+            }
+
             return (
               <div
                 key={idx}
-                onClick={() => handleCellClick(tile.dateStr)}
-                onKeyDown={(e) => handleCellKeyDown(tile.dateStr, e)}
                 role="button"
                 tabIndex={0}
-                aria-label={`Date: ${tile.dateStr}${note ? ', note: ' + note : ', empty'}. Press Enter to edit.`}
-                className={`min-h-[90px] sm:min-h-[110px] p-1.5 sm:p-2 border-b border-r last:border-r-0 border-stone-300 transition-colors flex flex-col justify-between cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-sage ${
-                  tile.isCurrentMonth
-                    ? 'bg-paper hover:bg-sage-surface/30'
-                    : 'bg-paper-alt/40 opacity-40'
-                } ${isToday ? 'ring-1 ring-inset ring-sage' : ''}`}
+                onClick={() => handleCellClick(tile.dateStr)}
+                onKeyDown={(e) => handleCellKeyDown(tile.dateStr, e)}
+                aria-label={`${tile.dateStr}: ${note || 'No notes'}. Click to edit milestone.`}
+                className={`min-h-[105px] sm:min-h-[135px] border-b border-r last:border-r-0 border-stone-800/40 p-2 sm:p-2.5 flex flex-col justify-between transition-colors cursor-pointer group focus:outline-none focus-visible:ring-2 focus-visible:ring-sage ${
+                  isToday ? 'bg-sage/10 font-medium' : 'bg-paper hover:bg-stone-50'
+                }`}
               >
-                {/* Date Number in upper corner */}
+                {/* Day number at top right of cell */}
                 <div className="flex items-center justify-between">
+                  {note ? (
+                    <span className="w-1.5 h-1.5 rounded-full bg-sage" />
+                  ) : (
+                    <span />
+                  )}
                   <span
-                    className={`font-serif text-xs font-medium ${
+                    className={`font-serif text-xs sm:text-sm ${
                       isToday
-                        ? 'w-5 h-5 rounded-full bg-sage text-white flex items-center justify-center font-bold text-[10px]'
-                        : tile.isCurrentMonth
-                        ? 'text-stone-900 font-semibold'
-                        : 'text-stone-400 italic'
+                        ? 'font-bold text-sage underline decoration-2'
+                        : 'text-stone-700 group-hover:text-ink'
                     }`}
                   >
                     {tile.dayNumber}
                   </span>
+                </div>
+
+                {/* Optional Note excerpt preview inside cell */}
+                <div className="mt-1 flex-1 overflow-hidden">
                   {note && (
-                    <span className="w-1.5 h-1.5 rounded-full bg-sage flex-shrink-0" title="Has journal note" />
+                    <p className="font-serif text-[11px] sm:text-xs text-ink/80 line-clamp-3 leading-snug">
+                      {note}
+                    </p>
                   )}
                 </div>
 
-                {/* Blank ruled writing lines or entered note */}
-                <div className="flex-1 mt-1 flex flex-col justify-end space-y-2 overflow-hidden">
-                  {note ? (
-                    <p className="font-script text-ink text-xs line-clamp-3 leading-tight select-none">
-                      {note}
-                    </p>
-                  ) : (
-                    <>
-                      <div className="w-full border-b border-stone-200/80" />
-                      <div className="w-full border-b border-stone-200/80" />
-                      <div className="w-full border-b border-stone-200/80" />
-                    </>
-                  )}
-                </div>
+                {/* Subtle affordance hint */}
+                <span className="text-[10px] text-sage opacity-0 group-hover:opacity-100 transition-opacity font-serif">
+                  {language === 'am' ? '+ ማስታወሻ' : '+ Note'}
+                </span>
               </div>
             );
           })}
@@ -171,7 +181,7 @@ export const MonthlyCalendarGrid: React.FC<MonthlyCalendarGridProps> = ({
           <div className="bg-paper border border-border-subtle rounded-xl shadow-paper-lg p-5 w-full max-w-md space-y-4">
             <div className="flex items-center justify-between border-b border-border-subtle pb-2">
               <h4 id="cell-modal-title" className="font-serif font-semibold text-ink text-base">
-                {language === 'am' ? `ማስታወሻ ለ ${selectedDate}` : `Notes for ${selectedDate}`}
+                {language === 'am' ? `${t.notesForDate || 'ማስታወሻ ለ'} ${selectedDate}` : `Notes for ${selectedDate}`}
               </h4>
               <button
                 type="button"
@@ -185,7 +195,7 @@ export const MonthlyCalendarGrid: React.FC<MonthlyCalendarGridProps> = ({
 
             <div>
               <label htmlFor="calendar-day-note-input" className="block text-xs font-serif uppercase tracking-wider text-ink-muted mb-1">
-                {language === 'am' ? 'የቀኑ ዋና ዋና ተግባራት እና ግዴታዎች' : 'Day Milestone & Commitments'}
+                {language === 'am' ? t.dayMilestoneLabel : 'Day Milestone & Commitments'}
               </label>
               <textarea
                 id="calendar-day-note-input"
@@ -194,7 +204,7 @@ export const MonthlyCalendarGrid: React.FC<MonthlyCalendarGridProps> = ({
                 rows={4}
                 placeholder={
                   language === 'am'
-                    ? 'ዋና ዋና ተግባራትን፣ ቀጠሮዎችን ወይም ማስታወሻዎችን እዚህ ይጻፉ...'
+                    ? t.notesPlaceholder
                     : 'Write focus items, events, appointments, or journal notes...'
                 }
                 autoFocus
@@ -208,7 +218,7 @@ export const MonthlyCalendarGrid: React.FC<MonthlyCalendarGridProps> = ({
                 className="text-xs font-serif text-sage hover:text-sage-dark hover:underline flex items-center gap-1"
                 title="Navigate to full daily planner and journal for this day"
               >
-                <span>{language === 'am' ? 'ሙሉውን የዕለት ገጽ ክፈት →' : 'Open Full Daily Page →'}</span>
+                <span>{language === 'am' ? t.openDailyPage : 'Open Full Daily Page →'}</span>
               </Link>
               <div className="flex items-center gap-2">
                 <button
@@ -216,14 +226,14 @@ export const MonthlyCalendarGrid: React.FC<MonthlyCalendarGridProps> = ({
                   onClick={() => setSelectedDate(null)}
                   className="px-3 py-1.5 text-xs font-serif text-ink-muted hover:text-ink cursor-pointer"
                 >
-                  {language === 'am' ? 'ሰርዝ' : 'Cancel'}
+                  {language === 'am' ? t.cancel : 'Cancel'}
                 </button>
                 <button
                   type="button"
                   onClick={handleSaveNote}
                   className="px-4 py-1.5 text-xs font-serif font-medium bg-sage text-white rounded-lg hover:bg-sage-dark transition-colors cursor-pointer shadow-xs"
                 >
-                  {language === 'am' ? 'አስቀምጥ' : 'Save Note'}
+                  {language === 'am' ? t.saveNote : 'Save Note'}
                 </button>
               </div>
             </div>

@@ -27,7 +27,7 @@ export const YearCalendarGrid: FC<YearCalendarGridProps> = ({
         : ['SU', 'MO', 'TU', 'WE', 'TH', 'FR', 'SA'];
 
   const getCardMonthName = (m: number) => {
-    return language === 'am' && t.months[m - 1] ? t.months[m - 1] : getMonthName(m);
+    return language === 'am' && t.months?.[m - 1] ? t.months[m - 1] : getMonthName(m);
   };
 
   const todayStr = new Date().toISOString().split('T')[0];
@@ -48,7 +48,9 @@ export const YearCalendarGrid: FC<YearCalendarGridProps> = ({
         </h2>
         {isLeapYear(year) && (
           <p className="text-xs text-sage font-serif italic mt-1.5 font-medium">
-            Leap Year &bull; 366 Intentional Days (Feb 29 Included)
+            {language === 'am'
+              ? 'ድርብ ዓመት • 366 የታሰበባቸው ቀናት (የካቲት 29 ተካቷል)'
+              : 'Leap Year • 366 Intentional Days (Feb 29 Included)'}
           </p>
         )}
       </div>
@@ -57,6 +59,7 @@ export const YearCalendarGrid: FC<YearCalendarGridProps> = ({
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-10">
         {Array.from({ length: 12 }, (_, i) => i + 1).map((month) => {
           const tiles = generateMonthGrid(year, month, weekStart);
+          const monthName = getCardMonthName(month);
 
           return (
             <div
@@ -70,19 +73,19 @@ export const YearCalendarGrid: FC<YearCalendarGridProps> = ({
                 className="text-center mb-3 cursor-pointer group focus:outline-none focus-visible:ring-2 focus-visible:ring-sage rounded-md p-1"
                 role="button"
                 tabIndex={0}
-                aria-label={`Open ${getCardMonthName(month)} ${year} monthly planner`}
+                aria-label={`Open ${monthName} ${year} monthly planner`}
               >
                 <h3 className="font-serif text-sm sm:text-base font-semibold uppercase tracking-widest text-ink group-hover:text-sage transition-colors">
-                  {getCardMonthName(month)}
+                  {monthName}
                 </h3>
                 {month === 2 && isLeapYear(year) && (
                   <span className="text-[10px] font-sans text-sage font-medium block mt-0.5">
-                    Leap Year &bull; 29 Days
+                    {language === 'am' ? t.leapYearBadge : 'Leap Year • 29 Days'}
                   </span>
                 )}
               </div>
 
-              {/* Weekday labels matching SU MO TU WE TH FR SA */}
+              {/* Weekday labels matching SU MO TU WE TH FR SA or Amharic */}
               <div className="grid grid-cols-7 gap-1 text-center mb-2">
                 {weekdays.map((wd) => (
                   <span
@@ -95,7 +98,7 @@ export const YearCalendarGrid: FC<YearCalendarGridProps> = ({
               </div>
 
               {/* Sage Green Rounded Square Tiles matching 122958.png with high-contrast legibility */}
-              <div className="grid grid-cols-7 gap-1 sm:gap-1.5" role="grid" aria-label={`${getMonthName(month)} ${year} calendar`}>
+              <div className="grid grid-cols-7 gap-1 sm:gap-1.5" role="grid" aria-label={`${monthName} ${year} calendar`}>
                 {tiles.map((tile, idx) => {
                   const isToday = tile.dateStr === todayStr;
 
@@ -113,8 +116,8 @@ export const YearCalendarGrid: FC<YearCalendarGridProps> = ({
                       key={idx}
                       type="button"
                       onClick={() => onDateClick?.(tile.dateStr)}
-                      title={`${tile.dateStr}${isToday ? ' (Today)' : ''}`}
-                      aria-label={`${tile.dateStr}${isToday ? ' (Today)' : ''}. Click to open week.`}
+                      title={`${tile.dateStr}${isToday ? ` (${t.todayLabel || 'Today'})` : ''}`}
+                      aria-label={`${tile.dateStr}${isToday ? ` (${t.todayLabel || 'Today'})` : ''}. Click to open week.`}
                       className={`w-full aspect-square rounded-[4px] flex items-center justify-center text-[11px] sm:text-xs font-sans font-bold transition-all cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-sage ${
                         isToday
                           ? 'bg-sage-dark text-white ring-2 ring-sage shadow-xs scale-105'
