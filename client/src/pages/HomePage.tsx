@@ -337,7 +337,7 @@ export const HomePage: React.FC = () => {
               />
               <div>
                 <span className="font-serif font-semibold text-ink text-lg block leading-none">
-                  Sara Tesfaye
+                  Peter Sisay
                 </span>
                 <span className="text-xs text-ink-muted font-serif italic">
                   Creator &bull; Addis Ababa, Ethiopia

@@ -27,8 +27,8 @@ describe('SettingsPage Component', () => {
     vi.spyOn(AuthContextModule, 'useAuth').mockReturnValue({
       user: {
         id: 'user_456',
-        name: 'Sara Tesfaye',
-        email: 'sara@example.com',
+        name: 'Peter Sisay',
+        email: 'peter@example.com',
         avatarUrl: undefined,
         preferences: {
           weekStart: 'monday',
@@ -134,8 +134,8 @@ describe('SettingsPage Component', () => {
     );
 
     expect(screen.getAllByText('Settings & Backup').length).toBeGreaterThanOrEqual(1);
-    expect(screen.getAllByText('Sara Tesfaye').length).toBeGreaterThanOrEqual(1);
-    expect(screen.getAllByText('sara@example.com').length).toBeGreaterThanOrEqual(1);
+    expect(screen.getAllByText('Peter Sisay').length).toBeGreaterThanOrEqual(1);
+    expect(screen.getAllByText('peter@example.com').length).toBeGreaterThanOrEqual(1);
     expect(screen.getByText('Your Account')).toBeInTheDocument();
     expect(screen.getByText('Monday')).toBeInTheDocument();
   });
@@ -192,8 +192,8 @@ describe('SettingsPage Component', () => {
     expect(exportSpy).toHaveBeenCalledWith(
       expect.objectContaining({
         id: 'user_456',
-        name: 'Sara Tesfaye',
-        email: 'sara@example.com',
+        name: 'Peter Sisay',
+        email: 'peter@example.com',
       })
     );
   });

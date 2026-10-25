@@ -13,7 +13,7 @@ describe('AnnualViewPage Component', () => {
       user: {
         id: 'user_test_123',
         email: 'planner.user@example.com',
-        name: 'Sara Tesfaye',
+        name: 'Peter Sisay',
         avatarUrl: undefined,
         createdAt: '2026-01-01T00:00:00.000Z',
         lastLoginAt: '2026-01-01T00:00:00.000Z',
@@ -79,7 +79,7 @@ describe('AnnualViewPage Component', () => {
     );
 
     expect(screen.getAllByText(/Guided Annual Planner/i).length).toBeGreaterThan(0);
-    expect(screen.getByText('Sara Tesfaye')).toBeInTheDocument();
+    expect(screen.getByText('Peter Sisay')).toBeInTheDocument();
     expect(screen.getByText('Sign Out')).toBeInTheDocument();
 
     await waitFor(() => {

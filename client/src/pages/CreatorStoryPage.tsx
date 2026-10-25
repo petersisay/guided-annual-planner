@@ -79,7 +79,7 @@ export const CreatorStoryPage: React.FC = () => {
                 <span>Crafted for mindful creators</span>
               </div>
               <span className="font-script text-2xl text-ink">
-                Sara Tesfaye
+                Peter Sisay
               </span>
             </div>
           </div>

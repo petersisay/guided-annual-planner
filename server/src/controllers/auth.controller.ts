@@ -170,7 +170,7 @@ export class AuthController {
       const devName =
         typeof req.body?.name === 'string' && req.body.name.trim()
           ? req.body.name.trim()
-          : 'Sara Tesfaye';
+          : 'Peter Sisay';
 
       let user = await User.findOne({
         $or: [{ googleSub: devGoogleSub }, { email: devEmail }],

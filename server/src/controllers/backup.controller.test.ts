@@ -22,7 +22,7 @@ describe('Backup & Restore Endpoints (/api/v1/planner/backup)', () => {
   const mockUserDoc: any = {
     _id: userAId,
     email: 'user.a@example.com',
-    name: 'Sara Tesfaye',
+    name: 'Peter Sisay',
     preferences: {
       weekStart: 'monday',
       weeklyViewDefault: '7day',

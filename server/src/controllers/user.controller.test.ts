@@ -15,7 +15,7 @@ describe('User Controller & Onboarding Endpoints (/api/v1/user)', () => {
   const mockUserDoc: any = {
     _id: userAId,
     email: 'user.a@example.com',
-    name: 'Sara Tesfaye',
+    name: 'Peter Sisay',
     googleSub: 'google_sub_123',
     preferences: {
       weekStart: 'monday',
@@ -50,7 +50,7 @@ describe('User Controller & Onboarding Endpoints (/api/v1/user)', () => {
     expect(res.body.success).toBe(true);
     expect(res.body.preferences.weekStart).toBe('monday');
     expect(res.body.preferences.onboardingStatus).toBe('not_started');
-    expect(res.body.user.name).toBe('Sara Tesfaye');
+    expect(res.body.user.name).toBe('Peter Sisay');
   });
 
   it('PUT /api/v1/user/preferences updates weekStart and theme', async () => {

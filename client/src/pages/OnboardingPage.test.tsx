@@ -24,8 +24,8 @@ describe('OnboardingPage Component', () => {
     vi.spyOn(AuthContextModule, 'useAuth').mockReturnValue({
       user: {
         id: 'user_123',
-        name: 'Sara Tesfaye',
-        email: 'sara@example.com',
+        name: 'Peter Sisay',
+        email: 'peter@example.com',
         preferences: {
           weekStart: 'monday',
           weeklyViewDefault: '7day',

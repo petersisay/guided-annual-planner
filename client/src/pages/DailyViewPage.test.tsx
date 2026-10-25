@@ -68,7 +68,7 @@ describe('DailyViewPage Component', () => {
       user: {
         id: 'user_test_123',
         email: 'planner.user@example.com',
-        name: 'Sara Tesfaye',
+        name: 'Peter Sisay',
         createdAt: '2026-01-01T00:00:00.000Z',
         lastLoginAt: '2026-01-01T00:00:00.000Z',
         preferences: {

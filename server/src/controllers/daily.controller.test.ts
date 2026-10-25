@@ -19,7 +19,7 @@ describe('Daily Planner & Journaling Endpoints (/api/v1/planner/daily)', () => {
   const userADoc = {
     _id: userAId,
     email: 'user.a@example.com',
-    name: 'Sara Tesfaye',
+    name: 'Peter Sisay',
   };
 
   beforeEach(() => {
