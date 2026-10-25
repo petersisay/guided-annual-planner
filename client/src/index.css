@@ -36,3 +36,25 @@ body {
   color: #1a1a1a;
   -webkit-font-smoothing: antialiased;
 }
+
+@keyframes clickRipple {
+  0% {
+    width: 4px;
+    height: 4px;
+    opacity: 0.85;
+    transform: translate(-50%, -50%) scale(0.3);
+  }
+  50% {
+    opacity: 0.5;
+  }
+  100% {
+    width: 80px;
+    height: 80px;
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(1.7);
+  }
+}
+
+.animate-click-ripple {
+  animation: clickRipple 0.7s cubic-bezier(0.12, 0.8, 0.32, 1) forwards;
+}

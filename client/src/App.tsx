@@ -6,6 +6,7 @@ import { HomePage } from './pages/HomePage';
 import { MissingGoogleConfigCard } from './components/auth/MissingGoogleConfigCard';
 import { PaperPageSpinner } from './components/common/PaperPageSpinner';
 import { PwaUpdatePrompt } from './components/common/PwaUpdatePrompt';
+import { GlobalClickAnimation } from './components/common/GlobalClickAnimation';
 import { register } from './serviceWorkerRegistration';
 
 // Lazy-loaded route components for optimal initial bundle performance
@@ -135,6 +136,8 @@ export const AppContent: React.FC = () => {
         registration={waitingRegistration}
         onDismiss={() => setWaitingRegistration(null)}
       />
+
+      <GlobalClickAnimation />
     </BrowserRouter>
   );
 };
