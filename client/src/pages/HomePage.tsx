@@ -24,7 +24,7 @@ export const HomePage: React.FC = () => {
           <Link to="/" className="flex items-center gap-3 group">
             <img
               src="/images/gp-monogram.png"
-              alt="Official GP Logo"
+              alt="Guided Annual Planner Logo"
               className="w-9 h-9 object-contain flex-shrink-0 transition-transform group-hover:scale-105"
             />
             <div className="flex flex-col">
@@ -32,7 +32,7 @@ export const HomePage: React.FC = () => {
                 Guided Annual Planner
               </span>
               <span className="text-[10px] text-ink-muted font-serif italic">
-                Official Edition
+                Mindful Growth Edition
               </span>
             </div>
           </Link>

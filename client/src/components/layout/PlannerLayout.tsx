@@ -178,7 +178,7 @@ export const PlannerLayout: React.FC<PlannerLayoutProps> = ({
           <div className="flex items-center gap-3 mb-8">
             <img
               src="/images/gp-monogram.png"
-              alt="Official GP Logo"
+              alt="Guided Annual Planner Logo"
               className="w-10 h-10 object-contain flex-shrink-0"
             />
             <div>
@@ -186,7 +186,7 @@ export const PlannerLayout: React.FC<PlannerLayoutProps> = ({
                 Guided Annual Planner
               </span>
               <span className="text-[10px] text-ink-muted font-serif italic block">
-                Official Edition
+                Mindful Growth Edition
               </span>
             </div>
           </div>

@@ -20,7 +20,7 @@ export const CreatorStoryPage: React.FC = () => {
               <div className="flex justify-center mb-1">
                 <img
                   src="/images/gp-monogram.png"
-                  alt="Official GP Logo"
+                  alt="Guided Annual Planner Logo"
                   className="w-16 h-16 object-contain"
                 />
               </div>

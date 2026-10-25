@@ -42,7 +42,7 @@ export const JournalLoginCard: React.FC = () => {
                 Guided Annual Planner
               </span>
               <span className="text-[10px] text-ink-muted font-sans font-medium block">
-                Official Edition
+                Mindful Growth Edition
               </span>
             </div>
           </div>
