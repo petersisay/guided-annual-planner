@@ -132,6 +132,11 @@ export interface TranslationDictionary {
   storyP3: string;
   storyP4: string;
   storyQuote: string;
+
+  // Final CTA
+  beginJourneyHeadline: string;
+  beginJourneySubheadline: string;
+  getStartedFree: string;
 }
 
 export const translations: Record<SupportedLanguage, TranslationDictionary> = {
@@ -248,7 +253,7 @@ export const translations: Record<SupportedLanguage, TranslationDictionary> = {
     h3Point2: 'ISO 8601 Monday Start',
     h3Point3: 'Weekly Notes & Reminders',
 
-    h4Title: 'Daily Focus & Reflection',
+    h4Title: 'Daily Focus & Journal',
     h4Desc: 'Start with 3 non-negotiable priorities, hourly structure, morning intention, gratitude, and evening check-out.',
     h4Point1: 'Rule of 3 Priority System',
     h4Point2: 'Mindful Morning Intention',
@@ -302,6 +307,11 @@ export const translations: Record<SupportedLanguage, TranslationDictionary> = {
       'Whenever I take out my journal, people often ask me how I do it, and I realize that others could benefit from the same guidance I was searching for. That’s when I made it my mission to fulfill those requests and provide something that I, too, struggled to find.',
     storyQuote:
       '“I hope this planner will not only help you stay organized but also inspire you to document your life in a way that feels authentic and personal, just like it has for me.”',
+
+    // Final CTA
+    beginJourneyHeadline: 'Begin Your Guided Journey Today',
+    beginJourneySubheadline: 'Take the first small, deliberate step toward clarity, steady progress, and mindful living.',
+    getStartedFree: 'Get Started — It’s Free',
   },
 
   am: {
@@ -471,5 +481,10 @@ export const translations: Record<SupportedLanguage, TranslationDictionary> = {
       'ማስታወሻዬን ሳወጣ ሰዎች ሁልጊዜ እንዴት እንደማደርገው ይጠይቁኛል፣ እና እኔ ስፈልገው የነበረው መመሪያ ለሌሎችም እንደሚጠቅም ተገነዘብኩ። እኔም ለማግኘት የተቸገርኩትን ነገር ለማቅረብ እና እነዚያን ጥያቄዎች ለመመለስ አላማ አድርጌ ተነሳሁ።',
     storyQuote:
       '«ይህ እቅድ አውጪ የተደራጁ እንዲሆኑ ብቻ ሳይሆን፣ ለእኔ እንደሆነው ሁሉ ህይወትዎን እውነተኛ እና ግላዊ በሆነ መንገድ እንዲመዘግቡ ያነሳሳዎታል ብዬ ተስፋ አደርጋለሁ።»',
+
+    // Final CTA
+    beginJourneyHeadline: 'የተመራ ጉዞዎን ዛሬ ይጀምሩ',
+    beginJourneySubheadline: 'ወደ ግልጽነት፣ የተረጋጋ እድገት እና አስተዋይ ኑሮ የመጀመሪያውን ትንሽ እና የታሰበበትን እርምጃ ይውሰዱ።',
+    getStartedFree: 'ይጀምሩ — በነጻ ነው',
   },
 };

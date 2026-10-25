@@ -17,7 +17,7 @@ import { LanguageSelector } from '../components/common/LanguageSelector';
 
 export const HomePage: React.FC = () => {
   const { user } = useAuth();
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
 
   return (
     <div className="min-h-screen bg-paper text-ink flex flex-col antialiased selection:bg-sage/20 selection:text-ink">
@@ -32,10 +32,10 @@ export const HomePage: React.FC = () => {
             />
             <div className="flex flex-col">
               <span className="font-serif font-semibold text-ink text-base tracking-tight leading-none">
-                Guided Annual Planner
+                {t.appName}
               </span>
               <span className="text-[10px] text-ink-muted font-serif italic">
-                Mindful Growth Edition
+                {t.appTagline}
               </span>
             </div>
           </Link>
@@ -109,13 +109,13 @@ export const HomePage: React.FC = () => {
           {/* Primary Compounding Philosophy Banner */}
           <div className="max-w-3xl mx-auto p-6 sm:p-8 bg-paper-alt border border-border-subtle rounded-2xl shadow-paper relative">
             <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-0.5 bg-sage text-white text-[11px] font-serif uppercase tracking-widest rounded-full">
-              {t.corePhilosophy}
+              {t.corePhilosophyLabel}
             </div>
             <blockquote className="font-serif text-lg sm:text-2xl text-ink italic leading-snug">
               &ldquo;{t.compoundingQuote}&rdquo;
             </blockquote>
             <p className="font-serif text-xs text-ink-muted mt-2">
-              {t.guidingPrincipleSub}
+              {t.guidingPrincipleLabel}
             </p>
           </div>
 
@@ -125,7 +125,7 @@ export const HomePage: React.FC = () => {
               to={user ? '/annual' : '/login'}
               className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-7 py-3.5 bg-sage hover:bg-sage-dark text-white rounded-xl font-serif text-base font-medium transition-all shadow-md hover:shadow-lg cursor-pointer"
             >
-              <span>{user ? t.openJournal : t.getStartedPlanner}</span>
+              <span>{user ? t.openYourJournal : t.getStartedWithPlanner}</span>
               <ArrowRight className="w-4 h-4" />
             </Link>
             <Link
@@ -150,7 +150,7 @@ export const HomePage: React.FC = () => {
               {t.fourHorizonsHeadline}
             </h2>
             <p className="font-serif text-sm sm:text-base text-ink-muted leading-relaxed">
-              {t.fourHorizonsSubheadline}
+              {t.fourHorizonsSubtitle}
             </p>
           </div>
 
@@ -164,23 +164,23 @@ export const HomePage: React.FC = () => {
                 <span className="text-[11px] font-serif uppercase tracking-wider text-sage font-semibold">
                   Horizon 1
                 </span>
-                <h3 className="font-serif text-xl font-medium text-ink">{t.annualVision}</h3>
+                <h3 className="font-serif text-xl font-medium text-ink">{t.h1Title}</h3>
                 <p className="font-serif text-xs text-ink-muted leading-relaxed">
-                  {t.annualVisionDesc}
+                  {t.h1Desc}
                 </p>
               </div>
               <ul className="text-xs font-serif text-ink-muted space-y-2 border-t border-border-subtle pt-4">
                 <li className="flex items-center gap-2">
                   <CheckCircle2 className="w-3.5 h-3.5 text-sage" />
-                  <span>Anchor Word &amp; Theme</span>
+                  <span>{t.h1Point1}</span>
                 </li>
                 <li className="flex items-center gap-2">
                   <CheckCircle2 className="w-3.5 h-3.5 text-sage" />
-                  <span>Reading Bookshelf</span>
+                  <span>{t.h1Point2}</span>
                 </li>
                 <li className="flex items-center gap-2">
                   <CheckCircle2 className="w-3.5 h-3.5 text-sage" />
-                  <span>365-Day Mood Matrix</span>
+                  <span>{t.h1Point3}</span>
                 </li>
               </ul>
             </div>
@@ -194,23 +194,23 @@ export const HomePage: React.FC = () => {
                 <span className="text-[11px] font-serif uppercase tracking-wider text-sage font-semibold">
                   Horizon 2
                 </span>
-                <h3 className="font-serif text-xl font-medium text-ink">{t.monthlyRhythm}</h3>
+                <h3 className="font-serif text-xl font-medium text-ink">{t.h2Title}</h3>
                 <p className="font-serif text-xs text-ink-muted leading-relaxed">
-                  {t.monthlyRhythmDesc}
+                  {t.h2Desc}
                 </p>
               </div>
               <ul className="text-xs font-serif text-ink-muted space-y-2 border-t border-border-subtle pt-4">
                 <li className="flex items-center gap-2">
                   <CheckCircle2 className="w-3.5 h-3.5 text-sage" />
-                  <span>Monthly Must-Dos</span>
+                  <span>{t.h2Point1}</span>
                 </li>
                 <li className="flex items-center gap-2">
                   <CheckCircle2 className="w-3.5 h-3.5 text-sage" />
-                  <span>Habit Consistency Grid</span>
+                  <span>{t.h2Point2}</span>
                 </li>
                 <li className="flex items-center gap-2">
                   <CheckCircle2 className="w-3.5 h-3.5 text-sage" />
-                  <span>Lined Reflection Notes</span>
+                  <span>{t.h2Point3}</span>
                 </li>
               </ul>
             </div>
@@ -224,23 +224,23 @@ export const HomePage: React.FC = () => {
                 <span className="text-[11px] font-serif uppercase tracking-wider text-sage font-semibold">
                   Horizon 3
                 </span>
-                <h3 className="font-serif text-xl font-medium text-ink">{t.weeklySpread}</h3>
+                <h3 className="font-serif text-xl font-medium text-ink">{t.h3Title}</h3>
                 <p className="font-serif text-xs text-ink-muted leading-relaxed">
-                  {t.weeklySpreadDesc}
+                  {t.h3Desc}
                 </p>
               </div>
               <ul className="text-xs font-serif text-ink-muted space-y-2 border-t border-border-subtle pt-4">
                 <li className="flex items-center gap-2">
                   <CheckCircle2 className="w-3.5 h-3.5 text-sage" />
-                  <span>Rule of 3 Focus</span>
+                  <span>{t.h3Point1}</span>
                 </li>
                 <li className="flex items-center gap-2">
                   <CheckCircle2 className="w-3.5 h-3.5 text-sage" />
-                  <span>ISO 8601 Monday Start</span>
+                  <span>{t.h3Point2}</span>
                 </li>
                 <li className="flex items-center gap-2">
                   <CheckCircle2 className="w-3.5 h-3.5 text-sage" />
-                  <span>Weekly Notes &amp; Reminders</span>
+                  <span>{t.h3Point3}</span>
                 </li>
               </ul>
             </div>
@@ -254,23 +254,23 @@ export const HomePage: React.FC = () => {
                 <span className="text-[11px] font-serif uppercase tracking-wider text-sage font-semibold">
                   Horizon 4
                 </span>
-                <h3 className="font-serif text-xl font-medium text-ink">{t.dailyFocus}</h3>
+                <h3 className="font-serif text-xl font-medium text-ink">{t.h4Title}</h3>
                 <p className="font-serif text-xs text-ink-muted leading-relaxed">
-                  {t.dailyFocusDesc}
+                  {t.h4Desc}
                 </p>
               </div>
               <ul className="text-xs font-serif text-ink-muted space-y-2 border-t border-border-subtle pt-4">
                 <li className="flex items-center gap-2">
                   <CheckCircle2 className="w-3.5 h-3.5 text-sage" />
-                  <span>Daily Word of Intention</span>
+                  <span>{t.h4Point1}</span>
                 </li>
                 <li className="flex items-center gap-2">
                   <CheckCircle2 className="w-3.5 h-3.5 text-sage" />
-                  <span>3 Gifts of Gratitude</span>
+                  <span>{t.h4Point2}</span>
                 </li>
                 <li className="flex items-center gap-2">
                   <CheckCircle2 className="w-3.5 h-3.5 text-sage" />
-                  <span>Evening Closing Reflection</span>
+                  <span>{t.h4Point3}</span>
                 </li>
               </ul>
             </div>
@@ -283,38 +283,50 @@ export const HomePage: React.FC = () => {
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 space-y-14">
           <div className="text-center space-y-3 max-w-2xl mx-auto">
             <span className="text-xs font-serif uppercase tracking-widest text-sage font-medium">
-              {t.guidingPhilosophy}
+              {t.guidingPrincipleLabel}
             </span>
             <h2 className="font-serif text-3xl sm:text-4xl font-medium text-ink">
-              {t.whySmallStepsMatter}
+              {t.quietIntentionHeading}
             </h2>
-            <p className="font-serif text-sm sm:text-base text-ink-muted">
-              {t.whySmallStepsDesc}
+            <p className="font-serif text-sm sm:text-base text-ink-muted max-w-2xl mx-auto leading-relaxed">
+              {t.philosophyBody1}
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div className="p-8 bg-paper border border-border-subtle rounded-2xl space-y-3 shadow-xs">
               <div className="text-2xl font-serif text-sage font-bold">01</div>
-              <h3 className="font-serif text-xl font-medium text-ink">{t.theRuleOfThreeTitle}</h3>
+              <h3 className="font-serif text-xl font-medium text-ink">
+                {language === 'am' ? 'የ3ቱ ቅድሚያዎች ህግ' : 'The Rule of 3'}
+              </h3>
               <p className="font-serif text-xs sm:text-sm text-ink-muted leading-relaxed">
-                {t.theRuleOfThreeDesc}
+                {language === 'am'
+                  ? 'ሁሉም ነገር ቅድሚያ ሲሰጠው፣ ምንም ቅድሚያ አይኖረውም። እያንዳንዱን ቀን በ3 ትርጉም ባላቸው የትኩረት ነጥቦች መገደብ ያለ አእምሮ ድካም ዘላቂ ፍጥነት ይፈጥራል።'
+                  : 'When everything is a priority, nothing is. Limiting each day to 3 meaningful focus items creates sustainable momentum without cognitive exhaustion.'}
               </p>
             </div>
 
             <div className="p-8 bg-paper border border-border-subtle rounded-2xl space-y-3 shadow-xs">
               <div className="text-2xl font-serif text-sage font-bold">02</div>
-              <h3 className="font-serif text-xl font-medium text-ink">{t.nonGuiltTitle}</h3>
+              <h3 className="font-serif text-xl font-medium text-ink">
+                {language === 'am' ? 'ከጥፋተኝነት ነጻ የሆነ ወጥነት' : 'Non-Guilt Consistency'}
+              </h3>
               <p className="font-serif text-xs sm:text-sm text-ink-muted leading-relaxed">
-                {t.nonGuiltDesc}
+                {language === 'am'
+                  ? 'ህይወት ቀጥተኛ መስመር አይደለችም። የልማድ ማትሪክስ እና የስሜት መከታተያዎቻችን ለስላሳ ራስን ማወቅ የተነደፉ ናቸው እንጂ ለጭንቀት አይደለም።'
+                  : 'Life is nonlinear. Our habit matrix and mood trackers are designed for gentle self-awareness, not punitive streak-breaking anxiety.'}
               </p>
             </div>
 
             <div className="p-8 bg-paper border border-border-subtle rounded-2xl space-y-3 shadow-xs">
               <div className="text-2xl font-serif text-sage font-bold">03</div>
-              <h3 className="font-serif text-xl font-medium text-ink">{t.compoundingImpactTitle}</h3>
+              <h3 className="font-serif text-xl font-medium text-ink">
+                {language === 'am' ? 'የማባዛት ውጤት' : 'Compounding Impact'}
+              </h3>
               <p className="font-serif text-xs sm:text-sm text-ink-muted leading-relaxed">
-                {t.compoundingImpactDesc}
+                {language === 'am'
+                  ? 'በየቀኑ ሶስት የታሰበባቸው ተግባራትን ማጠናቀቅ በዓመት ከ1,000 በላይ ትርጉም ያላቸው ስኬቶችን ያስገኛል። ትናንሽ፣ ጸጥተኛ ታማኝነቶች ወደ ዘላቂ የህይወት ቅርስዎ ይባዛሉ።'
+                  : 'Completing three intentional actions daily yields over 1,000 meaningful milestones in a year. Small, quiet faithfulness compounds into your lifetime legacy.'}
               </p>
             </div>
           </div>
@@ -333,22 +345,22 @@ export const HomePage: React.FC = () => {
               />
               <div>
                 <span className="font-serif font-semibold text-ink text-lg block leading-none">
-                  {t.creatorName}
+                  {t.founderName}
                 </span>
                 <span className="text-xs text-ink-muted font-serif italic">
-                  {t.creatorRole}
+                  {t.founderRole}
                 </span>
               </div>
             </div>
 
             <blockquote className="font-serif text-lg sm:text-xl text-ink leading-relaxed italic border-l-2 border-sage pl-4 sm:pl-6">
-              &ldquo;{t.creatorQuote}&rdquo;
+              &ldquo;{t.storyQuote}&rdquo;
             </blockquote>
 
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-4 border-t border-border-subtle">
               <div className="flex items-center gap-2 text-xs font-serif text-sage">
                 <Heart className="w-4 h-4 fill-sage/20" />
-                <span>{t.craftedForMindfulCreators}</span>
+                <span>{t.craftedForCreators}</span>
               </div>
               <Link
                 to="/story"
@@ -366,17 +378,17 @@ export const HomePage: React.FC = () => {
       <section className="py-20 bg-radial from-sage-surface/40 to-paper text-center">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
           <h2 className="font-serif text-3xl sm:text-4xl font-medium text-ink">
-            {t.beginGuidedJourney}
+            {t.beginJourneyHeadline}
           </h2>
           <p className="font-serif text-sm sm:text-base text-ink-muted max-w-xl mx-auto">
-            {t.beginGuidedJourneySub}
+            {t.beginJourneySubheadline}
           </p>
           <div className="pt-2">
             <Link
               to={user ? '/annual' : '/login'}
               className="inline-flex items-center gap-2 px-8 py-4 bg-sage hover:bg-sage-dark text-white rounded-xl font-serif text-base font-medium transition-all shadow-md hover:shadow-lg cursor-pointer"
             >
-              <span>{user ? t.openJournal : t.getStartedFree}</span>
+              <span>{user ? t.openYourJournal : t.getStartedFree}</span>
               <ArrowRight className="w-4 h-4" />
             </Link>
           </div>
@@ -394,34 +406,34 @@ export const HomePage: React.FC = () => {
             />
             <div>
               <span className="font-serif font-semibold text-ink text-sm block leading-none">
-                Guided Annual Planner
+                {t.appName}
               </span>
               <span className="text-[11px] font-serif text-ink-muted">
-                Crafted with deliberate care &bull; Addis Ababa
+                {t.appTagline} &bull; Addis Ababa
               </span>
             </div>
           </div>
 
           <div className="flex flex-wrap justify-center gap-6 font-serif text-xs text-ink-muted">
             <Link to="/annual" className="hover:text-ink transition-colors">
-              Annual Horizon
+              {language === 'am' ? 'ዓመታዊ አድማስ' : 'Annual Horizon'}
             </Link>
             <Link to="/monthly/2026/1" className="hover:text-ink transition-colors">
-              Monthly
+              {language === 'am' ? 'ወርሃዊ' : 'Monthly'}
             </Link>
             <Link to="/weekly/2026/1" className="hover:text-ink transition-colors">
-              Weekly Spread
+              {language === 'am' ? 'ሳምንታዊ እቅድ' : 'Weekly Spread'}
             </Link>
             <Link to="/daily" className="hover:text-ink transition-colors">
-              Daily Focus
+              {language === 'am' ? 'ዕለታዊ ማስታወሻ' : 'Daily Focus'}
             </Link>
             <Link to="/story" className="hover:text-ink transition-colors">
-              Creator Story
+              {t.creatorStory}
             </Link>
           </div>
 
           <div className="text-xs font-serif text-ink-muted">
-            &copy; {new Date().getFullYear()} Guided Annual Planner. All rights reserved.
+            &copy; {new Date().getFullYear()} {t.appName}. All rights reserved.
           </div>
         </div>
       </footer>
