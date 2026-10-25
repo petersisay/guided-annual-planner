@@ -24,8 +24,11 @@ export const GlobalCursorMovement: React.FC = () => {
   const smoothY = useSpring(mouseY, springConfig);
 
   useEffect(() => {
-    // Check if device supports fine hover (mouse/trackpad, not touch)
-    if (window.matchMedia('(pointer: coarse)').matches) {
+    // Check if device supports fine hover (mouse/trackpad, not touch) and user allows motion
+    if (
+      window.matchMedia('(pointer: coarse)').matches ||
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    ) {
       return;
     }
 

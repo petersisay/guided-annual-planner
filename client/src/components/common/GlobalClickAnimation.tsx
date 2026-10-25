@@ -11,6 +11,11 @@ export const GlobalClickAnimation: React.FC = () => {
   const [ripples, setRipples] = useState<ClickRipple[]>([]);
 
   const handleClick = useCallback((e: MouseEvent) => {
+    // Respect user preference for reduced motion
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      return;
+    }
+
     // Elegant warm earthy sage and terracotta color palette for click movement
     const colors = [
       'rgba(122, 154, 72, 0.45)', // Sage

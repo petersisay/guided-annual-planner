@@ -68,3 +68,15 @@ html[lang="am"] .font-serif {
 .animate-click-ripple {
   animation: clickRipple 0.7s cubic-bezier(0.12, 0.8, 0.32, 1) forwards;
 }
+
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .animate-click-ripple {
+    display: none !important;
+  }
+}
