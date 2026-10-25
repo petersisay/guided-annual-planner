@@ -42,6 +42,24 @@ export interface TranslationDictionary {
   compoundingQuote: string;
   fourHorizonsHeadline: string;
   fourHorizonsSubheadline: string;
+  openJournal: string;
+  getStartedPlanner: string;
+  readOriginStory: string;
+  guidingPrincipleSub: string;
+  unifiedArchitecture: string;
+  guidingPhilosophy: string;
+  whySmallStepsMatter: string;
+  whySmallStepsDesc: string;
+  theRuleOfThreeTitle: string;
+  theRuleOfThreeDesc: string;
+  nonGuiltTitle: string;
+  nonGuiltDesc: string;
+  compoundingImpactTitle: string;
+  compoundingImpactDesc: string;
+  craftedForMindfulCreators: string;
+  beginGuidedJourney: string;
+  beginGuidedJourneySub: string;
+  getStartedFree: string;
 
   // Creator Story
   creatorName: string;
@@ -147,6 +165,29 @@ export const translations: Record<SupportedLanguage, TranslationDictionary> = {
     fourHorizonsHeadline: 'Four Horizons, One Continuous Journey',
     fourHorizonsSubheadline:
       'Most productivity tools fragment your attention. The Guided Annual Planner connects every moment to your overarching vision.',
+    openJournal: 'Open Your Journal',
+    getStartedPlanner: 'Get Started with Your Planner',
+    readOriginStory: 'Read the Origin Story',
+    guidingPrincipleSub: 'The Guiding Principle of the Guided Annual Planner',
+    unifiedArchitecture: 'Unified Architecture',
+    guidingPhilosophy: 'The Guiding Philosophy',
+    whySmallStepsMatter: 'Why Small Steps Matter',
+    whySmallStepsDesc:
+      'Grand resolutions without daily architecture fade quickly. Our system grounds you in intentional rhythm.',
+    theRuleOfThreeTitle: 'The Rule of 3',
+    theRuleOfThreeDesc:
+      'When everything is a priority, nothing is. Limiting each day to 3 meaningful focus items creates sustainable momentum without cognitive exhaustion.',
+    nonGuiltTitle: 'Non-Guilt Consistency',
+    nonGuiltDesc:
+      'Life is nonlinear. Our habit matrix and mood trackers are designed for gentle self-awareness, not punitive streak-breaking anxiety.',
+    compoundingImpactTitle: 'Compounding Impact',
+    compoundingImpactDesc:
+      'Completing three intentional actions daily yields over 1,000 meaningful milestones in a year. Small, quiet faithfulness compounds into your lifetime legacy.',
+    craftedForMindfulCreators: 'Crafted for mindful creators everywhere',
+    beginGuidedJourney: 'Begin Your Guided Journey Today',
+    beginGuidedJourneySub:
+      'Take the first small, deliberate step toward clarity, steady progress, and mindful living.',
+    getStartedFree: 'Get Started — It’s Free',
 
     creatorName: 'Peter Sisay',
     creatorRole: 'Creator • Addis Ababa, Ethiopia',
@@ -250,6 +291,29 @@ export const translations: Record<SupportedLanguage, TranslationDictionary> = {
     fourHorizonsHeadline: 'አራት አድማሶች፣ አንድ ቀጣይነት ያለው ጉዞ',
     fourHorizonsSubheadline:
       'አብዛኛዎቹ የቴክኖሎጂ መተግበሪያዎች ትኩረትን ይበታትናሉ። ይህ መሪ ዓመታዊ እቅድ አውጪ እያንዳንዱን ቅጽበት ከዋናው ራዕይዎ ጋር ያገናኛል።',
+    openJournal: 'ማስታወሻዎን ይክፈቱ',
+    getStartedPlanner: 'በእቅድ አውጪዎ ይጀምሩ',
+    readOriginStory: 'የመነሻ ታሪኩን ያንብቡ',
+    guidingPrincipleSub: 'የመሪ ዓመታዊ እቅድ አውጪው መመሪያ መርህ',
+    unifiedArchitecture: 'የተዋሃደ መዋቅር',
+    guidingPhilosophy: 'መሪ ፍልስፍና',
+    whySmallStepsMatter: 'ጥቃቅን እርምጃዎች ለምን ወሳኝ ሆኑ?',
+    whySmallStepsDesc:
+      'ያለ ዕለታዊ ስርአት ትላልቅ ውሳኔዎች በፍጥነት ይደበዝዛሉ። የእኛ ስርአት በረጋ እና በታሰበበት ምት ያቆይዎታል።',
+    theRuleOfThreeTitle: 'የ3ቱ ቅድሚያዎች ህግ',
+    theRuleOfThreeDesc:
+      'ሁሉም ነገር ቅድሚያ ሲሆን፣ ምንም ቅድሚያ የሚሰጠው አይኖርም። ዕለታዊ ትኩረትን በ3 ወሳኝ ጉዳዮች መገደብ ያለ አእምሮ ድካም ቀጣይነት ያለው ጉልበት ይፈጥራል።',
+    nonGuiltTitle: 'ከጸጸት የጸዳ ወጥነት',
+    nonGuiltDesc:
+      'ህይወት ቀጥተኛ አይደለም። የእኛ የልማድ እና የስሜት መከታተያዎች ለረጋ ራስን ማወቅ የተነደፉ ናቸው እንጂ ለጭንቀት አይደለም።',
+    compoundingImpactTitle: 'የሚደራረብ ተጽእኖ',
+    compoundingImpactDesc:
+      'በየቀኑ 3 የታሰበባቸውን ተግባራት ማከናወን በዓመት ውስጥ ከ1,000 በላይ ትርጉም ያላቸው ስኬቶችን ያመጣል። ጥቃቅን ዕለታዊ ጥረቶች ወደ ዘላቂ የህይወት ቅርስ ያድጋሉ።',
+    craftedForMindfulCreators: 'በጥንቃቄ ለሚያስቡ ፈጣሪዎች በሙሉ የተዘጋጀ',
+    beginGuidedJourney: 'የተመራ ጉዞዎን ዛሬ ይጀምሩ',
+    beginGuidedJourneySub:
+      'ወደ ግልጽነት፣ የተረጋጋ እድገት እና አስተዋይ አኗኗር የመጀመሪያውን የታሰበበትን እርምጃ ይውሰዱ።',
+    getStartedFree: 'ይጀምሩ — ነፃ ነው',
 
     creatorName: 'Peter Sisay',
     creatorRole: 'ፈጣሪ • አዲስ አበባ፣ ኢትዮጵያ',

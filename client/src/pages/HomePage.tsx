@@ -90,33 +90,32 @@ export const HomePage: React.FC = () => {
           {/* Botanical Badge */}
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-sage-surface border border-sage/30 text-sage text-xs font-serif font-medium shadow-xs">
             <Compass className="w-3.5 h-3.5" />
-            <span>Mindful Journaling &bull; Ethiopian Origin Story</span>
+            <span>{t.ethiopianOrigin}</span>
           </div>
 
           {/* Headline */}
           <div className="space-y-4">
             <h1 className="font-serif text-4xl sm:text-6xl font-medium tracking-tight text-ink leading-tight">
-              Plan with Intention. <br />
+              {t.planWithIntention} <br />
               <span className="italic font-normal font-serif text-sage">
-                Live with Quiet Clarity.
+                {t.liveWithClarity}
               </span>
             </h1>
             <p className="max-w-2xl mx-auto font-serif text-base sm:text-xl text-ink-muted leading-relaxed">
-              A paper-inspired sanctuary designed to bridge your daily focus, weekly momentum,
-              monthly clarity, and annual horizon into a lifetime legacy.
+              {t.heroSubheadline}
             </p>
           </div>
 
           {/* Primary Compounding Philosophy Banner */}
           <div className="max-w-3xl mx-auto p-6 sm:p-8 bg-paper-alt border border-border-subtle rounded-2xl shadow-paper relative">
             <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-0.5 bg-sage text-white text-[11px] font-serif uppercase tracking-widest rounded-full">
-              Core Philosophy
+              {t.corePhilosophy}
             </div>
             <blockquote className="font-serif text-lg sm:text-2xl text-ink italic leading-snug">
-              &ldquo;Doing small things before taking major steps compounds over time to create a huge impact.&rdquo;
+              &ldquo;{t.compoundingQuote}&rdquo;
             </blockquote>
             <p className="font-serif text-xs text-ink-muted mt-2">
-              The Guiding Principle of the Guided Annual Planner
+              {t.guidingPrincipleSub}
             </p>
           </div>
 
@@ -126,7 +125,7 @@ export const HomePage: React.FC = () => {
               to={user ? '/annual' : '/login'}
               className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-7 py-3.5 bg-sage hover:bg-sage-dark text-white rounded-xl font-serif text-base font-medium transition-all shadow-md hover:shadow-lg cursor-pointer"
             >
-              <span>{user ? 'Open Your Journal' : 'Get Started with Your Planner'}</span>
+              <span>{user ? t.openJournal : t.getStartedPlanner}</span>
               <ArrowRight className="w-4 h-4" />
             </Link>
             <Link
@@ -134,7 +133,7 @@ export const HomePage: React.FC = () => {
               className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 bg-paper-alt hover:bg-paper text-ink border border-border-subtle rounded-xl font-serif text-base transition-colors cursor-pointer"
             >
               <Compass className="w-4 h-4 text-sage" />
-              <span>Read the Origin Story</span>
+              <span>{t.readOriginStory}</span>
             </Link>
           </div>
         </div>
@@ -145,14 +144,13 @@ export const HomePage: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-16">
           <div className="text-center space-y-3 max-w-2xl mx-auto">
             <span className="text-xs font-serif uppercase tracking-widest text-sage font-medium">
-              Unified Architecture
+              {t.unifiedArchitecture}
             </span>
             <h2 className="font-serif text-3xl sm:text-4xl font-medium text-ink">
-              Four Horizons, One Continuous Journey
+              {t.fourHorizonsHeadline}
             </h2>
             <p className="font-serif text-sm sm:text-base text-ink-muted leading-relaxed">
-              Most productivity tools fragment your attention. The Guided Annual Planner connects every
-              moment to your overarching vision.
+              {t.fourHorizonsSubheadline}
             </p>
           </div>
 
@@ -166,10 +164,9 @@ export const HomePage: React.FC = () => {
                 <span className="text-[11px] font-serif uppercase tracking-wider text-sage font-semibold">
                   Horizon 1
                 </span>
-                <h3 className="font-serif text-xl font-medium text-ink">Annual Vision</h3>
+                <h3 className="font-serif text-xl font-medium text-ink">{t.annualVision}</h3>
                 <p className="font-serif text-xs text-ink-muted leading-relaxed">
-                  Year-at-a-glance calendar, overarching Word of the Year, lifetime intentions,
-                  bookshelf, and year-end celebrations.
+                  {t.annualVisionDesc}
                 </p>
               </div>
               <ul className="text-xs font-serif text-ink-muted space-y-2 border-t border-border-subtle pt-4">
@@ -197,10 +194,9 @@ export const HomePage: React.FC = () => {
                 <span className="text-[11px] font-serif uppercase tracking-wider text-sage font-semibold">
                   Horizon 2
                 </span>
-                <h3 className="font-serif text-xl font-medium text-ink">Monthly Rhythm</h3>
+                <h3 className="font-serif text-xl font-medium text-ink">{t.monthlyRhythm}</h3>
                 <p className="font-serif text-xs text-ink-muted leading-relaxed">
-                  Monthly dashboard with high-priority Must-Dos, habit tracker overview, key events,
-                  and structured lined journaling.
+                  {t.monthlyRhythmDesc}
                 </p>
               </div>
               <ul className="text-xs font-serif text-ink-muted space-y-2 border-t border-border-subtle pt-4">
@@ -228,10 +224,9 @@ export const HomePage: React.FC = () => {
                 <span className="text-[11px] font-serif uppercase tracking-wider text-sage font-semibold">
                   Horizon 3
                 </span>
-                <h3 className="font-serif text-xl font-medium text-ink">Weekly 2-Page Spread</h3>
+                <h3 className="font-serif text-xl font-medium text-ink">{t.weeklySpread}</h3>
                 <p className="font-serif text-xs text-ink-muted leading-relaxed">
-                  Authentic 2-page notebook spread with ISO Monday start, Rule of 3 daily tasks,
-                  weekly priorities, and next-week horizons.
+                  {t.weeklySpreadDesc}
                 </p>
               </div>
               <ul className="text-xs font-serif text-ink-muted space-y-2 border-t border-border-subtle pt-4">
@@ -259,10 +254,9 @@ export const HomePage: React.FC = () => {
                 <span className="text-[11px] font-serif uppercase tracking-wider text-sage font-semibold">
                   Horizon 4
                 </span>
-                <h3 className="font-serif text-xl font-medium text-ink">Daily Focus &amp; Journal</h3>
+                <h3 className="font-serif text-xl font-medium text-ink">{t.dailyFocus}</h3>
                 <p className="font-serif text-xs text-ink-muted leading-relaxed">
-                  Daily core intention, 3 essential priorities synced to your weekly spread, flow time blocks,
-                  gratitude, and evening reflection.
+                  {t.dailyFocusDesc}
                 </p>
               </div>
               <ul className="text-xs font-serif text-ink-muted space-y-2 border-t border-border-subtle pt-4">
@@ -289,41 +283,38 @@ export const HomePage: React.FC = () => {
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 space-y-14">
           <div className="text-center space-y-3 max-w-2xl mx-auto">
             <span className="text-xs font-serif uppercase tracking-widest text-sage font-medium">
-              The Guiding Philosophy
+              {t.guidingPhilosophy}
             </span>
             <h2 className="font-serif text-3xl sm:text-4xl font-medium text-ink">
-              Why Small Steps Matter
+              {t.whySmallStepsMatter}
             </h2>
             <p className="font-serif text-sm sm:text-base text-ink-muted">
-              Grand resolutions without daily architecture fade quickly. Our system grounds you in intentional rhythm.
+              {t.whySmallStepsDesc}
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div className="p-8 bg-paper border border-border-subtle rounded-2xl space-y-3 shadow-xs">
               <div className="text-2xl font-serif text-sage font-bold">01</div>
-              <h3 className="font-serif text-xl font-medium text-ink">The Rule of 3</h3>
+              <h3 className="font-serif text-xl font-medium text-ink">{t.theRuleOfThreeTitle}</h3>
               <p className="font-serif text-xs sm:text-sm text-ink-muted leading-relaxed">
-                When everything is a priority, nothing is. Limiting each day to 3 meaningful focus items
-                creates sustainable momentum without cognitive exhaustion.
+                {t.theRuleOfThreeDesc}
               </p>
             </div>
 
             <div className="p-8 bg-paper border border-border-subtle rounded-2xl space-y-3 shadow-xs">
               <div className="text-2xl font-serif text-sage font-bold">02</div>
-              <h3 className="font-serif text-xl font-medium text-ink">Non-Guilt Consistency</h3>
+              <h3 className="font-serif text-xl font-medium text-ink">{t.nonGuiltTitle}</h3>
               <p className="font-serif text-xs sm:text-sm text-ink-muted leading-relaxed">
-                Life is nonlinear. Our habit matrix and mood trackers are designed for gentle self-awareness,
-                not punitive streak-breaking anxiety.
+                {t.nonGuiltDesc}
               </p>
             </div>
 
             <div className="p-8 bg-paper border border-border-subtle rounded-2xl space-y-3 shadow-xs">
               <div className="text-2xl font-serif text-sage font-bold">03</div>
-              <h3 className="font-serif text-xl font-medium text-ink">Compounding Impact</h3>
+              <h3 className="font-serif text-xl font-medium text-ink">{t.compoundingImpactTitle}</h3>
               <p className="font-serif text-xs sm:text-sm text-ink-muted leading-relaxed">
-                Completing three intentional actions daily yields over 1,000 meaningful milestones in a year.
-                Small, quiet faithfulness compounds into your lifetime legacy.
+                {t.compoundingImpactDesc}
               </p>
             </div>
           </div>
@@ -342,31 +333,28 @@ export const HomePage: React.FC = () => {
               />
               <div>
                 <span className="font-serif font-semibold text-ink text-lg block leading-none">
-                  Peter Sisay
+                  {t.creatorName}
                 </span>
                 <span className="text-xs text-ink-muted font-serif italic">
-                  Creator &bull; Addis Ababa, Ethiopia
+                  {t.creatorRole}
                 </span>
               </div>
             </div>
 
             <blockquote className="font-serif text-lg sm:text-xl text-ink leading-relaxed italic border-l-2 border-sage pl-4 sm:pl-6">
-              &ldquo;In Ethiopia, it&apos;s nearly impossible to find a journal that&apos;s more than just plain pages.
-              Planning and journaling aren&apos;t just habits for me; they&apos;re how I leave a mark on my life.
-              I created this planner to provide something that is guided, meaningful, and designed for people who want
-              to document their journey and grow.&rdquo;
+              &ldquo;{t.creatorQuote}&rdquo;
             </blockquote>
 
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-4 border-t border-border-subtle">
               <div className="flex items-center gap-2 text-xs font-serif text-sage">
                 <Heart className="w-4 h-4 fill-sage/20" />
-                <span>Crafted for mindful creators everywhere</span>
+                <span>{t.craftedForMindfulCreators}</span>
               </div>
               <Link
                 to="/story"
                 className="inline-flex items-center gap-1.5 text-sm font-serif font-medium text-sage hover:text-sage-dark hover:underline"
               >
-                <span>Read the Complete Creator Story</span>
+                <span>{t.readCreatorStory}</span>
                 <ArrowRight className="w-3.5 h-3.5" />
               </Link>
             </div>
@@ -378,17 +366,17 @@ export const HomePage: React.FC = () => {
       <section className="py-20 bg-radial from-sage-surface/40 to-paper text-center">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
           <h2 className="font-serif text-3xl sm:text-4xl font-medium text-ink">
-            Begin Your Guided Journey Today
+            {t.beginGuidedJourney}
           </h2>
           <p className="font-serif text-sm sm:text-base text-ink-muted max-w-xl mx-auto">
-            Take the first small, deliberate step toward clarity, steady progress, and mindful living.
+            {t.beginGuidedJourneySub}
           </p>
           <div className="pt-2">
             <Link
               to={user ? '/annual' : '/login'}
               className="inline-flex items-center gap-2 px-8 py-4 bg-sage hover:bg-sage-dark text-white rounded-xl font-serif text-base font-medium transition-all shadow-md hover:shadow-lg cursor-pointer"
             >
-              <span>{user ? 'Open Your Journal' : 'Get Started — It’s Free'}</span>
+              <span>{user ? t.openJournal : t.getStartedFree}</span>
               <ArrowRight className="w-4 h-4" />
             </Link>
           </div>
