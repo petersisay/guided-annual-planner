@@ -11,6 +11,7 @@ import {
   Compass,
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
+import { LandingAnimatedBackground } from '../components/common/LandingAnimatedBackground';
 
 export const HomePage: React.FC = () => {
   const { user } = useAuth();
@@ -80,7 +81,8 @@ export const HomePage: React.FC = () => {
 
       {/* Hero Section */}
       <section className="relative overflow-hidden pt-16 pb-20 sm:pt-24 sm:pb-28 border-b border-border-subtle bg-radial from-paper-alt/60 via-paper to-paper">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-8">
+        <LandingAnimatedBackground />
+        <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-8">
           {/* Botanical Badge */}
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-sage-surface border border-sage/30 text-sage text-xs font-serif font-medium shadow-xs">
             <Compass className="w-3.5 h-3.5" />
