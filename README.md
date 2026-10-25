@@ -13,14 +13,36 @@
 
 A warm, paper-inspired digital sanctuary and Progressive Web App (PWA) designed to turn long-term annual intentions into manageable, compounding daily craft.
 
+> *"Doing small things before taking major steps compounds over time to create a huge impact."*
+
+**Live Deployments:**
+- **Web Application**: [https://guided-annual-planner.vercel.app/](https://guided-annual-planner.vercel.app/)
+- **Backend API Health Check**: [https://guided-annual-planner.onrender.com/health](https://guided-annual-planner.onrender.com/health)
+- **GitHub Repository**: [https://github.com/petersisay/guided-annual-planner](https://github.com/petersisay/guided-annual-planner)
+
+---
+
+## Application Screenshots
+
+The user interface reproduces the warm tactile aesthetic of physical spiral-bound notebooks created in Ethiopia, combining serif typography, dot-grid paper textures, and clear visual progress trackers.
+
+| **Annual Horizon & Calendar Grid** | **Monthly Intentions & Bookshelf** |
+| :---: | :---: |
+| <img src="reference_images/Screenshot%202026-10-14%20122526.png" alt="Annual Horizon & Calendar Grid" width="460" /><br><sub><strong>Annual Horizon & Calendar Grid</strong><br>12-month calendar horizon with automatic leap-year handling, annual intention theme, and milestone reflections.</sub> | <img src="reference_images/Screenshot%202026-10-14%20122649.png" alt="Monthly Intentions Spread & Bookshelf" width="460" /><br><sub><strong>Monthly Intentions & Bookshelf</strong><br>Top 6 Must-Do priorities, 5 new habits, To-Buy inventory card, 5-book interactive bookshelf, and self-change reflection.</sub> |
+| **Weekly 7-Day Planner Spread** | **Daily Focus & Evening Reflection** |
+| <img src="reference_images/Screenshot%202026-10-14%20122758.png" alt="Weekly 7-Day Planner Spread" width="460" /><br><sub><strong>Weekly 7-Day Planner</strong><br>Full 7-day ISO calendar spread structured around the Rule of 3 with configurable week-start days (Monday/Sunday).</sub> | <img src="reference_images/Screenshot%202026-10-14%20122831.png" alt="Daily Focus & Evening Reflection Journal" width="460" /><br><sub><strong>Daily Focus & Evening Journal</strong><br>Top 3 non-negotiable daily priorities, secondary task checklist, hourly schedule blocks, and 4-part guided gratitude journal.</sub> |
+| **Habit & Mood Consistency Maps** | **Creator Story & Backup Hub** |
+| <img src="reference_images/Screenshot%202026-10-14%20122958.png" alt="Habit & Mood Consistency Heatmaps" width="460" /><br><sub><strong>Habit & Mood Consistency Maps</strong><br>Full-year GitHub-style consistency heatmaps calculating routine completion and emotional trends across all 365/366 days.</sub> | <img src="reference_images/Screenshot%202026-10-14%20123051.png" alt="Creator Story & Settings" width="460" /><br><sub><strong>Creator Story & Backup Hub</strong><br>The founding philosophy behind the planner, user display preferences, and zero lock-in JSON export/import data hub.</sub> |
+
+> *All screenshot assets are tracked in the repository under [reference_images/](reference_images/).*
+
 ---
 
 ## Table of Contents
 
+- [Application Screenshots](#application-screenshots)
 - [Overview & Problem Solved](#overview--problem-solved)
-- [Live Deployments](#live-deployments)
 - [Key Features](#key-features)
-- [Visual Previews](#visual-previews)
 - [Technology Stack](#technology-stack)
 - [System Architecture](#system-architecture)
 - [Application Workflow & Authentication](#application-workflow--authentication)
@@ -47,20 +69,12 @@ Traditional productivity applications often exacerbate cognitive fatigue through
 **Guided Annual Planner** bridges this divide. Inspired by tactile guided journals created in Ethiopia, the platform provides a calm, warm-paper digital environment rooted in the philosophy that *"doing small things before taking major steps compounds over time to create a huge impact."*
 
 The application structures personal growth into a cascading hierarchy:
-1. **Annual Horizon**: Define a unifying theme word, core milestones, and year-end retrospectives.
+1. **Annual Horizon**: Define a unifying theme word, core milestone intentions, and year-end retrospectives.
 2. **Monthly Intentions**: Establish non-negotiable must-dos, habits, reading goals, and reflections.
 3. **Weekly Rhythms**: Plan across a 7-day ISO calendar spread using the Rule of 3.
 4. **Daily Focus**: Limit essential priorities to three items, schedule hourly blocks, and close the evening with a 4-part structured journal.
 5. **Continuous Tracking**: Monitor habits and emotional trends with annual GitHub-style consistency heatmaps.
 6. **Bilingual Accessibility**: Full bilingual support in English and Amharic (አማርኛ), honoring authentic Ethiopic typography and date contexts.
-
----
-
-## Live Deployments
-
-- **Live Application**: [https://guided-annual-planner.vercel.app/](https://guided-annual-planner.vercel.app/)
-- **Live Backend API Health**: [https://guided-annual-planner.onrender.com/health](https://guided-annual-planner.onrender.com/health)
-- **GitHub Repository**: [https://github.com/petersisay/guided-annual-planner](https://github.com/petersisay/guided-annual-planner)
 
 ---
 
@@ -116,23 +130,6 @@ The application structures personal growth into a cascading hierarchy:
 - Complete JSON backup export with zero vendor lock-in.
 - Pre-restore preview and Zod schema validation before applying records.
 - Strict tenant isolation ensuring users can only read and restore their own data.
-
----
-
-## Visual Previews
-
-The user interface uses paper-journal design tokens, spiral-bound notebook margins, serif typography, and tactile status indicators:
-
-| View | Description | File Path |
-| :--- | :--- | :--- |
-| **Annual Horizon** | 12-month calendar cards, yearly theme, intentions, and retrospective review | `reference_images/Screenshot 2026-10-14 122526.png` |
-| **Monthly Intentions** | Must-Do checklists, habits, To-Buy card, 5-book reading shelf, and reflections | `reference_images/Screenshot 2026-10-14 122649.png` |
-| **Weekly Planner** | 7-day overview with Rule of 3 priorities and weekly retrospective | `reference_images/Screenshot 2026-10-14 122758.png` |
-| **Daily Spread** | Top 3 priorities, secondary tasks, hourly schedule blocks, and 4-part journal | `reference_images/Screenshot 2026-10-14 122831.png` |
-| **Habit & Mood Heatmaps** | Annual consistency heatmaps calculating habit execution and emotional trends | `reference_images/Screenshot 2026-10-14 122958.png` |
-| **Settings & Backup** | Week-start preference, appearance options, JSON backup export, and schema validation preview | `reference_images/Screenshot 2026-10-14 123051.png` |
-
-> *All screenshot assets are located in the repository under [reference_images/](reference_images/).*
 
 ---
 
