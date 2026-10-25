@@ -14,6 +14,7 @@ import {
   Compass,
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
+import { useLanguage } from '../context/LanguageContext';
 import { AnnualPlan, isLeapYear, getISOWeekNumber } from '@planner/shared';
 import { YearCalendarGrid } from '../components/annual/YearCalendarGrid';
 import { MoodTrackerHeatmap } from '../components/annual/MoodTrackerHeatmap';
@@ -35,6 +36,7 @@ type ActiveTab = 'overview' | 'mood' | 'habits';
 export const AnnualViewPage: React.FC = () => {
   const navigate = useNavigate();
   const { user, logout, loading: authLoading } = useAuth();
+  const { language } = useLanguage();
   const [selectedYear, setSelectedYear] = useState<number>(new Date().getFullYear());
   const [activeTab, setActiveTab] = useState<ActiveTab>('overview');
   const [loading, setLoading] = useState<boolean>(true);
@@ -188,11 +190,13 @@ export const AnnualViewPage: React.FC = () => {
                   Guided Annual Planner
                 </span>
                 <span className="text-[10px] px-2 py-0.5 rounded-full bg-sage/10 text-sage font-semibold uppercase tracking-wider">
-                  Official
+                  {language === 'am' ? 'አስተዋይ የእድገት እትም' : 'Mindful Growth Edition'}
                 </span>
               </div>
               <span className="text-[11px] text-ink-muted font-serif italic block mt-0.5">
-                Rooted in intentional living & compounding daily craft
+                {language === 'am'
+                  ? 'በዓላማ መኖር እና በዕለታዊ ጥረት ላይ የተመሠረተ'
+                  : 'Rooted in intentional living & compounding daily craft'}
               </span>
             </div>
           </div>
