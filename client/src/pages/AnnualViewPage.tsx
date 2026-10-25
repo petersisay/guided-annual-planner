@@ -30,6 +30,7 @@ import { ConflictResolutionModal } from '../components/common/ConflictResolution
 import { usePlanAutosave } from '../hooks/usePlanAutosave';
 import { SaveStatusBadge } from '../components/common/SaveStatusBadge';
 import { PageLoadingState, PageErrorState } from '../components/common/PageStatusBanner';
+import { LanguageSelector } from '../components/common/LanguageSelector';
 
 type ActiveTab = 'overview' | 'mood' | 'habits';
 
@@ -244,8 +245,9 @@ export const AnnualViewPage: React.FC = () => {
             />
           </div>
 
-          {/* User Account & Logout */}
+          {/* User Account, Language Selector & Logout */}
           <div className="flex items-center gap-3 self-end md:self-auto">
+            <LanguageSelector />
             {user?.avatarUrl && (
               <img
                 src={user.avatarUrl}
@@ -265,7 +267,7 @@ export const AnnualViewPage: React.FC = () => {
               className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-border-subtle text-xs text-ink hover:bg-paper font-serif font-medium transition-colors cursor-pointer shadow-xs focus:outline-none focus-visible:ring-2 focus-visible:ring-sage"
             >
               <LogOut className="w-3.5 h-3.5" />
-              <span>Sign Out</span>
+              <span>{language === 'am' ? 'ውጣ' : 'Sign Out'}</span>
             </button>
           </div>
         </div>

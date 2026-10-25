@@ -3,6 +3,7 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import { AnnualViewPage } from './AnnualViewPage';
+import { LanguageProvider } from '../context/LanguageContext';
 import * as AuthContextModule from '../context/AuthContext';
 
 describe('AnnualViewPage Component', () => {
@@ -74,13 +75,16 @@ describe('AnnualViewPage Component', () => {
   it('renders annual overview header, user name, and year navigation', async () => {
     render(
       <MemoryRouter>
-        <AnnualViewPage />
+        <LanguageProvider>
+          <AnnualViewPage />
+        </LanguageProvider>
       </MemoryRouter>
     );
 
     expect(screen.getAllByText(/Guided Annual Planner/i).length).toBeGreaterThan(0);
     expect(screen.getByText('Peter Sisay')).toBeInTheDocument();
     expect(screen.getByText('Sign Out')).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /switch interface language to amharic/i })).toBeInTheDocument();
 
     await waitFor(() => {
       expect(screen.getByText('Core Intentions & Commitments')).toBeInTheDocument();
