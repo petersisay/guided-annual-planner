@@ -41,6 +41,7 @@ The user interface reproduces the warm tactile aesthetic of physical spiral-boun
 ## Table of Contents
 
 - [Application Screenshots](#application-screenshots)
+- [Documentation Hub](#documentation-hub)
 - [Overview & Problem Solved](#overview--problem-solved)
 - [Key Features](#key-features)
 - [Technology Stack](#technology-stack)
@@ -59,6 +60,22 @@ The user interface reproduces the warm tactile aesthetic of physical spiral-boun
 - [Troubleshooting](#troubleshooting)
 - [Contributing](#contributing)
 - [License & Author](#license--author)
+
+---
+
+## Documentation Hub
+
+Comprehensive, in-depth architectural and developer documentation is maintained in the [`docs/`](docs/) directory:
+
+| Document | Description |
+| :--- | :--- |
+| [**Architecture & System Design**](docs/ARCHITECTURE.md) | Monorepo structure, layered architecture, component tree, and edge reverse-proxy. |
+| [**REST API Reference**](docs/API_REFERENCE.md) | Endpoint specifications (`/auth`, `/planner`, `/trackers`, `/backup`), headers, and payloads. |
+| [**Data Models & Schemas**](docs/DATA_MODELS.md) | MongoDB collections, Mongoose models, compound unique indexes, and JSON backup schema. |
+| [**Offline-First & Synchronization**](docs/OFFLINE_AND_SYNC.md) | IndexedDB stores, mutation coalescing, optimistic concurrency control, and conflict handling. |
+| [**Security & Privacy Posture**](docs/SECURITY.md) | Database-backed SHA-256 sessions, CSRF headers, Google OIDC signature verification, and tenant isolation. |
+| [**Contributing Guidelines**](docs/CONTRIBUTING.md) | Development workflow, branching strategy, Conventional Commits format, and PR checklist. |
+| [**Production Deployment Runbook**](DEPLOYMENT.md) | Full cloud operations guide for Vercel, Render, and MongoDB Atlas. |
 
 ---
 
