@@ -535,16 +535,16 @@ export const SettingsPage: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => setWeekStart('monday')}
-                  className={`p-3 rounded-xl border text-left cursor-pointer transition-all ${
+                  className={`p-3.5 rounded-xl border-2 text-left cursor-pointer transition-all duration-150 ${
                     weekStart === 'monday'
-                      ? 'bg-paper border-sage ring-1 ring-sage'
-                      : 'bg-paper/40 border-border-subtle'
+                      ? 'bg-sage-surface border-sage ring-2 ring-sage/20 text-forest shadow-xs font-semibold'
+                      : 'bg-paper border-border-subtle hover:border-sage/50 hover:bg-sage-surface/40 hover:shadow-2xs text-ink-muted hover:text-ink active:scale-[0.99]'
                   }`}
                 >
-                  <span className="font-serif text-sm font-medium text-ink block">
+                  <span className="font-serif text-sm font-semibold text-ink block">
                     Monday
                   </span>
-                  <span className="text-[11px] font-serif text-ink-muted block">
+                  <span className="text-[11px] font-serif text-ink-muted block mt-0.5">
                     Standard workweek view (Saturday &amp; Sunday grouped together)
                   </span>
                 </button>
@@ -552,16 +552,16 @@ export const SettingsPage: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => setWeekStart('sunday')}
-                  className={`p-3 rounded-xl border text-left cursor-pointer transition-all ${
+                  className={`p-3.5 rounded-xl border-2 text-left cursor-pointer transition-all duration-150 ${
                     weekStart === 'sunday'
-                      ? 'bg-paper border-sage ring-1 ring-sage'
-                      : 'bg-paper/40 border-border-subtle'
+                      ? 'bg-sage-surface border-sage ring-2 ring-sage/20 text-forest shadow-xs font-semibold'
+                      : 'bg-paper border-border-subtle hover:border-sage/50 hover:bg-sage-surface/40 hover:shadow-2xs text-ink-muted hover:text-ink active:scale-[0.99]'
                   }`}
                 >
-                  <span className="font-serif text-sm font-medium text-ink block">
+                  <span className="font-serif text-sm font-semibold text-ink block">
                     Sunday
                   </span>
-                  <span className="text-[11px] font-serif text-ink-muted block">
+                  <span className="text-[11px] font-serif text-ink-muted block mt-0.5">
                     Traditional calendar format starting on Sunday
                   </span>
                 </button>
@@ -577,16 +577,16 @@ export const SettingsPage: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => setTheme('paper-warm')}
-                  className={`p-3 rounded-xl border text-left cursor-pointer transition-all ${
+                  className={`p-3.5 rounded-xl border-2 text-left cursor-pointer transition-all duration-150 ${
                     theme === 'paper-warm'
-                      ? 'bg-paper border-sage ring-1 ring-sage'
-                      : 'bg-paper/40 border-border-subtle'
+                      ? 'bg-sage-surface border-sage ring-2 ring-sage/20 text-forest shadow-xs font-semibold'
+                      : 'bg-paper border-border-subtle hover:border-sage/50 hover:bg-sage-surface/40 hover:shadow-2xs text-ink-muted hover:text-ink active:scale-[0.99]'
                   }`}
                 >
-                  <span className="font-serif text-sm font-medium text-ink block">
+                  <span className="font-serif text-sm font-semibold text-ink block">
                     Warm Linen
                   </span>
-                  <span className="text-[11px] font-serif text-ink-muted block">
+                  <span className="text-[11px] font-serif text-ink-muted block mt-0.5">
                     Soft, relaxing cream paper tone with gentle green accents
                   </span>
                 </button>
@@ -594,16 +594,16 @@ export const SettingsPage: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => setTheme('paper-editorial')}
-                  className={`p-3 rounded-xl border text-left cursor-pointer transition-all ${
+                  className={`p-3.5 rounded-xl border-2 text-left cursor-pointer transition-all duration-150 ${
                     theme === 'paper-editorial'
-                      ? 'bg-paper border-sage ring-1 ring-sage'
-                      : 'bg-paper/40 border-border-subtle'
+                      ? 'bg-sage-surface border-sage ring-2 ring-sage/20 text-forest shadow-xs font-semibold'
+                      : 'bg-paper border-border-subtle hover:border-sage/50 hover:bg-sage-surface/40 hover:shadow-2xs text-ink-muted hover:text-ink active:scale-[0.99]'
                   }`}
                 >
-                  <span className="font-serif text-sm font-medium text-ink block">
+                  <span className="font-serif text-sm font-semibold text-ink block">
                     Classic Editorial
                   </span>
-                  <span className="text-[11px] font-serif text-ink-muted block">
+                  <span className="text-[11px] font-serif text-ink-muted block mt-0.5">
                     Clean, crisp white paper style
                   </span>
                 </button>
@@ -640,16 +640,16 @@ export const SettingsPage: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => setLanguage('en')}
-                  className={`p-3 rounded-xl border text-left cursor-pointer transition-all ${
+                  className={`p-3.5 rounded-xl border-2 text-left cursor-pointer transition-all duration-150 ${
                     language === 'en'
-                      ? 'bg-paper border-sage ring-1 ring-sage'
-                      : 'bg-paper/40 border-border-subtle'
+                      ? 'bg-sage-surface border-sage ring-2 ring-sage/20 text-forest shadow-xs font-semibold'
+                      : 'bg-paper border-border-subtle hover:border-sage/50 hover:bg-sage-surface/40 hover:shadow-2xs text-ink-muted hover:text-ink active:scale-[0.99]'
                   }`}
                 >
-                  <span className="font-serif text-sm font-medium text-ink block">
+                  <span className="font-serif text-sm font-semibold text-ink block">
                     🇺🇸 English (Default)
                   </span>
-                  <span className="text-[11px] font-serif text-ink-muted block">
+                  <span className="text-[11px] font-serif text-ink-muted block mt-0.5">
                     Full English planner interface
                   </span>
                 </button>
@@ -657,16 +657,16 @@ export const SettingsPage: React.FC = () => {
                 <button
                   type="button"
                   onClick={() => setLanguage('am')}
-                  className={`p-3 rounded-xl border text-left cursor-pointer transition-all ${
+                  className={`p-3.5 rounded-xl border-2 text-left cursor-pointer transition-all duration-150 ${
                     language === 'am'
-                      ? 'bg-paper border-sage ring-1 ring-sage'
-                      : 'bg-paper/40 border-border-subtle'
+                      ? 'bg-amber-100/80 border-amber-400 ring-2 ring-amber-300/40 text-amber-950 shadow-xs font-semibold'
+                      : 'bg-paper border-border-subtle hover:border-amber-300 hover:bg-amber-50/40 hover:shadow-2xs text-ink-muted hover:text-ink active:scale-[0.99]'
                   }`}
                 >
-                  <span className="font-serif text-sm font-medium text-ink block">
+                  <span className="font-serif text-sm font-semibold text-ink block">
                     🇪🇹 አማርኛ (Amharic)
                   </span>
-                  <span className="text-[11px] font-serif text-ink-muted block">
+                  <span className="text-[11px] font-serif text-ink-muted block mt-0.5">
                     የአማርኛ ቋንቋ አማራጭ እና አሰሳ
                   </span>
                 </button>
@@ -678,11 +678,11 @@ export const SettingsPage: React.FC = () => {
                 type="button"
                 onClick={handleSavePreferences}
                 disabled={saving}
-                className="inline-flex items-center gap-2 px-5 py-2.5 bg-sage hover:bg-sage-dark text-white rounded-xl font-serif text-xs font-medium transition-all shadow-xs cursor-pointer disabled:opacity-50"
+                className="inline-flex items-center gap-2 px-6 py-3 bg-sage hover:bg-forest text-white rounded-xl font-serif text-xs sm:text-sm font-semibold transition-all duration-150 shadow-xs hover:shadow-md active:scale-95 cursor-pointer disabled:opacity-50"
               >
                 {savedSuccess ? (
                   <>
-                    <Check className="w-3.5 h-3.5" />
+                    <Check className="w-4 h-4" />
                     <span>Saved to Profile</span>
                   </>
                 ) : (
@@ -715,9 +715,9 @@ export const SettingsPage: React.FC = () => {
           <button
             type="button"
             onClick={handleRevisitOnboarding}
-            className="inline-flex items-center gap-2 px-4 py-2 bg-paper border border-border-subtle hover:bg-paper-alt text-ink rounded-xl text-xs font-serif transition-colors cursor-pointer"
+            className="group inline-flex items-center gap-2.5 px-4.5 py-2.5 bg-paper border-2 border-sage/40 hover:border-sage hover:bg-sage hover:text-white text-forest rounded-xl text-xs sm:text-sm font-serif font-semibold transition-all duration-150 cursor-pointer shadow-2xs hover:shadow-xs active:scale-95"
           >
-            <RotateCcw className="w-3.5 h-3.5 text-sage" />
+            <RotateCcw className="w-4 h-4 text-sage group-hover:text-white transition-colors" />
             <span>Open Guided Tour &amp; Tips</span>
           </button>
         </div>
@@ -782,21 +782,21 @@ export const SettingsPage: React.FC = () => {
                 type="button"
                 onClick={handleDownloadServerBackup}
                 disabled={exportingServerBackup}
-                className="inline-flex items-center gap-2 px-4 py-2 bg-sage hover:bg-sage-dark text-white rounded-xl text-xs font-serif font-medium transition-all shadow-xs cursor-pointer disabled:opacity-50"
+                className="inline-flex items-center gap-2 px-5 py-2.5 sm:px-6 sm:py-3 bg-sage hover:bg-forest text-white rounded-xl text-xs sm:text-sm font-serif font-semibold transition-all duration-150 shadow-xs hover:shadow-md active:scale-95 cursor-pointer disabled:opacity-50"
               >
                 {exportingServerBackup ? (
                   <>
-                    <RefreshCw className="w-3.5 h-3.5 animate-spin" />
+                    <RefreshCw className="w-4 h-4 animate-spin" />
                     <span>Preparing Download...</span>
                   </>
                 ) : serverExportSuccess ? (
                   <>
-                    <Check className="w-3.5 h-3.5" />
+                    <Check className="w-4 h-4" />
                     <span>Backup Saved to Computer!</span>
                   </>
                 ) : (
                   <>
-                    <Download className="w-3.5 h-3.5" />
+                    <Download className="w-4 h-4" />
                     <span>Download Backup File</span>
                   </>
                 )}
@@ -805,10 +805,10 @@ export const SettingsPage: React.FC = () => {
               <button
                 type="button"
                 onClick={handleExportLocalMirror}
-                className="inline-flex items-center gap-2 px-3.5 py-2 bg-paper border border-border-subtle hover:bg-paper-alt text-ink-muted hover:text-ink rounded-xl text-xs font-serif transition-colors cursor-pointer"
+                className="group inline-flex items-center gap-2 px-4 py-2.5 sm:px-4.5 sm:py-3 bg-paper border-2 border-border-subtle hover:border-sage/40 hover:bg-sage-surface text-ink-muted hover:text-forest rounded-xl text-xs sm:text-sm font-serif font-semibold transition-all duration-150 shadow-2xs hover:shadow-xs active:scale-95 cursor-pointer"
                 title="Exports cached browser records as a local fallback"
               >
-                <Download className="w-3 h-3 text-ink-muted" />
+                <Download className="w-4 h-4 text-ink-muted group-hover:text-forest transition-colors" />
                 <span>Save Offline Copy</span>
               </button>
             </div>
@@ -841,9 +841,9 @@ export const SettingsPage: React.FC = () => {
               <button
                 type="button"
                 onClick={() => fileInputRef.current?.click()}
-                className="inline-flex items-center gap-2 px-4 py-2.5 bg-paper-alt border border-dashed border-sage/50 hover:border-sage text-ink rounded-xl text-xs font-serif transition-all cursor-pointer"
+                className="group inline-flex items-center gap-2.5 px-5 py-3 bg-paper-alt border-2 border-dashed border-sage/60 hover:border-forest hover:bg-sage-surface text-forest rounded-xl text-xs sm:text-sm font-serif font-semibold transition-all duration-150 cursor-pointer shadow-2xs hover:shadow-xs active:scale-95"
               >
-                <Upload className="w-4 h-4 text-sage" />
+                <Upload className="w-4.5 h-4.5 text-sage group-hover:text-forest transition-colors" />
                 <span>Choose Backup File to Restore</span>
               </button>
             )}
@@ -1017,16 +1017,16 @@ export const SettingsPage: React.FC = () => {
                     type="button"
                     onClick={handleExecuteRestore}
                     disabled={isRestoring || (restoreMode === 'replace' && !confirmReplace)}
-                    className="inline-flex items-center gap-2 px-4 py-2 bg-sage hover:bg-sage-dark text-white rounded-xl text-xs font-serif font-medium transition-all shadow-xs cursor-pointer disabled:opacity-50"
+                    className="inline-flex items-center gap-2 px-5 py-2.5 sm:px-6 sm:py-3 bg-sage hover:bg-forest text-white rounded-xl text-xs sm:text-sm font-serif font-semibold transition-all duration-150 shadow-xs hover:shadow-md active:scale-95 cursor-pointer disabled:opacity-50"
                   >
                     {isRestoring ? (
                       <>
-                        <RefreshCw className="w-3.5 h-3.5 animate-spin" />
+                        <RefreshCw className="w-4 h-4 animate-spin" />
                         <span>Restoring Notes...</span>
                       </>
                     ) : (
                       <>
-                        <Check className="w-3.5 h-3.5" />
+                        <Check className="w-4 h-4" />
                         <span>Restore My Planner Now</span>
                       </>
                     )}
@@ -1036,7 +1036,7 @@ export const SettingsPage: React.FC = () => {
                     type="button"
                     onClick={handleCancelRestore}
                     disabled={isRestoring}
-                    className="px-4 py-2 bg-paper border border-border-subtle hover:bg-paper-alt text-ink rounded-xl text-xs font-serif transition-colors cursor-pointer"
+                    className="px-4.5 py-2.5 bg-paper border-2 border-border-subtle hover:bg-paper-alt hover:border-border-strong text-ink rounded-xl text-xs sm:text-sm font-serif font-semibold transition-all duration-150 cursor-pointer active:scale-95"
                   >
                     Cancel
                   </button>
