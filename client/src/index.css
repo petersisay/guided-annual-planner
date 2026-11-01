@@ -24,11 +24,14 @@
   }
 
   .btn-tab-active {
-    @apply btn-tab bg-forest text-white shadow-sm border border-forest ring-2 ring-forest/20;
+    @apply btn-tab bg-forest text-white shadow-sm border-2 border-forest ring-2 ring-forest/20;
+    background-color: #2D4A22 !important;
+    color: #FFFFFF !important;
   }
 
   .btn-tab-inactive {
-    @apply btn-tab bg-paper border border-border-subtle text-ink-muted hover:text-forest hover:bg-sage-surface/80 hover:border-sage/40 shadow-2xs;
+    @apply btn-tab bg-paper border-2 border-border-subtle text-ink hover:text-forest hover:bg-sage-surface/80 hover:border-sage/40 shadow-2xs;
+    color: #1A1A1A;
   }
 
   /* Destructive / Sign Out Button */
