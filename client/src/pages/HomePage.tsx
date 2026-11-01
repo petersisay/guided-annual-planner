@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import {
   Calendar,
@@ -9,6 +9,9 @@ import {
   ArrowRight,
   CheckCircle2,
   Compass,
+  Menu,
+  X,
+  Sparkles,
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useLanguage } from '../context/LanguageContext';
@@ -18,13 +21,26 @@ import { LanguageSelector } from '../components/common/LanguageSelector';
 export const HomePage: React.FC = () => {
   const { user } = useAuth();
   const { t, language } = useLanguage();
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  // Close mobile navigation drawer on Escape key press
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && mobileMenuOpen) {
+        setMobileMenuOpen(false);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [mobileMenuOpen]);
 
   return (
     <div className="min-h-screen bg-paper text-ink flex flex-col antialiased selection:bg-sage/20 selection:text-ink">
       {/* Public Top Navigation */}
       <header className="sticky top-0 z-40 bg-paper/90 backdrop-blur-md border-b border-border-subtle">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-          <Link to="/" className="flex items-center gap-3 group">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
+          {/* Logo & Brand Title */}
+          <Link to="/" className="flex items-center gap-2.5 sm:gap-3 group shrink-0">
             <img
               src="/images/gp-monogram.png"
               alt="Guided Annual Planner Logo"
@@ -34,53 +50,129 @@ export const HomePage: React.FC = () => {
               <span className="font-serif font-semibold text-ink text-base tracking-tight leading-none">
                 {t.appName}
               </span>
-              <span className="text-[10px] text-ink-muted font-serif italic">
+              <span className="text-[10px] text-ink-muted font-serif italic hidden sm:block mt-0.5">
                 {t.appTagline}
               </span>
             </div>
           </Link>
 
-          <nav className="hidden md:flex items-center gap-8 font-serif text-sm">
-            <a href="#horizons" className="text-ink-muted hover:text-ink transition-colors">
+          {/* Desktop Navigation Links — Hidden below lg (1024px) to give tablet & mobile generous spacing */}
+          <nav
+            aria-label="Public Navigation"
+            className="hidden lg:flex items-center gap-6 xl:gap-8 font-serif text-sm"
+          >
+            <a
+              href="#horizons"
+              className="text-ink-muted hover:text-ink px-2.5 py-1 rounded-lg hover:bg-paper-alt transition-colors"
+            >
               {t.theHorizons}
             </a>
-            <a href="#philosophy" className="text-ink-muted hover:text-ink transition-colors">
+            <a
+              href="#philosophy"
+              className="text-ink-muted hover:text-ink px-2.5 py-1 rounded-lg hover:bg-paper-alt transition-colors"
+            >
               {t.philosophy}
             </a>
-            <Link to="/story" className="text-ink-muted hover:text-ink transition-colors">
+            <Link
+              to="/story"
+              className="text-ink-muted hover:text-ink px-2.5 py-1 rounded-lg hover:bg-paper-alt transition-colors"
+            >
               {t.creatorStory}
             </Link>
           </nav>
 
-          <div className="flex items-center gap-3">
+          {/* Right Action Cluster: Language Selector + Auth CTA + Mobile Menu Toggle */}
+          <div className="flex items-center gap-2 sm:gap-3 shrink-0">
             <LanguageSelector />
+
             {user ? (
               <Link
                 to="/annual"
-                className="inline-flex items-center gap-2 px-4 py-2 bg-sage hover:bg-sage-dark text-white rounded-xl font-serif text-sm font-medium transition-all shadow-xs"
+                className="inline-flex items-center gap-1.5 px-3 py-1.5 sm:px-4 sm:py-2 bg-sage hover:bg-sage-dark text-white rounded-xl font-serif text-xs sm:text-sm font-medium transition-all shadow-xs"
               >
                 <span>{t.enterPlanner}</span>
-                <ArrowRight className="w-4 h-4" />
+                <ArrowRight className="w-3.5 h-3.5" />
               </Link>
             ) : (
               <>
                 <Link
                   to="/login"
-                  className="px-3.5 py-1.5 text-sm font-serif text-ink-muted hover:text-ink transition-colors"
+                  className="hidden sm:inline-flex px-3 py-1.5 text-xs sm:text-sm font-serif text-ink-muted hover:text-ink transition-colors"
                 >
                   {t.signIn}
                 </Link>
                 <Link
                   to="/login"
-                  className="inline-flex items-center gap-1.5 px-4 py-2 bg-sage hover:bg-sage-dark text-white rounded-xl font-serif text-sm font-medium transition-all shadow-xs"
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 sm:px-4 sm:py-2 bg-sage hover:bg-sage-dark text-white rounded-xl font-serif text-xs sm:text-sm font-medium transition-all shadow-xs"
                 >
                   <span>{t.getStarted}</span>
                   <ArrowRight className="w-3.5 h-3.5" />
                 </Link>
               </>
             )}
+
+            {/* Mobile / Tablet Menu Button — visible below lg (e.g. 768px tablet portrait) */}
+            <button
+              type="button"
+              onClick={() => setMobileMenuOpen((prev) => !prev)}
+              className="lg:hidden p-2 text-ink-muted hover:text-ink hover:bg-paper-alt rounded-xl border border-border-subtle transition-colors cursor-pointer"
+              aria-label={mobileMenuOpen ? 'Close navigation menu' : 'Open navigation menu'}
+              aria-expanded={mobileMenuOpen}
+              aria-controls="mobile-public-nav"
+            >
+              {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+            </button>
           </div>
         </div>
+
+        {/* Mobile / Tablet Navigation Drawer */}
+        {mobileMenuOpen && (
+          <div
+            id="mobile-public-nav"
+            className="lg:hidden border-b border-border-subtle bg-paper-alt/95 backdrop-blur-md px-4 sm:px-6 py-4 space-y-3 animate-fade-in shadow-paper"
+          >
+            <nav className="flex flex-col space-y-1 font-serif text-sm">
+              <a
+                href="#horizons"
+                onClick={() => setMobileMenuOpen(false)}
+                className="flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-ink hover:bg-paper transition-colors font-medium"
+              >
+                <Compass className="w-4 h-4 text-sage" />
+                <span>{t.theHorizons}</span>
+              </a>
+              <a
+                href="#philosophy"
+                onClick={() => setMobileMenuOpen(false)}
+                className="flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-ink hover:bg-paper transition-colors font-medium"
+              >
+                <Sparkles className="w-4 h-4 text-sage" />
+                <span>{t.philosophy}</span>
+              </a>
+              <Link
+                to="/story"
+                onClick={() => setMobileMenuOpen(false)}
+                className="flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-ink hover:bg-paper transition-colors font-medium"
+              >
+                <Heart className="w-4 h-4 text-sage" />
+                <span>{t.creatorStory}</span>
+              </Link>
+            </nav>
+            {!user && (
+              <div className="pt-2 border-t border-border-subtle flex items-center justify-between">
+                <span className="text-xs font-serif text-ink-muted">
+                  {language === 'am' ? 'ቀደም ሲል አካውንት አለዎት?' : 'Already have a journal account?'}
+                </span>
+                <Link
+                  to="/login"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="text-xs font-serif font-semibold text-sage hover:text-sage-dark underline"
+                >
+                  {t.signIn}
+                </Link>
+              </div>
+            )}
+          </div>
+        )}
       </header>
 
       {/* Hero Section */}
