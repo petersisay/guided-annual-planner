@@ -219,40 +219,40 @@ export const MonthlyViewPage: React.FC = () => {
               <button
                 type="button"
                 onClick={() => setViewMode('dashboard')}
-                className={`group inline-flex items-center gap-2 px-3.5 py-2 sm:px-4 sm:py-2.5 rounded-xl text-xs sm:text-sm font-serif font-semibold transition-all duration-150 cursor-pointer select-none active:scale-[0.98] ${
+                className={`group inline-flex items-center gap-2 px-3.5 py-2 sm:px-4 sm:py-2.5 rounded-xl text-xs sm:text-sm font-serif font-semibold transition-all duration-150 cursor-pointer select-none active:scale-[0.98] focus:outline-none focus-visible:ring-2 focus-visible:ring-forest ${
                   viewMode === 'dashboard'
-                    ? 'bg-forest text-white shadow-sm border-2 border-forest ring-2 ring-forest/20'
-                    : 'bg-paper border-2 border-border-subtle text-ink-muted hover:text-forest hover:bg-sage-surface hover:border-sage/50 shadow-2xs'
+                    ? 'btn-tab-active bg-forest text-white shadow-md border-2 border-forest ring-2 ring-forest/20'
+                    : 'btn-tab-inactive bg-paper border-2 border-border-subtle text-ink hover:text-forest hover:bg-sage-surface hover:border-sage/50 shadow-2xs'
                 }`}
               >
-                <LayoutDashboard className={`w-4 h-4 transition-colors ${viewMode === 'dashboard' ? 'text-white' : 'text-sage group-hover:text-forest'}`} />
-                <span>Dashboard (Must-Do &amp; Books)</span>
+                <LayoutDashboard className={`w-4 h-4 transition-colors ${viewMode === 'dashboard' ? 'text-white' : 'text-forest/70 group-hover:text-forest'}`} />
+                <span className={viewMode === 'dashboard' ? 'text-white font-bold tracking-wide' : 'text-ink font-semibold group-hover:text-forest'}>Dashboard (Must-Do &amp; Books)</span>
               </button>
 
               <button
                 type="button"
                 onClick={() => setViewMode('grid')}
-                className={`group inline-flex items-center gap-2 px-3.5 py-2 sm:px-4 sm:py-2.5 rounded-xl text-xs sm:text-sm font-serif font-semibold transition-all duration-150 cursor-pointer select-none active:scale-[0.98] ${
+                className={`group inline-flex items-center gap-2 px-3.5 py-2 sm:px-4 sm:py-2.5 rounded-xl text-xs sm:text-sm font-serif font-semibold transition-all duration-150 cursor-pointer select-none active:scale-[0.98] focus:outline-none focus-visible:ring-2 focus-visible:ring-forest ${
                   viewMode === 'grid'
-                    ? 'bg-forest text-white shadow-sm border-2 border-forest ring-2 ring-forest/20'
-                    : 'bg-paper border-2 border-border-subtle text-ink-muted hover:text-forest hover:bg-sage-surface hover:border-sage/50 shadow-2xs'
+                    ? 'btn-tab-active bg-forest text-white shadow-md border-2 border-forest ring-2 ring-forest/20'
+                    : 'btn-tab-inactive bg-paper border-2 border-border-subtle text-ink hover:text-forest hover:bg-sage-surface hover:border-sage/50 shadow-2xs'
                 }`}
               >
-                <Calendar className={`w-4 h-4 transition-colors ${viewMode === 'grid' ? 'text-white' : 'text-sage group-hover:text-forest'}`} />
-                <span>Calendar Grid</span>
+                <Calendar className={`w-4 h-4 transition-colors ${viewMode === 'grid' ? 'text-white' : 'text-forest/70 group-hover:text-forest'}`} />
+                <span className={viewMode === 'grid' ? 'text-white font-bold tracking-wide' : 'text-ink font-semibold group-hover:text-forest'}>Calendar Grid</span>
               </button>
 
               <button
                 type="button"
                 onClick={() => setViewMode('trackers')}
-                className={`group inline-flex items-center gap-2 px-3.5 py-2 sm:px-4 sm:py-2.5 rounded-xl text-xs sm:text-sm font-serif font-semibold transition-all duration-150 cursor-pointer select-none active:scale-[0.98] ${
+                className={`group inline-flex items-center gap-2 px-3.5 py-2 sm:px-4 sm:py-2.5 rounded-xl text-xs sm:text-sm font-serif font-semibold transition-all duration-150 cursor-pointer select-none active:scale-[0.98] focus:outline-none focus-visible:ring-2 focus-visible:ring-forest ${
                   viewMode === 'trackers'
-                    ? 'bg-forest text-white shadow-sm border-2 border-forest ring-2 ring-forest/20'
-                    : 'bg-paper border-2 border-border-subtle text-ink-muted hover:text-forest hover:bg-sage-surface hover:border-sage/50 shadow-2xs'
+                    ? 'btn-tab-active bg-forest text-white shadow-md border-2 border-forest ring-2 ring-forest/20'
+                    : 'btn-tab-inactive bg-paper border-2 border-border-subtle text-ink hover:text-forest hover:bg-sage-surface hover:border-sage/50 shadow-2xs'
                 }`}
               >
-                <Heart className={`w-4 h-4 transition-colors ${viewMode === 'trackers' ? 'text-white' : 'text-sage group-hover:text-forest'}`} />
-                <span>Trackers</span>
+                <Heart className={`w-4 h-4 transition-colors ${viewMode === 'trackers' ? 'text-white' : 'text-forest/70 group-hover:text-forest'}`} />
+                <span className={viewMode === 'trackers' ? 'text-white font-bold tracking-wide' : 'text-ink font-semibold group-hover:text-forest'}>Trackers</span>
               </button>
             </div>
 
