@@ -212,9 +212,9 @@ export const DailyViewPage: React.FC = () => {
               onClick={handlePrevDay}
               title="Previous Day"
               aria-label="Navigate to previous day"
-              className="p-1.5 text-ink-muted hover:text-ink rounded-lg bg-paper-alt border border-border-subtle hover:bg-paper transition-colors cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-sage"
+              className="p-2 text-forest bg-paper-alt hover:bg-sage hover:text-white rounded-xl border border-sage/20 hover:border-sage transition-all duration-150 cursor-pointer shadow-2xs hover:shadow-xs active:scale-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-sage"
             >
-              <ChevronLeft className="w-4 h-4" />
+              <ChevronLeft className="w-4.5 h-4.5" />
             </button>
 
             <div>
@@ -242,9 +242,9 @@ export const DailyViewPage: React.FC = () => {
               onClick={handleNextDay}
               title="Next Day"
               aria-label="Navigate to next day"
-              className="p-1.5 text-ink-muted hover:text-ink rounded-lg bg-paper-alt border border-border-subtle hover:bg-paper transition-colors cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-sage"
+              className="p-2 text-forest bg-paper-alt hover:bg-sage hover:text-white rounded-xl border border-sage/20 hover:border-sage transition-all duration-150 cursor-pointer shadow-2xs hover:shadow-xs active:scale-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-sage"
             >
-              <ChevronRight className="w-4 h-4" />
+              <ChevronRight className="w-4.5 h-4.5" />
             </button>
           </div>
 
