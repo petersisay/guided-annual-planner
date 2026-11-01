@@ -137,10 +137,11 @@ export const AnnualIntentionCard: React.FC<AnnualIntentionCardProps> = ({
                   <button
                     type="button"
                     onClick={() => handleRemoveIntention(idx)}
-                    className="opacity-0 group-hover:opacity-100 text-ink-muted hover:text-terracotta p-1 rounded transition-opacity cursor-pointer"
+                    className="opacity-70 group-hover:opacity-100 text-ink-muted hover:text-rose-700 hover:bg-rose-100/80 p-2 rounded-xl transition-all duration-150 cursor-pointer focus:opacity-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-rose-500 active:scale-95"
                     title="Remove intention"
+                    aria-label="Remove intention"
                   >
-                    <Trash2 className="w-3.5 h-3.5" />
+                    <Trash2 className="w-4 h-4" />
                   </button>
                 </div>
               ))
@@ -149,20 +150,20 @@ export const AnnualIntentionCard: React.FC<AnnualIntentionCardProps> = ({
         </div>
 
         {/* Add Intention Input Form */}
-        <form onSubmit={handleAddIntention} className="pt-3 border-t border-border-subtle flex gap-2">
+        <form onSubmit={handleAddIntention} className="pt-3 border-t border-border-subtle flex gap-2 sm:gap-3">
           <input
             type="text"
             value={newIntention}
             onChange={(e) => setNewIntention(e.target.value)}
             placeholder="Write a new intention (e.g. Read 20 books, Daily contemplative walk)..."
-            className="flex-1 px-3 py-2 text-xs font-serif bg-paper-alt border border-border-subtle rounded-lg text-ink focus:outline-none focus:border-sage focus:ring-1 focus:ring-sage"
+            className="flex-1 px-3.5 py-2.5 text-xs sm:text-sm font-serif bg-paper-alt border-2 border-border-subtle rounded-xl text-ink focus:outline-none focus:border-sage focus:ring-1 focus:ring-sage shadow-2xs"
           />
           <button
             type="submit"
             disabled={saving || !newIntention.trim()}
-            className="inline-flex items-center gap-1.5 px-3 py-2 text-xs font-serif font-medium text-paper bg-sage hover:bg-sage-dark rounded-lg transition-colors cursor-pointer disabled:opacity-50 shadow-xs"
+            className="inline-flex items-center gap-2 px-4 py-2.5 sm:px-5 sm:py-2.5 text-xs sm:text-sm font-serif font-semibold text-white bg-sage hover:bg-forest rounded-xl transition-all duration-150 cursor-pointer shadow-xs hover:shadow-md active:scale-95 disabled:opacity-40 disabled:cursor-not-allowed disabled:active:scale-100"
           >
-            <Plus className="w-3.5 h-3.5" />
+            <Plus className="w-4 h-4" />
             <span>Add</span>
           </button>
         </form>
