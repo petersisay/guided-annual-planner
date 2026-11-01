@@ -204,23 +204,23 @@ export const AnnualViewPage: React.FC = () => {
 
           {/* Year Navigator Controls & Live Save Feedback */}
           <div className="flex items-center gap-3 flex-wrap justify-center">
-            <div className="flex items-center justify-center gap-2 bg-paper border border-border-subtle rounded-xl px-3 py-1.5 shadow-xs">
+            <div className="flex items-center justify-center gap-1.5 bg-paper border-2 border-sage/30 rounded-2xl p-1.5 shadow-xs">
               <button
                 type="button"
                 onClick={() => setSelectedYear((prev) => prev - 1)}
-                className="p-1 text-ink-muted hover:text-ink rounded-lg transition-colors cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-sage"
+                className="p-2 text-forest bg-paper-alt hover:bg-sage hover:text-white rounded-xl border border-sage/20 hover:border-sage transition-all duration-150 cursor-pointer shadow-2xs hover:shadow-xs active:scale-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-sage"
                 title="Previous Year"
                 aria-label="Previous Year"
               >
-                <ChevronLeft className="w-4 h-4" />
+                <ChevronLeft className="w-4.5 h-4.5" />
               </button>
 
-              <div className="flex items-center gap-2 px-2">
-                <span className="font-serif text-lg font-bold text-ink tracking-wider">
+              <div className="flex items-center gap-2 px-3">
+                <span className="font-serif text-xl font-bold text-ink tracking-wider">
                   {selectedYear}
                 </span>
                 {isLeap && (
-                  <span className="text-[9px] uppercase px-1.5 py-0.5 rounded bg-sage-surface text-sage font-semibold border border-sage/30">
+                  <span className="text-[10px] uppercase px-2 py-0.5 rounded-md bg-sage-surface text-forest font-semibold border border-sage/30">
                     Leap Year (366 Days)
                   </span>
                 )}
@@ -229,11 +229,11 @@ export const AnnualViewPage: React.FC = () => {
               <button
                 type="button"
                 onClick={() => setSelectedYear((prev) => prev + 1)}
-                className="p-1 text-ink-muted hover:text-ink rounded-lg transition-colors cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-sage"
+                className="p-2 text-forest bg-paper-alt hover:bg-sage hover:text-white rounded-xl border border-sage/20 hover:border-sage transition-all duration-150 cursor-pointer shadow-2xs hover:shadow-xs active:scale-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-sage"
                 title="Next Year"
                 aria-label="Next Year"
               >
-                <ChevronRight className="w-4 h-4" />
+                <ChevronRight className="w-4.5 h-4.5" />
               </button>
             </div>
 
@@ -252,7 +252,7 @@ export const AnnualViewPage: React.FC = () => {
               <img
                 src={user.avatarUrl}
                 alt={user.name}
-                className="w-8 h-8 rounded-full border border-border-strong"
+                className="w-9 h-9 rounded-full border-2 border-border-strong shadow-2xs"
               />
             )}
             <div className="hidden sm:block text-right">
@@ -264,9 +264,9 @@ export const AnnualViewPage: React.FC = () => {
               onClick={() => logout()}
               disabled={authLoading}
               aria-label="Sign Out of Journal"
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-border-subtle text-xs text-ink hover:bg-paper font-serif font-medium transition-colors cursor-pointer shadow-xs focus:outline-none focus-visible:ring-2 focus-visible:ring-sage"
+              className="group inline-flex items-center gap-2 px-3.5 py-2 sm:px-4 sm:py-2 rounded-xl border-2 border-rose-200 bg-rose-50/80 text-rose-800 hover:bg-rose-600 hover:text-white hover:border-rose-600 font-serif text-xs sm:text-sm font-semibold transition-all duration-150 cursor-pointer shadow-xs hover:shadow-sm active:scale-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-rose-500"
             >
-              <LogOut className="w-3.5 h-3.5" />
+              <LogOut className="w-4 h-4 text-rose-700 group-hover:text-white transition-colors" />
               <span>{language === 'am' ? 'ውጣ' : 'Sign Out'}</span>
             </button>
           </div>
@@ -276,7 +276,7 @@ export const AnnualViewPage: React.FC = () => {
       {/* Main Workspace */}
       <main className="max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-8 flex-1 space-y-8">
         {user?.preferences?.onboardingStatus === 'not_started' && (
-          <div className="p-4 sm:p-5 bg-sage-surface border border-sage/30 rounded-2xl flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-xs">
+          <div className="p-4 sm:p-5 bg-sage-surface border-2 border-sage/30 rounded-2xl flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-xs">
             <div className="flex items-start sm:items-center gap-3">
               <Compass className="w-5 h-5 text-sage flex-shrink-0 mt-0.5 sm:mt-0" />
               <div>
@@ -291,7 +291,7 @@ export const AnnualViewPage: React.FC = () => {
             <div className="flex items-center gap-2 self-start sm:self-auto flex-shrink-0">
               <Link
                 to="/onboarding"
-                className="px-4 py-2 bg-sage hover:bg-sage-dark text-white rounded-xl text-xs font-serif font-medium transition-colors shadow-xs"
+                className="px-4.5 py-2.5 bg-sage hover:bg-forest text-white rounded-xl text-xs sm:text-sm font-serif font-semibold transition-all shadow-xs hover:shadow-sm active:scale-95"
               >
                 Start Guided Tour &rarr;
               </Link>
@@ -301,67 +301,67 @@ export const AnnualViewPage: React.FC = () => {
 
         {/* Navigation Tabs */}
         <div className="flex flex-wrap items-center justify-between gap-4 border-b border-border-subtle pb-4">
-          <div className="flex items-center gap-2 bg-paper-alt p-1 rounded-xl border border-border-subtle shadow-paper">
+          <div className="flex items-center gap-2 bg-paper-alt p-1.5 rounded-2xl border-2 border-border-subtle shadow-xs">
             <button
               type="button"
               onClick={() => setActiveTab('overview')}
-              className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-serif font-medium transition-all cursor-pointer ${
+              className={`group inline-flex items-center gap-2 px-4 py-2 sm:px-5 sm:py-2.5 rounded-xl text-xs sm:text-sm font-serif font-semibold transition-all duration-150 cursor-pointer select-none active:scale-[0.98] ${
                 activeTab === 'overview'
-                  ? 'bg-paper text-ink shadow-xs border border-border-subtle font-semibold'
-                  : 'text-ink-muted hover:text-ink'
+                  ? 'bg-forest text-white shadow-sm border-2 border-forest ring-2 ring-forest/20'
+                  : 'bg-paper border-2 border-border-subtle text-ink-muted hover:text-forest hover:bg-sage-surface hover:border-sage/50 shadow-2xs'
               }`}
             >
-              <Calendar className="w-3.5 h-3.5 text-sage" />
+              <Calendar className={`w-4 h-4 transition-colors ${activeTab === 'overview' ? 'text-white' : 'text-sage group-hover:text-forest'}`} />
               <span>12-Month Calendar &amp; Goals</span>
             </button>
 
             <button
               type="button"
               onClick={() => setActiveTab('mood')}
-              className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-serif font-medium transition-all cursor-pointer ${
+              className={`group inline-flex items-center gap-2 px-4 py-2 sm:px-5 sm:py-2.5 rounded-xl text-xs sm:text-sm font-serif font-semibold transition-all duration-150 cursor-pointer select-none active:scale-[0.98] ${
                 activeTab === 'mood'
-                  ? 'bg-paper text-ink shadow-xs border border-border-subtle font-semibold'
-                  : 'text-ink-muted hover:text-ink'
+                  ? 'bg-forest text-white shadow-sm border-2 border-forest ring-2 ring-forest/20'
+                  : 'bg-paper border-2 border-border-subtle text-ink-muted hover:text-forest hover:bg-sage-surface hover:border-sage/50 shadow-2xs'
               }`}
             >
-              <Heart className="w-3.5 h-3.5 text-sage" />
+              <Heart className={`w-4 h-4 transition-colors ${activeTab === 'mood' ? 'text-white' : 'text-sage group-hover:text-forest'}`} />
               <span>Daily Mood Tracker</span>
             </button>
 
             <button
               type="button"
               onClick={() => setActiveTab('habits')}
-              className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-serif font-medium transition-all cursor-pointer ${
+              className={`group inline-flex items-center gap-2 px-4 py-2 sm:px-5 sm:py-2.5 rounded-xl text-xs sm:text-sm font-serif font-semibold transition-all duration-150 cursor-pointer select-none active:scale-[0.98] ${
                 activeTab === 'habits'
-                  ? 'bg-paper text-ink shadow-xs border border-border-subtle font-semibold'
-                  : 'text-ink-muted hover:text-ink'
+                  ? 'bg-forest text-white shadow-sm border-2 border-forest ring-2 ring-forest/20'
+                  : 'bg-paper border-2 border-border-subtle text-ink-muted hover:text-forest hover:bg-sage-surface hover:border-sage/50 shadow-2xs'
               }`}
             >
-              <CheckCircle2 className="w-3.5 h-3.5 text-sage" />
+              <CheckCircle2 className={`w-4 h-4 transition-colors ${activeTab === 'habits' ? 'text-white' : 'text-sage group-hover:text-forest'}`} />
               <span>Habits Tracker</span>
             </button>
           </div>
 
-          <div className="flex items-center gap-2 flex-wrap">
+          <div className="flex items-center gap-2.5 flex-wrap">
             <Link
               to={`/monthly/${selectedYear}/${new Date().getMonth() + 1}`}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-serif font-medium bg-paper border border-border-subtle text-ink hover:bg-paper-alt transition-colors shadow-xs focus:outline-none focus-visible:ring-2 focus-visible:ring-sage"
+              className="group inline-flex items-center gap-2 px-3.5 py-2 sm:px-4 sm:py-2 rounded-xl text-xs sm:text-sm font-serif font-semibold bg-paper border-2 border-sage/30 text-forest hover:bg-sage hover:text-white hover:border-sage transition-all duration-150 shadow-xs hover:shadow-sm active:scale-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-sage"
             >
-              <CalendarDays className="w-3.5 h-3.5 text-sage" />
+              <CalendarDays className="w-4 h-4 text-sage group-hover:text-white transition-colors" />
               <span>Monthly Planner</span>
             </Link>
             <Link
               to={`/weekly/${selectedYear}/${getISOWeekNumber(new Date())}`}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-serif font-medium bg-paper border border-border-subtle text-ink hover:bg-paper-alt transition-colors shadow-xs focus:outline-none focus-visible:ring-2 focus-visible:ring-sage"
+              className="group inline-flex items-center gap-2 px-3.5 py-2 sm:px-4 sm:py-2 rounded-xl text-xs sm:text-sm font-serif font-semibold bg-paper border-2 border-sage/30 text-forest hover:bg-sage hover:text-white hover:border-sage transition-all duration-150 shadow-xs hover:shadow-sm active:scale-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-sage"
             >
-              <LayoutGrid className="w-3.5 h-3.5 text-sage" />
+              <LayoutGrid className="w-4 h-4 text-sage group-hover:text-white transition-colors" />
               <span>Weekly Spread</span>
             </Link>
             <Link
               to="/story"
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-serif font-medium bg-paper border border-border-subtle text-ink hover:bg-paper-alt transition-colors shadow-xs focus:outline-none focus-visible:ring-2 focus-visible:ring-sage"
+              className="group inline-flex items-center gap-2 px-3.5 py-2 sm:px-4 sm:py-2 rounded-xl text-xs sm:text-sm font-serif font-semibold bg-paper border-2 border-sage/30 text-forest hover:bg-sage hover:text-white hover:border-sage transition-all duration-150 shadow-xs hover:shadow-sm active:scale-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-sage"
             >
-              <BookOpen className="w-3.5 h-3.5 text-sage" />
+              <BookOpen className="w-4 h-4 text-sage group-hover:text-white transition-colors" />
               <span>Origin Story</span>
             </Link>
           </div>
