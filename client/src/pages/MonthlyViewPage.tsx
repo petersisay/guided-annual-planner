@@ -188,9 +188,9 @@ export const MonthlyViewPage: React.FC = () => {
               onClick={handlePrevMonth}
               title="Previous Month"
               aria-label="Navigate to previous month"
-              className="p-1.5 text-ink-muted hover:text-ink rounded-lg bg-paper-alt border border-border-subtle hover:bg-paper transition-colors cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-sage"
+              className="p-2 text-forest bg-paper-alt hover:bg-sage hover:text-white rounded-xl border border-sage/20 hover:border-sage transition-all duration-150 cursor-pointer shadow-2xs hover:shadow-xs active:scale-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-sage"
             >
-              <ChevronLeft className="w-4 h-4" />
+              <ChevronLeft className="w-4.5 h-4.5" />
             </button>
 
             <div className="text-left">
@@ -207,51 +207,51 @@ export const MonthlyViewPage: React.FC = () => {
               onClick={handleNextMonth}
               title="Next Month"
               aria-label="Navigate to next month"
-              className="p-1.5 text-ink-muted hover:text-ink rounded-lg bg-paper-alt border border-border-subtle hover:bg-paper transition-colors cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-sage"
+              className="p-2 text-forest bg-paper-alt hover:bg-sage hover:text-white rounded-xl border border-sage/20 hover:border-sage transition-all duration-150 cursor-pointer shadow-2xs hover:shadow-xs active:scale-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-sage"
             >
-              <ChevronRight className="w-4 h-4" />
+              <ChevronRight className="w-4.5 h-4.5" />
             </button>
           </div>
 
           {/* View Mode Toggle Buttons and Live Save Feedback */}
           <div className="flex items-center gap-3 flex-wrap">
-            <div className="flex items-center bg-paper-alt p-1 rounded-xl border border-border-subtle shadow-xs">
+            <div className="flex items-center gap-2 bg-paper-alt p-1.5 rounded-2xl border-2 border-border-subtle shadow-xs">
               <button
                 type="button"
                 onClick={() => setViewMode('dashboard')}
-                className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-serif font-medium transition-all cursor-pointer ${
+                className={`group inline-flex items-center gap-2 px-3.5 py-2 sm:px-4 sm:py-2.5 rounded-xl text-xs sm:text-sm font-serif font-semibold transition-all duration-150 cursor-pointer select-none active:scale-[0.98] ${
                   viewMode === 'dashboard'
-                    ? 'bg-paper text-ink shadow-xs border border-border-subtle font-semibold'
-                    : 'text-ink-muted hover:text-ink'
+                    ? 'bg-forest text-white shadow-sm border-2 border-forest ring-2 ring-forest/20'
+                    : 'bg-paper border-2 border-border-subtle text-ink-muted hover:text-forest hover:bg-sage-surface hover:border-sage/50 shadow-2xs'
                 }`}
               >
-                <LayoutDashboard className="w-3.5 h-3.5 text-sage" />
-                <span>Dashboard (Must-Do & Books)</span>
+                <LayoutDashboard className={`w-4 h-4 transition-colors ${viewMode === 'dashboard' ? 'text-white' : 'text-sage group-hover:text-forest'}`} />
+                <span>Dashboard (Must-Do &amp; Books)</span>
               </button>
 
               <button
                 type="button"
                 onClick={() => setViewMode('grid')}
-                className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-serif font-medium transition-all cursor-pointer ${
+                className={`group inline-flex items-center gap-2 px-3.5 py-2 sm:px-4 sm:py-2.5 rounded-xl text-xs sm:text-sm font-serif font-semibold transition-all duration-150 cursor-pointer select-none active:scale-[0.98] ${
                   viewMode === 'grid'
-                    ? 'bg-paper text-ink shadow-xs border border-border-subtle font-semibold'
-                    : 'text-ink-muted hover:text-ink'
+                    ? 'bg-forest text-white shadow-sm border-2 border-forest ring-2 ring-forest/20'
+                    : 'bg-paper border-2 border-border-subtle text-ink-muted hover:text-forest hover:bg-sage-surface hover:border-sage/50 shadow-2xs'
                 }`}
               >
-                <Calendar className="w-3.5 h-3.5 text-sage" />
+                <Calendar className={`w-4 h-4 transition-colors ${viewMode === 'grid' ? 'text-white' : 'text-sage group-hover:text-forest'}`} />
                 <span>Calendar Grid</span>
               </button>
 
               <button
                 type="button"
                 onClick={() => setViewMode('trackers')}
-                className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-serif font-medium transition-all cursor-pointer ${
+                className={`group inline-flex items-center gap-2 px-3.5 py-2 sm:px-4 sm:py-2.5 rounded-xl text-xs sm:text-sm font-serif font-semibold transition-all duration-150 cursor-pointer select-none active:scale-[0.98] ${
                   viewMode === 'trackers'
-                    ? 'bg-paper text-ink shadow-xs border border-border-subtle font-semibold'
-                    : 'text-ink-muted hover:text-ink'
+                    ? 'bg-forest text-white shadow-sm border-2 border-forest ring-2 ring-forest/20'
+                    : 'bg-paper border-2 border-border-subtle text-ink-muted hover:text-forest hover:bg-sage-surface hover:border-sage/50 shadow-2xs'
                 }`}
               >
-                <Heart className="w-3.5 h-3.5 text-sage" />
+                <Heart className={`w-4 h-4 transition-colors ${viewMode === 'trackers' ? 'text-white' : 'text-sage group-hover:text-forest'}`} />
                 <span>Trackers</span>
               </button>
             </div>
