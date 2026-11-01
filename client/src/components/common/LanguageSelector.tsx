@@ -21,10 +21,10 @@ export const LanguageSelector: React.FC<LanguageSelectorProps> = ({
     <button
       type="button"
       onClick={handleToggle}
-      className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg border text-xs font-serif transition-all cursor-pointer shadow-2xs select-none ${
+      className={`group inline-flex items-center gap-2 px-3.5 py-1.5 sm:px-4 sm:py-2 rounded-xl border-2 text-xs sm:text-sm font-serif font-semibold transition-all duration-150 cursor-pointer shadow-xs hover:shadow-sm active:scale-95 select-none ${
         language === 'am'
-          ? 'bg-amber-50/80 border-amber-300 text-amber-900 font-semibold'
-          : 'bg-paper-alt hover:bg-paper border-border-subtle text-ink-muted hover:text-ink'
+          ? 'bg-amber-100/90 border-amber-400 text-amber-950 hover:bg-amber-200 hover:border-amber-500'
+          : 'bg-paper border-sage/40 text-forest hover:bg-sage hover:text-white hover:border-sage'
       } ${className}`}
       title={language === 'en' ? 'Switch to Amharic (አማርኛ)' : 'Switch to English'}
       aria-label={
@@ -33,11 +33,11 @@ export const LanguageSelector: React.FC<LanguageSelectorProps> = ({
           : 'ቋንቋን ወደ እንግሊዝኛ ቀይር (Switch to English)'
       }
     >
-      <Globe className="w-3.5 h-3.5 text-sage flex-shrink-0" />
-      <span className="flex items-center gap-1">
-        <span className={language === 'en' ? 'font-bold text-ink' : 'opacity-60'}>EN</span>
+      <Globe className={`w-4 h-4 flex-shrink-0 transition-colors ${language === 'am' ? 'text-amber-800' : 'text-sage group-hover:text-white'}`} />
+      <span className="flex items-center gap-1.5">
+        <span className={language === 'en' ? 'font-bold underline decoration-sage/60 decoration-2 underline-offset-2' : 'opacity-70'}>EN</span>
         <span className="opacity-40">/</span>
-        <span className={language === 'am' ? 'font-bold text-ink' : 'opacity-60'}>አማርኛ</span>
+        <span className={language === 'am' ? 'font-bold underline decoration-amber-600 decoration-2 underline-offset-2' : 'opacity-70'}>አማርኛ</span>
       </span>
     </button>
   );
