@@ -305,40 +305,40 @@ export const AnnualViewPage: React.FC = () => {
             <button
               type="button"
               onClick={() => setActiveTab('overview')}
-              className={`group inline-flex items-center gap-2 px-4 py-2 sm:px-5 sm:py-2.5 rounded-xl text-xs sm:text-sm font-serif font-semibold transition-all duration-150 cursor-pointer select-none active:scale-[0.98] ${
+              className={`group inline-flex items-center gap-2 px-4 py-2 sm:px-5 sm:py-2.5 rounded-xl text-xs sm:text-sm font-serif font-semibold transition-all duration-150 cursor-pointer select-none active:scale-[0.98] focus:outline-none focus-visible:ring-2 focus-visible:ring-forest ${
                 activeTab === 'overview'
-                  ? 'bg-forest text-white shadow-sm border-2 border-forest ring-2 ring-forest/20'
-                  : 'bg-paper border-2 border-border-subtle text-ink-muted hover:text-forest hover:bg-sage-surface hover:border-sage/50 shadow-2xs'
+                  ? 'btn-tab-active bg-forest text-white shadow-md border-2 border-forest ring-2 ring-forest/20'
+                  : 'btn-tab-inactive bg-paper border-2 border-border-subtle text-ink hover:text-forest hover:bg-sage-surface hover:border-sage/50 shadow-2xs'
               }`}
             >
-              <Calendar className={`w-4 h-4 transition-colors ${activeTab === 'overview' ? 'text-white' : 'text-sage group-hover:text-forest'}`} />
-              <span>12-Month Calendar &amp; Goals</span>
+              <Calendar className={`w-4 h-4 transition-colors ${activeTab === 'overview' ? 'text-white' : 'text-forest/70 group-hover:text-forest'}`} />
+              <span className={activeTab === 'overview' ? 'text-white font-bold tracking-wide' : 'text-ink font-semibold group-hover:text-forest'}>12-Month Calendar &amp; Goals</span>
             </button>
 
             <button
               type="button"
               onClick={() => setActiveTab('mood')}
-              className={`group inline-flex items-center gap-2 px-4 py-2 sm:px-5 sm:py-2.5 rounded-xl text-xs sm:text-sm font-serif font-semibold transition-all duration-150 cursor-pointer select-none active:scale-[0.98] ${
+              className={`group inline-flex items-center gap-2 px-4 py-2 sm:px-5 sm:py-2.5 rounded-xl text-xs sm:text-sm font-serif font-semibold transition-all duration-150 cursor-pointer select-none active:scale-[0.98] focus:outline-none focus-visible:ring-2 focus-visible:ring-forest ${
                 activeTab === 'mood'
-                  ? 'bg-forest text-white shadow-sm border-2 border-forest ring-2 ring-forest/20'
-                  : 'bg-paper border-2 border-border-subtle text-ink-muted hover:text-forest hover:bg-sage-surface hover:border-sage/50 shadow-2xs'
+                  ? 'btn-tab-active bg-forest text-white shadow-md border-2 border-forest ring-2 ring-forest/20'
+                  : 'btn-tab-inactive bg-paper border-2 border-border-subtle text-ink hover:text-forest hover:bg-sage-surface hover:border-sage/50 shadow-2xs'
               }`}
             >
-              <Heart className={`w-4 h-4 transition-colors ${activeTab === 'mood' ? 'text-white' : 'text-sage group-hover:text-forest'}`} />
-              <span>Daily Mood Tracker</span>
+              <Heart className={`w-4 h-4 transition-colors ${activeTab === 'mood' ? 'text-white' : 'text-forest/70 group-hover:text-forest'}`} />
+              <span className={activeTab === 'mood' ? 'text-white font-bold tracking-wide' : 'text-ink font-semibold group-hover:text-forest'}>Daily Mood Tracker</span>
             </button>
 
             <button
               type="button"
               onClick={() => setActiveTab('habits')}
-              className={`group inline-flex items-center gap-2 px-4 py-2 sm:px-5 sm:py-2.5 rounded-xl text-xs sm:text-sm font-serif font-semibold transition-all duration-150 cursor-pointer select-none active:scale-[0.98] ${
+              className={`group inline-flex items-center gap-2 px-4 py-2 sm:px-5 sm:py-2.5 rounded-xl text-xs sm:text-sm font-serif font-semibold transition-all duration-150 cursor-pointer select-none active:scale-[0.98] focus:outline-none focus-visible:ring-2 focus-visible:ring-forest ${
                 activeTab === 'habits'
-                  ? 'bg-forest text-white shadow-sm border-2 border-forest ring-2 ring-forest/20'
-                  : 'bg-paper border-2 border-border-subtle text-ink-muted hover:text-forest hover:bg-sage-surface hover:border-sage/50 shadow-2xs'
+                  ? 'btn-tab-active bg-forest text-white shadow-md border-2 border-forest ring-2 ring-forest/20'
+                  : 'btn-tab-inactive bg-paper border-2 border-border-subtle text-ink hover:text-forest hover:bg-sage-surface hover:border-sage/50 shadow-2xs'
               }`}
             >
-              <CheckCircle2 className={`w-4 h-4 transition-colors ${activeTab === 'habits' ? 'text-white' : 'text-sage group-hover:text-forest'}`} />
-              <span>Habits Tracker</span>
+              <CheckCircle2 className={`w-4 h-4 transition-colors ${activeTab === 'habits' ? 'text-white' : 'text-forest/70 group-hover:text-forest'}`} />
+              <span className={activeTab === 'habits' ? 'text-white font-bold tracking-wide' : 'text-ink font-semibold group-hover:text-forest'}>Habits Tracker</span>
             </button>
           </div>
 
