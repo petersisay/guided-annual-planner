@@ -29,9 +29,24 @@
     color: #FFFFFF !important;
   }
 
+  .btn-tab-active span,
+  .btn-tab-active svg {
+    color: #FFFFFF !important;
+  }
+
   .btn-tab-inactive {
     @apply btn-tab bg-paper border-2 border-border-subtle text-ink hover:text-forest hover:bg-sage-surface/80 hover:border-sage/40 shadow-2xs;
-    color: #1A1A1A;
+    color: #1A1A1A !important;
+    background-color: #FDFBF7 !important;
+  }
+
+  .btn-tab-inactive span {
+    color: #1A1A1A !important;
+  }
+
+  .btn-tab-inactive:hover,
+  .btn-tab-inactive:hover span {
+    color: #2D4A22 !important;
   }
 
   /* Destructive / Sign Out Button */
