@@ -2,8 +2,43 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer components {
+  /* Tactile clickable button base - makes interactive controls distinct from normal text */
+  .btn-clickable {
+    @apply inline-flex items-center justify-center gap-2 font-serif text-sm font-semibold rounded-xl transition-all duration-150 cursor-pointer shadow-xs select-none active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed disabled:active:scale-100;
+  }
+
+  /* Primary Forest/Sage Action Button */
+  .btn-primary {
+    @apply btn-clickable bg-sage hover:bg-forest text-white shadow-sm hover:shadow-md border border-sage/40 hover:border-forest;
+  }
+
+  /* Secondary Tactile Paper Pill Button */
+  .btn-secondary {
+    @apply btn-clickable bg-paper-alt hover:bg-sage-surface border-2 border-border-subtle hover:border-sage/50 text-ink hover:text-forest shadow-2xs hover:shadow-xs;
+  }
+
+  /* Distinct Accent Tab Button */
+  .btn-tab {
+    @apply inline-flex items-center gap-2 px-4 py-2.5 sm:px-5 sm:py-2.5 rounded-xl text-xs sm:text-sm font-serif font-semibold transition-all duration-150 cursor-pointer select-none active:scale-[0.98];
+  }
+
+  .btn-tab-active {
+    @apply btn-tab bg-forest text-white shadow-sm border border-forest ring-2 ring-forest/20;
+  }
+
+  .btn-tab-inactive {
+    @apply btn-tab bg-paper border border-border-subtle text-ink-muted hover:text-forest hover:bg-sage-surface/80 hover:border-sage/40 shadow-2xs;
+  }
+
+  /* Destructive / Sign Out Button */
+  .btn-destructive {
+    @apply btn-clickable bg-rose-50/80 hover:bg-rose-600 text-rose-800 hover:text-white border border-rose-200 hover:border-rose-600 shadow-2xs hover:shadow-xs;
+  }
+}
+
 @layer utilities {
-  /* Subtle journal dot-grid pattern inspired by physical notebook (Screenshot 4) */
+  /* Subtle journal dot-grid pattern inspired by physical notebook */
   .bg-dot-grid {
     background-image: radial-gradient(#d3ceb6 1.4px, transparent 1.4px);
     background-size: 16px 16px;
@@ -27,6 +62,23 @@
       0 8px 16px rgba(0, 0, 0, 0.03);
   }
 }
+
+/* Global button focus and tactile transitions */
+button:not(:disabled),
+[role="button"]:not([aria-disabled="true"]),
+a[href] {
+  transition-property: color, background-color, border-color, box-shadow, transform;
+  transition-duration: 150ms;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+button:focus-visible,
+[role="button"]:focus-visible,
+a[href]:focus-visible {
+  outline: 2px solid #556B2F;
+  outline-offset: 2px;
+}
+
 
 /* Base smoothing and selection */
 body {
