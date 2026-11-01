@@ -19,6 +19,16 @@ export default {
           surface: '#EBF2DF',
           dark: '#658239',
         },
+        forest: {
+          DEFAULT: '#2D4A22',
+          dark: '#1E3316',
+          light: '#3E6131',
+        },
+        gold: {
+          DEFAULT: '#C5A059',
+          light: '#F5EDDC',
+          dark: '#8C6D2D',
+        },
         olive: {
           DEFAULT: '#6E8B3D',
           dark: '#587030',
