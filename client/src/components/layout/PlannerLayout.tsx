@@ -148,16 +148,16 @@ export const PlannerLayout: React.FC<PlannerLayoutProps> = ({
           <button
             type="button"
             onClick={() => setShowHowItWorks(true)}
-            className="px-2.5 py-1 text-xs font-serif bg-sage-surface text-forest rounded-lg border border-sage/30 flex items-center gap-1 cursor-pointer"
+            className="group px-3 py-1.5 text-xs font-serif font-semibold bg-sage-surface hover:bg-sage text-forest hover:text-white rounded-xl border border-sage/40 flex items-center gap-1.5 cursor-pointer transition-all duration-150 shadow-2xs active:scale-95"
             title="How This Planner Works"
           >
-            <BookOpen className="w-3 h-3 text-sage" />
+            <BookOpen className="w-3.5 h-3.5 text-sage group-hover:text-white transition-colors" />
             <span>{t.guide}</span>
           </button>
           <button
             type="button"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="p-1.5 text-ink-muted hover:text-ink rounded-lg cursor-pointer"
+            className="p-2 text-ink-muted hover:text-ink hover:bg-paper rounded-xl border border-border-subtle cursor-pointer transition-all duration-150 active:scale-95"
             aria-label={mobileMenuOpen ? 'Close navigation menu' : 'Open navigation menu'}
             aria-expanded={mobileMenuOpen}
             aria-controls="planner-sidebar-navigation"
@@ -208,15 +208,15 @@ export const PlannerLayout: React.FC<PlannerLayoutProps> = ({
                   key={item.to}
                   to={item.to}
                   onClick={() => setMobileMenuOpen(false)}
-                  className={`flex items-start gap-3 px-3 py-2.5 rounded-xl transition-all font-serif text-sm ${
+                  className={`group flex items-start gap-3 px-3.5 py-3 rounded-xl transition-all duration-150 font-serif text-sm cursor-pointer select-none ${
                     item.isActive
-                      ? 'bg-paper text-ink font-semibold shadow-xs border border-border-subtle'
-                      : 'text-ink-muted hover:text-ink hover:bg-paper/50'
+                      ? 'bg-paper text-ink font-bold shadow-xs border-2 border-sage/40 ring-1 ring-sage/20'
+                      : 'text-ink-muted hover:text-forest hover:bg-sage-surface/60 hover:border-sage/30 border border-transparent active:scale-[0.99]'
                   }`}
                 >
                   <Icon
-                    className={`w-4 h-4 mt-0.5 flex-shrink-0 ${
-                      item.isActive ? 'text-sage' : 'text-stone-400'
+                    className={`w-4 h-4 mt-0.5 flex-shrink-0 transition-colors ${
+                      item.isActive ? 'text-sage' : 'text-stone-400 group-hover:text-forest'
                     }`}
                   />
                   <div>
@@ -234,13 +234,13 @@ export const PlannerLayout: React.FC<PlannerLayoutProps> = ({
           <button
             type="button"
             onClick={() => setShowHowItWorks(true)}
-            className="w-full mt-4 flex items-center justify-between px-3 py-2.5 bg-sage-surface/80 hover:bg-sage-surface border border-sage/30 rounded-xl text-xs font-serif text-forest transition-all cursor-pointer shadow-2xs group"
+            className="w-full mt-4 flex items-center justify-between px-3.5 py-3 bg-sage-surface hover:bg-sage border-2 border-sage/40 hover:border-sage rounded-xl text-xs sm:text-sm font-serif font-semibold text-forest hover:text-white transition-all duration-150 cursor-pointer shadow-xs hover:shadow-sm active:scale-[0.98] group"
           >
             <span className="flex items-center gap-2">
-              <BookOpen className="w-4 h-4 text-sage group-hover:scale-105 transition-transform" />
-              <span className="font-semibold">How This Planner Works</span>
+              <BookOpen className="w-4 h-4 text-sage group-hover:text-white transition-colors" />
+              <span>How This Planner Works</span>
             </span>
-            <span className="text-[10px] font-sans bg-paper px-1.5 py-0.5 rounded border border-sage/20 text-ink-muted">
+            <span className="text-[10px] font-sans bg-paper group-hover:bg-forest group-hover:text-white group-hover:border-white/40 px-2 py-0.5 rounded border border-sage/30 text-ink-muted transition-colors">
               Guide
             </span>
           </button>
@@ -338,7 +338,8 @@ export const PlannerLayout: React.FC<PlannerLayoutProps> = ({
                 onClick={handleLogoutClick}
                 disabled={loading}
                 title="Sign Out"
-                className="p-1.5 text-ink-muted hover:text-terracotta rounded-lg transition-colors cursor-pointer"
+                aria-label="Sign Out"
+                className="p-2 text-rose-800 bg-rose-50/80 hover:bg-rose-600 hover:text-white border border-rose-200 hover:border-rose-600 rounded-xl transition-all duration-150 cursor-pointer shadow-2xs hover:shadow-xs active:scale-95"
               >
                 <LogOut className="w-4 h-4" />
               </button>
@@ -346,7 +347,7 @@ export const PlannerLayout: React.FC<PlannerLayoutProps> = ({
           ) : (
             <NavLink
               to="/login"
-              className="w-full flex items-center justify-center gap-1.5 py-2 px-3 bg-sage hover:bg-sage-dark text-white rounded-xl text-xs font-serif font-medium transition-colors shadow-xs"
+              className="w-full flex items-center justify-center gap-2 py-2.5 px-4 bg-sage hover:bg-forest text-white rounded-xl text-xs sm:text-sm font-serif font-semibold transition-all duration-150 shadow-xs hover:shadow-sm active:scale-95"
             >
               <span>Sign In / Get Started</span>
             </NavLink>
@@ -367,9 +368,9 @@ export const PlannerLayout: React.FC<PlannerLayoutProps> = ({
           aria-labelledby="logout-confirm-title"
           className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-ink/40 backdrop-blur-xs animate-in fade-in duration-200"
         >
-          <div className="bg-paper border border-border rounded-xl shadow-2xl max-w-md w-full p-6 space-y-4 font-sans">
+          <div className="bg-paper border-2 border-border-strong rounded-2xl shadow-2xl max-w-md w-full p-6 space-y-4 font-sans">
             <div className="flex items-start gap-3">
-              <div className="p-2 rounded-full bg-gold-light/40 text-amber-900 shrink-0">
+              <div className="p-2.5 rounded-full bg-gold-light/40 text-amber-900 shrink-0">
                 <AlertTriangle className="w-6 h-6" />
               </div>
               <div>
@@ -385,28 +386,28 @@ export const PlannerLayout: React.FC<PlannerLayoutProps> = ({
               </div>
             </div>
 
-            <div className="flex flex-col gap-2 pt-2 border-t border-border">
+            <div className="flex flex-col gap-2 pt-3 border-t border-border">
               <button
                 type="button"
                 onClick={handleExportRescueBeforeLogout}
-                className="inline-flex items-center justify-center gap-2 px-4 py-2 text-xs font-semibold rounded-lg border border-sage text-sage hover:bg-sage-surface cursor-pointer"
+                className="inline-flex items-center justify-center gap-2 px-4 py-2.5 text-xs sm:text-sm font-semibold rounded-xl border-2 border-sage text-sage hover:bg-sage hover:text-white transition-all duration-150 cursor-pointer shadow-xs active:scale-95"
               >
-                <Download className="w-3.5 h-3.5" />
+                <Download className="w-4 h-4" />
                 Download Rescue Backup First
               </button>
 
-              <div className="flex items-center justify-end gap-2 mt-2">
+              <div className="flex items-center justify-end gap-2.5 mt-2">
                 <button
                   type="button"
                   onClick={() => setShowLogoutConfirm(false)}
-                  className="px-3 py-1.5 text-xs font-medium rounded-lg border border-border text-ink hover:bg-paper-alt cursor-pointer"
+                  className="px-4 py-2 text-xs sm:text-sm font-semibold rounded-xl border-2 border-border text-ink hover:bg-paper-alt hover:border-border-strong transition-all duration-150 cursor-pointer active:scale-95 shadow-2xs"
                 >
                   Stay Signed In
                 </button>
                 <button
                   type="button"
                   onClick={confirmLogout}
-                  className="px-3 py-1.5 text-xs font-semibold rounded-lg bg-terracotta text-white hover:bg-terracotta-dark cursor-pointer shadow-xs"
+                  className="px-4 py-2 text-xs sm:text-sm font-semibold rounded-xl bg-terracotta hover:bg-terracotta-dark text-white transition-all duration-150 cursor-pointer shadow-xs hover:shadow-sm active:scale-95"
                 >
                   Log Out Anyway
                 </button>
