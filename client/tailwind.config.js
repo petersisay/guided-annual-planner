@@ -48,6 +48,8 @@ export default {
         sans: ['Inter', 'Noto Sans Ethiopic', 'system-ui', 'sans-serif'],
       },
       boxShadow: {
+        '2xs': '0 1px 1px 0 rgba(0, 0, 0, 0.03)',
+        xs: '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
         paper: '0 4px 20px -2px rgba(26, 26, 26, 0.05), 0 2px 6px -1px rgba(26, 26, 26, 0.02)',
         'paper-lg': '0 10px 30px -4px rgba(26, 26, 26, 0.08), 0 4px 12px -2px rgba(26, 26, 26, 0.03)',
       },
