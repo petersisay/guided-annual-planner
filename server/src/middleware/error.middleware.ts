@@ -25,6 +25,23 @@ export function errorHandler(
     return;
   }
 
+  // Mongoose Validation Error
+  if (err?.name === 'ValidationError') {
+    const details = Object.values(err.errors || {}).map((e: any) => ({
+      field: e.path,
+      issue: e.message,
+    }));
+    res.status(400).json({
+      success: false,
+      error: {
+        code: 'VALIDATION_ERROR',
+        message: 'The submitted database record failed validation requirements',
+        details,
+      },
+    });
+    return;
+  }
+
   // Mongoose Duplicate Key Error (code 11000)
   if (err.code === 11000) {
     const field = Object.keys(err.keyValue || {})[0] || 'resource';

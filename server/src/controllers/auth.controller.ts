@@ -34,16 +34,17 @@ export class AuthController {
         // Check if an existing account is already registered with this email under a DIFFERENT Google identity
         const existingEmailUser = await User.findOne({ email: verified.email });
         if (existingEmailUser) {
+          const sub = typeof existingEmailUser.googleSub === 'string' ? existingEmailUser.googleSub : '';
           const isDevOrMockSub =
-            existingEmailUser.googleSub.startsWith('dev_') ||
-            existingEmailUser.googleSub.startsWith('mock_') ||
-            existingEmailUser.googleSub.startsWith('test_') ||
-            existingEmailUser.googleSub === 'placeholder' ||
-            !existingEmailUser.googleSub;
+            !sub ||
+            sub.startsWith('dev_') ||
+            sub.startsWith('mock_') ||
+            sub.startsWith('test_') ||
+            sub === 'placeholder';
 
           const isAuthoritativeGoogleDomain =
-            verified.email.endsWith('@gmail.com') ||
-            verified.email.endsWith('@googlemail.com');
+            typeof verified.email === 'string' &&
+            (verified.email.endsWith('@gmail.com') || verified.email.endsWith('@googlemail.com'));
 
           if (isDevOrMockSub || isAuthoritativeGoogleDomain) {
             // Legitimate account claim / Google identity link:
@@ -52,6 +53,18 @@ export class AuthController {
             existingEmailUser.googleSub = verified.googleSub;
             if (verified.avatarUrl) existingEmailUser.avatarUrl = verified.avatarUrl;
             if (verified.name) existingEmailUser.name = verified.name;
+            if (!existingEmailUser.preferences) {
+              existingEmailUser.preferences = {
+                weekStart: 'monday',
+                weeklyViewDefault: '7day',
+                defaultCurrency: 'USD',
+                theme: 'paper-warm',
+                prefersReducedMotion: false,
+                onboardingStatus: 'completed',
+                onboardingStep: 5,
+                defaultYear: new Date().getFullYear(),
+              } as any;
+            }
             existingEmailUser.lastLoginAt = new Date();
             await existingEmailUser.save();
             user = existingEmailUser;
@@ -74,6 +87,16 @@ export class AuthController {
               email: verified.email,
               name: verified.name,
               avatarUrl: verified.avatarUrl,
+              preferences: {
+                weekStart: 'monday',
+                weeklyViewDefault: '7day',
+                defaultCurrency: 'USD',
+                theme: 'paper-warm',
+                prefersReducedMotion: false,
+                onboardingStatus: 'not_started',
+                onboardingStep: 1,
+                defaultYear: new Date().getFullYear(),
+              },
               lastLoginAt: new Date(),
             });
           } catch (createErr: any) {

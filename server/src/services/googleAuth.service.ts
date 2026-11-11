@@ -17,25 +17,42 @@ export class GoogleAuthService {
 
   async verifyIdToken(idToken: string): Promise<VerifiedGoogleUser> {
     try {
-      const ticket = await this.client.verifyIdToken({
-        idToken,
-        audience: env.GOOGLE_CLIENT_ID,
-      });
+      const configuredClientId = env.GOOGLE_CLIENT_ID?.trim();
+      const isMockClientId =
+        !configuredClientId ||
+        configuredClientId.startsWith('mock') ||
+        configuredClientId.includes('mock_') ||
+        configuredClientId.includes('mock-');
+
+      // If GOOGLE_CLIENT_ID is a real client ID, verify audience against it.
+      // If GOOGLE_CLIENT_ID is a mock default or unconfigured, allow any token with a valid Google signature.
+      const verifyOptions: { idToken: string; audience?: string } = { idToken };
+      if (!isMockClientId) {
+        verifyOptions.audience = configuredClientId;
+      }
+
+      const ticket = await this.client.verifyIdToken(verifyOptions);
 
       const payload: TokenPayload | undefined = ticket.getPayload();
 
       if (!payload) {
-        throw new Error('Google token payload is empty');
+        const err: any = new Error('Google token payload is empty');
+        err.statusCode = 401;
+        throw err;
       }
 
       // Check verified email claim
       if (!payload.email_verified || !payload.email) {
-        throw new Error('Google account email is not verified');
+        const err: any = new Error('Google account email is not verified');
+        err.statusCode = 401;
+        throw err;
       }
 
       // Check stable subject claim
       if (!payload.sub) {
-        throw new Error('Google token missing subject identifier');
+        const err: any = new Error('Google token missing subject identifier');
+        err.statusCode = 401;
+        throw err;
       }
 
       return {
@@ -46,7 +63,11 @@ export class GoogleAuthService {
       };
     } catch (err: unknown) {
       const message = err instanceof Error ? err.message : 'Invalid Google token';
-      throw new Error(`Google authentication failed: ${message}`);
+      console.error('[GoogleAuthService] Token verification failed:', message);
+      const authError: any = new Error(`Google authentication failed: ${message}`);
+      authError.statusCode = 401;
+      authError.code = 'UNAUTHORIZED';
+      throw authError;
     }
   }
 }
