@@ -276,6 +276,123 @@ describe('AuthController, CSRF Protection & Identity Conflict Tests', () => {
       expect(res.headers['set-cookie']).toBeUndefined();
     });
 
+    it('claims and links account when existing user has a dev/mock sub', async () => {
+      const realGoogleSub = 'real_numeric_google_sub_1098234710923847';
+      const userEmail = 'petros.planner@customdomain.org';
+      const devMockSub = 'dev_google_sub_petros.planner@customdomain.org';
+
+      vi.spyOn(googleAuthService, 'verifyIdToken').mockResolvedValue({
+        googleSub: realGoogleSub,
+        email: userEmail,
+        name: 'Petros User',
+        avatarUrl: 'https://lh3.googleusercontent.com/avatar.jpg',
+      });
+
+      const existingDevDoc = {
+        _id: new Types.ObjectId(),
+        googleSub: devMockSub,
+        email: userEmail,
+        name: 'Dev Petros',
+        avatarUrl: undefined,
+        preferences: {
+          weekStart: 'monday',
+          weeklyViewDefault: '7day',
+          defaultCurrency: 'USD',
+          theme: 'paper-warm',
+          prefersReducedMotion: false,
+        },
+        createdAt: new Date(),
+        lastLoginAt: new Date(),
+        save: vi.fn().mockResolvedValue(true),
+      };
+
+      vi.spyOn(User, 'findOne').mockImplementation((query: any) => {
+        if (query.googleSub === realGoogleSub) {
+          return Promise.resolve(null);
+        }
+        if (query.email === userEmail) {
+          return Promise.resolve(existingDevDoc as any);
+        }
+        return Promise.resolve(null);
+      });
+
+      const sessionSpy = vi.spyOn(sessionService, 'createSession').mockResolvedValue({
+        rawToken: 'claimed_dev_session_token',
+        session: { _id: new Types.ObjectId() } as any,
+      });
+
+      const res = await request(app)
+        .post('/api/v1/auth/google')
+        .set('Origin', validOrigin)
+        .set('X-Planner-Client', validCsrfHeader)
+        .send({ credential: 'valid_google_token_for_dev_user' });
+
+      expect(res.status).toBe(200);
+      expect(res.body.success).toBe(true);
+      expect(existingDevDoc.googleSub).toBe(realGoogleSub);
+      expect(existingDevDoc.save).toHaveBeenCalled();
+      expect(sessionSpy).toHaveBeenCalled();
+      expect(res.headers['set-cookie']).toBeDefined();
+    });
+
+    it('links account when existing user has verified @gmail.com address', async () => {
+      const realGoogleSub = '109823471092384719238';
+      const userEmail = 'petrossisay1646@gmail.com';
+      const oldSub = 'old_initial_sub_55555';
+
+      vi.spyOn(googleAuthService, 'verifyIdToken').mockResolvedValue({
+        googleSub: realGoogleSub,
+        email: userEmail,
+        name: 'Petros Sisay',
+        avatarUrl: 'https://lh3.googleusercontent.com/photo.jpg',
+      });
+
+      const existingUserDoc = {
+        _id: new Types.ObjectId(),
+        googleSub: oldSub,
+        email: userEmail,
+        name: 'Petros Sisay',
+        preferences: {
+          weekStart: 'monday',
+          weeklyViewDefault: '7day',
+          defaultCurrency: 'USD',
+          theme: 'paper-warm',
+          prefersReducedMotion: false,
+        },
+        createdAt: new Date(),
+        lastLoginAt: new Date(),
+        save: vi.fn().mockResolvedValue(true),
+      };
+
+      vi.spyOn(User, 'findOne').mockImplementation((query: any) => {
+        if (query.googleSub === realGoogleSub) {
+          return Promise.resolve(null);
+        }
+        if (query.email === userEmail) {
+          return Promise.resolve(existingUserDoc as any);
+        }
+        return Promise.resolve(null);
+      });
+
+      const sessionSpy = vi.spyOn(sessionService, 'createSession').mockResolvedValue({
+        rawToken: 'linked_gmail_session_token',
+        session: { _id: new Types.ObjectId() } as any,
+      });
+
+      const res = await request(app)
+        .post('/api/v1/auth/google')
+        .set('Origin', validOrigin)
+        .set('X-Planner-Client', validCsrfHeader)
+        .send({ credential: 'valid_google_token_for_petros' });
+
+      expect(res.status).toBe(200);
+      expect(res.body.success).toBe(true);
+      expect(existingUserDoc.googleSub).toBe(realGoogleSub);
+      expect(existingUserDoc.save).toHaveBeenCalled();
+      expect(sessionSpy).toHaveBeenCalled();
+      expect(res.headers['set-cookie']).toBeDefined();
+    });
+
     it('handles duplicate key race condition safely without throwing unhandled 500', async () => {
       vi.spyOn(googleAuthService, 'verifyIdToken').mockResolvedValue({
         googleSub: 'racing_sub',

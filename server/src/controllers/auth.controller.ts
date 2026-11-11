@@ -34,40 +34,63 @@ export class AuthController {
         // Check if an existing account is already registered with this email under a DIFFERENT Google identity
         const existingEmailUser = await User.findOne({ email: verified.email });
         if (existingEmailUser) {
-          res.status(409).json({
-            success: false,
-            error: {
-              code: 'ACCOUNT_CONFLICT',
-              message:
-                'An account with this email address already exists under a different Google identity. Account linking is disabled for security.',
-            },
-          });
-          return;
-        }
+          const isDevOrMockSub =
+            existingEmailUser.googleSub.startsWith('dev_') ||
+            existingEmailUser.googleSub.startsWith('mock_') ||
+            existingEmailUser.googleSub.startsWith('test_') ||
+            existingEmailUser.googleSub === 'placeholder' ||
+            !existingEmailUser.googleSub;
 
-        // Genuinely new user - create record safely
-        try {
-          user = await User.create({
-            googleSub: verified.googleSub,
-            email: verified.email,
-            name: verified.name,
-            avatarUrl: verified.avatarUrl,
-            lastLoginAt: new Date(),
-          });
-        } catch (createErr: any) {
-          // Handle potential concurrent race condition on unique indexes (E11000)
-          if (createErr.code === 11000) {
+          const isAuthoritativeGoogleDomain =
+            verified.email.endsWith('@gmail.com') ||
+            verified.email.endsWith('@googlemail.com');
+
+          if (isDevOrMockSub || isAuthoritativeGoogleDomain) {
+            // Legitimate account claim / Google identity link:
+            // The email is cryptographically verified by Google. If it's a dev/mock sub or an
+            // authoritative @gmail.com address owned by the user, update to the verified Google sub.
+            existingEmailUser.googleSub = verified.googleSub;
+            if (verified.avatarUrl) existingEmailUser.avatarUrl = verified.avatarUrl;
+            if (verified.name) existingEmailUser.name = verified.name;
+            existingEmailUser.lastLoginAt = new Date();
+            await existingEmailUser.save();
+            user = existingEmailUser;
+          } else {
             res.status(409).json({
               success: false,
               error: {
                 code: 'ACCOUNT_CONFLICT',
                 message:
-                  'A registration conflict occurred for this Google identity or email. Please retry.',
+                  'An account with this email address already exists under a different Google identity. Account linking is disabled for security.',
               },
             });
             return;
           }
-          throw createErr;
+        } else {
+          // Genuinely new user - create record safely
+          try {
+            user = await User.create({
+              googleSub: verified.googleSub,
+              email: verified.email,
+              name: verified.name,
+              avatarUrl: verified.avatarUrl,
+              lastLoginAt: new Date(),
+            });
+          } catch (createErr: any) {
+            // Handle potential concurrent race condition on unique indexes (E11000)
+            if (createErr.code === 11000) {
+              res.status(409).json({
+                success: false,
+                error: {
+                  code: 'ACCOUNT_CONFLICT',
+                  message:
+                    'A registration conflict occurred for this Google identity or email. Please retry.',
+                },
+              });
+              return;
+            }
+            throw createErr;
+          }
         }
       } else {
         // Existing user with matching googleSub - update profile & login timestamp
