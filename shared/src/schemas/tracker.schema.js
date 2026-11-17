@@ -1,5 +1,14 @@
 import { z } from 'zod';
 
+export const DEFAULT_MOOD_PALETTE = [
+  { key: 'great', label: 'Great / Joyful', colorHex: '#7A9A48' },
+  { key: 'peaceful', label: 'Calm / Peaceful', colorHex: '#A2B97E' },
+  { key: 'neutral', label: 'Ordinary / Neutral', colorHex: '#D3CEB6' },
+  { key: 'difficult', label: 'Difficult / Stressful', colorHex: '#C85A48' },
+  { key: 'down', label: 'Down / Moody', colorHex: '#2F3E46' },
+  { key: 'celebration', label: 'Celebration / Special', colorHex: '#D4A373' },
+];
+
 export const moodEntrySchema = z.object({
   date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, 'Date must be formatted as YYYY-MM-DD'),
   moodKey: z.string().min(1).max(50),
@@ -7,8 +16,6 @@ export const moodEntrySchema = z.object({
   label: z.string().min(1).max(50),
   note: z.string().max(1000).optional(),
 });
-
-export type MoodEntryInput = z.infer<typeof moodEntrySchema>;
 
 export const habitCreateSchema = z.object({
   title: z.string().min(1, 'Habit title is required').max(100),
@@ -19,8 +26,6 @@ export const habitCreateSchema = z.object({
   activeYear: z.number().int().min(2000).max(2100),
 });
 
-export type HabitCreateInput = z.infer<typeof habitCreateSchema>;
-
 export const habitUpdateSchema = z.object({
   title: z.string().min(1).max(100).optional(),
   colorHex: z
@@ -30,11 +35,7 @@ export const habitUpdateSchema = z.object({
   archived: z.boolean().optional(),
 });
 
-export type HabitUpdateInput = z.infer<typeof habitUpdateSchema>;
-
 export const habitToggleSchema = z.object({
   date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, 'Date must be formatted as YYYY-MM-DD'),
   completed: z.boolean(),
 });
-
-export type HabitToggleInput = z.infer<typeof habitToggleSchema>;
