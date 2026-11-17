@@ -1,22 +1,18 @@
-import { Response, NextFunction } from 'express';
 import crypto from 'crypto';
 import {
   updateDailyPlanSchema,
-  DailyPlan as IDailyPlanDto,
-  DailyContext,
   isValidDateStr,
   getISOWeekNumber,
   getISOWeekYear,
-  DayTask,
 } from '@planner/shared';
-import { DailyPlan, IDailyPlanDocument } from '../models/DailyPlan';
-import { WeeklyPlan } from '../models/WeeklyPlan';
-import { MonthlyPlan } from '../models/MonthlyPlan';
-import { MoodEntry } from '../models/MoodEntry';
-import { Habit } from '../models/Habit';
-import { AuthenticatedRequest } from '../middleware/auth.middleware';
+import { DailyPlan } from '../models/DailyPlan.js';
+import { WeeklyPlan } from '../models/WeeklyPlan.js';
+import { MonthlyPlan } from '../models/MonthlyPlan.js';
+import { MoodEntry } from '../models/MoodEntry.js';
+import { Habit } from '../models/Habit.js';
+import { safeIsoDate } from './auth.controller.js';
 
-function mapDailyPlanToDto(doc: IDailyPlanDocument): IDailyPlanDto {
+function mapDailyPlanToDto(doc) {
   return {
     id: doc._id.toString(),
     userId: doc.userId.toString(),
@@ -52,8 +48,8 @@ function mapDailyPlanToDto(doc: IDailyPlanDocument): IDailyPlanDto {
       challengesAndLessons: doc.journal?.challengesAndLessons || '',
       freeWriting: doc.journal?.freeWriting || '',
     },
-    createdAt: doc.createdAt.toISOString(),
-    updatedAt: doc.updatedAt.toISOString(),
+    createdAt: safeIsoDate(doc.createdAt),
+    updatedAt: safeIsoDate(doc.updatedAt),
   };
 }
 
@@ -67,11 +63,7 @@ const DEFAULT_SCHEDULE_SLOTS = [
 ];
 
 export class DailyController {
-  async getDailyPlan(
-    req: AuthenticatedRequest,
-    res: Response,
-    next: NextFunction
-  ): Promise<void> {
+  async getDailyPlan(req, res, next) {
     try {
       const date = String(req.params.date);
 
@@ -90,13 +82,13 @@ export class DailyController {
       const dateObj = new Date(Date.UTC(year, month - 1, day));
       const isoWeek = getISOWeekNumber(dateObj);
       const isoYear = getISOWeekYear(dateObj);
-      const userId = req.user!._id;
+      const userId = req.user._id;
 
       let plan = await DailyPlan.findOne({ userId, date });
 
       if (!plan) {
         // Check if weekly spread already has tasks for this specific date
-        let initialPriorities: [DayTask, DayTask, DayTask] = [
+        let initialPriorities = [
           { id: crypto.randomUUID(), text: '', done: false },
           { id: crypto.randomUUID(), text: '', done: false },
           { id: crypto.randomUUID(), text: '', done: false },
@@ -144,7 +136,7 @@ export class DailyController {
               freeWriting: '',
             },
           });
-        } catch (createErr: any) {
+        } catch (createErr) {
           if (createErr?.code === 11000) {
             plan = await DailyPlan.findOne({ userId, date });
             if (!plan) throw createErr;
@@ -161,7 +153,7 @@ export class DailyController {
         MonthlyPlan.findOne({ userId, year, month }),
       ]);
 
-      const context: DailyContext = {
+      const context = {
         mood: moodDoc
           ? {
               moodKey: moodDoc.moodKey,
@@ -193,11 +185,7 @@ export class DailyController {
     }
   }
 
-  async updateDailyPlan(
-    req: AuthenticatedRequest,
-    res: Response,
-    next: NextFunction
-  ): Promise<void> {
+  async updateDailyPlan(req, res, next) {
     try {
       const date = String(req.params.date);
 
@@ -213,14 +201,14 @@ export class DailyController {
       }
 
       const updates = updateDailyPlanSchema.parse(req.body);
-      const userId = req.user!._id;
+      const userId = req.user._id;
 
       const [year, month, day] = date.split('-').map(Number);
       const dateObj = new Date(Date.UTC(year, month - 1, day));
       const isoWeek = getISOWeekNumber(dateObj);
       const isoYear = getISOWeekYear(dateObj);
 
-      const setPayload: Record<string, unknown> = {};
+      const setPayload = {};
       if (updates.intention !== undefined) setPayload.intention = updates.intention;
       if (updates.primaryPriorities !== undefined) setPayload.primaryPriorities = updates.primaryPriorities;
       if (updates.additionalTasks !== undefined) setPayload.additionalTasks = updates.additionalTasks;
@@ -228,7 +216,7 @@ export class DailyController {
       if (updates.reflection !== undefined) setPayload.reflection = updates.reflection;
       if (updates.journal !== undefined) setPayload.journal = updates.journal;
 
-      let plan: IDailyPlanDocument | null = null;
+      let plan = null;
       if (updates.expectedUpdatedAt) {
         const expectedDate = new Date(updates.expectedUpdatedAt);
         plan = await DailyPlan.findOneAndUpdate(
@@ -272,7 +260,7 @@ export class DailyController {
             },
             { new: true, upsert: true }
           );
-        } catch (upsertErr: any) {
+        } catch (upsertErr) {
           if (upsertErr?.code === 11000) {
             plan = await DailyPlan.findOneAndUpdate(
               { userId, date },
