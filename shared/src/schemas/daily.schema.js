@@ -39,5 +39,3 @@ export const updateDailyPlanSchema = z.object({
   journal: dailyJournalSchema.optional(),
   expectedUpdatedAt: z.string().optional(),
 });
-
-export type UpdateDailyPlanInput = z.infer<typeof updateDailyPlanSchema>;
