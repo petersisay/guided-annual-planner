@@ -1,6 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { plannerBackupSchema, restoreRequestSchema } from './backup.schema';
-import { BACKUP_FORMAT_IDENTIFIER, BACKUP_SCHEMA_VERSION } from '../types/backup';
+import { plannerBackupSchema, restoreRequestSchema, BACKUP_FORMAT_IDENTIFIER, BACKUP_SCHEMA_VERSION } from './backup.schema.js';
 
 describe('Planner Backup Zod Schemas', () => {
   const validBackup = {
@@ -19,10 +18,10 @@ describe('Planner Backup Zod Schemas', () => {
       },
     },
     preferences: {
-      weekStart: 'monday' as const,
-      weeklyViewDefault: '7day' as const,
+      weekStart: 'monday',
+      weeklyViewDefault: '7day',
       defaultCurrency: 'USD',
-      theme: 'paper-warm' as const,
+      theme: 'paper-warm',
       prefersReducedMotion: false,
     },
     annualPlans: [
