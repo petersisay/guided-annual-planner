@@ -1,11 +1,10 @@
-import { Request, Response, NextFunction } from 'express';
-import { env } from '../config/env';
+import { env } from '../config/env.js';
 
 const SAFE_METHODS = new Set(['GET', 'HEAD', 'OPTIONS']);
 export const REQUIRED_CSRF_HEADER = 'x-planner-client';
 export const EXPECTED_CSRF_HEADER_VALUE = 'WebApp';
 
-export function csrfProtection(req: Request, res: Response, next: NextFunction): void {
+export function csrfProtection(req, res, next) {
   // 1. Safe HTTP methods bypass CSRF checks
   if (SAFE_METHODS.has(req.method.toUpperCase())) {
     return next();
