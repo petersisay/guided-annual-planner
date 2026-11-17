@@ -1,17 +1,6 @@
-import { Schema, model, Document, Types } from 'mongoose';
-import { AnnualReviewData } from '@planner/shared';
+import { Schema, model } from 'mongoose';
 
-export interface IAnnualPlanDocument extends Document<Types.ObjectId> {
-  userId: Types.ObjectId;
-  year: number;
-  themeOrWord?: string;
-  annualIntentions: string[];
-  annualReview: AnnualReviewData;
-  createdAt: Date;
-  updatedAt: Date;
-}
-
-const AnnualReviewSchema = new Schema<AnnualReviewData>(
+const AnnualReviewSchema = new Schema(
   {
     celebrations: { type: String, trim: true, maxlength: 2000 },
     obstaclesEncountered: { type: String, trim: true, maxlength: 2000 },
@@ -21,7 +10,7 @@ const AnnualReviewSchema = new Schema<AnnualReviewData>(
   { _id: false }
 );
 
-const AnnualPlanSchema = new Schema<IAnnualPlanDocument>(
+const AnnualPlanSchema = new Schema(
   {
     userId: {
       type: Schema.Types.ObjectId,
@@ -54,7 +43,6 @@ const AnnualPlanSchema = new Schema<IAnnualPlanDocument>(
   }
 );
 
-// Guarantee tenant isolation and one annual plan per user per year
 AnnualPlanSchema.index({ userId: 1, year: 1 }, { unique: true });
 
-export const AnnualPlan = model<IAnnualPlanDocument>('AnnualPlan', AnnualPlanSchema);
+export const AnnualPlan = model('AnnualPlan', AnnualPlanSchema);
