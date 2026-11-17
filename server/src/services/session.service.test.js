@@ -1,12 +1,11 @@
-import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
-import mongoose, { Types } from 'mongoose';
-import { Session } from '../models/Session';
+import { describe, it, expect, beforeEach, vi } from 'vitest';
+import { Types } from 'mongoose';
+import { Session } from '../models/Session.js';
 import {
   sessionService,
   SLIDING_WINDOW_MS,
-  RENEWAL_THRESHOLD_MS,
   GRACE_PERIOD_MS,
-} from './session.service';
+} from './session.service.js';
 
 describe('SessionService', () => {
   const mockUserId = new Types.ObjectId();
@@ -35,7 +34,7 @@ describe('SessionService', () => {
       lastRotatedAt: new Date(),
     };
 
-    const createSpy = vi.spyOn(Session, 'create').mockResolvedValue(fakeSession as any);
+    const createSpy = vi.spyOn(Session, 'create').mockResolvedValue(fakeSession);
 
     const { rawToken, session } = await sessionService.createSession(
       mockUserId,
@@ -58,8 +57,8 @@ describe('SessionService', () => {
       absoluteExpiresAt: new Date(Date.now() + 10000),
     };
 
-    vi.spyOn(Session, 'findOne').mockResolvedValue(expiredSession as any);
-    const deleteSpy = vi.spyOn(Session, 'deleteOne').mockResolvedValue({ deletedCount: 1 } as any);
+    vi.spyOn(Session, 'findOne').mockResolvedValue(expiredSession);
+    const deleteSpy = vi.spyOn(Session, 'deleteOne').mockResolvedValue({ deletedCount: 1 });
 
     const result = await sessionService.validateAndRenewSession(rawToken);
 
@@ -83,7 +82,7 @@ describe('SessionService', () => {
       save: vi.fn().mockResolvedValue(true),
     };
 
-    vi.spyOn(Session, 'findOne').mockResolvedValue(renewableSession as any);
+    vi.spyOn(Session, 'findOne').mockResolvedValue(renewableSession);
 
     const result = await sessionService.validateAndRenewSession(rawToken);
 
@@ -108,7 +107,7 @@ describe('SessionService', () => {
       absoluteExpiresAt: new Date(Date.now() + 50 * 24 * 60 * 60 * 1000),
     };
 
-    vi.spyOn(Session, 'findOne').mockResolvedValue(sessionInGrace as any);
+    vi.spyOn(Session, 'findOne').mockResolvedValue(sessionInGrace);
 
     const result = await sessionService.validateAndRenewSession(previousToken);
 
@@ -120,7 +119,7 @@ describe('SessionService', () => {
 
   it('revokes session on logout', async () => {
     const rawToken = 'logout_token_123';
-    const deleteSpy = vi.spyOn(Session, 'deleteOne').mockResolvedValue({ deletedCount: 1 } as any);
+    const deleteSpy = vi.spyOn(Session, 'deleteOne').mockResolvedValue({ deletedCount: 1 });
 
     const revoked = await sessionService.revokeSession(rawToken);
 
