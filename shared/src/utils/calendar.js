@@ -1,12 +1,12 @@
-export function isLeapYear(year: number): boolean {
+export function isLeapYear(year) {
   return (year % 4 === 0 && year % 100 !== 0) || year % 400 === 0;
 }
 
-export function getDaysInYear(year: number): number {
+export function getDaysInYear(year) {
   return isLeapYear(year) ? 366 : 365;
 }
 
-export function getDaysInMonth(year: number, month: number): number {
+export function getDaysInMonth(year, month) {
   // month is 1-indexed (1 = January, 12 = December)
   if (month === 2) {
     return isLeapYear(year) ? 29 : 28;
@@ -32,33 +32,24 @@ export const MONTH_NAMES = [
   'December',
 ];
 
-export function getMonthName(month: number): string {
+export function getMonthName(month) {
   return MONTH_NAMES[month - 1] || '';
 }
 
-export function padZero(num: number): string {
+export function padZero(num) {
   return num < 10 ? `0${num}` : `${num}`;
 }
 
-export function formatDateStr(year: number, month: number, day: number): string {
+export function formatDateStr(year, month, day) {
   return `${year}-${padZero(month)}-${padZero(day)}`;
-}
-
-export interface DayTileInfo {
-  dateStr: string;
-  dayNumber: number;
-  month: number;
-  year: number;
-  isCurrentMonth: boolean;
-  dayOfWeek: number; // 0 = Sunday, 1 = Monday, ..., 6 = Saturday
 }
 
 /**
  * Generates an array of all exact calendar dates (YYYY-MM-DD) for a full year.
  * Length is 366 for leap years and 365 for common years.
  */
-export function getAllYearDates(year: number): string[] {
-  const dates: string[] = [];
+export function getAllYearDates(year) {
+  const dates = [];
   const daysInMonths = [
     31,
     isLeapYear(year) ? 29 : 28,
@@ -88,22 +79,22 @@ export function getAllYearDates(year: number): string[] {
  * Generates a 35 or 42 tile grid for a single month, aligned to Monday or Sunday start.
  */
 export function generateMonthGrid(
-  year: number,
-  month: number,
-  weekStart: 'monday' | 'sunday' = 'monday'
-): DayTileInfo[] {
+  year,
+  month,
+  weekStart = 'monday'
+) {
   const daysInMonth = getDaysInMonth(year, month);
   const firstDayOfWeek = new Date(year, month - 1, 1).getDay(); // 0 is Sunday, 1 is Monday...
 
   // Compute leading empty / previous month offset
-  let offset: number;
+  let offset;
   if (weekStart === 'monday') {
     offset = firstDayOfWeek === 0 ? 6 : firstDayOfWeek - 1;
   } else {
     offset = firstDayOfWeek;
   }
 
-  const tiles: DayTileInfo[] = [];
+  const tiles = [];
 
   // Previous month trailing days
   const prevMonth = month === 1 ? 12 : month - 1;
@@ -165,7 +156,7 @@ export function generateMonthGrid(
 /**
  * Returns the ISO 8601 week number (1–53) for a given date.
  */
-export function getISOWeekNumber(date: Date): number {
+export function getISOWeekNumber(date) {
   const d = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
   d.setUTCDate(d.getUTCDate() + 4 - (d.getUTCDay() || 7));
   const yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
@@ -176,7 +167,7 @@ export function getISOWeekNumber(date: Date): number {
  * Returns the ISO week-year for a given date.
  * (Can differ from calendar year for dates in week 52/53 or week 1.)
  */
-export function getISOWeekYear(date: Date): number {
+export function getISOWeekYear(date) {
   const d = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
   d.setUTCDate(d.getUTCDate() + 4 - (d.getUTCDay() || 7));
   return d.getUTCFullYear();
@@ -186,14 +177,14 @@ export function getISOWeekYear(date: Date): number {
  * Returns the 7 dates (Mon → Sun) for a given ISO week.
  * Returns an array of YYYY-MM-DD strings, length 7.
  */
-export function getWeekDates(isoYear: number, isoWeek: number): string[] {
+export function getWeekDates(isoYear, isoWeek) {
   const jan4 = new Date(Date.UTC(isoYear, 0, 4));
   const mondayW1 = new Date(jan4);
   mondayW1.setUTCDate(jan4.getUTCDate() - (jan4.getUTCDay() || 7) + 1);
   const monday = new Date(mondayW1);
   monday.setUTCDate(mondayW1.getUTCDate() + (isoWeek - 1) * 7);
 
-  const dates: string[] = [];
+  const dates = [];
   for (let i = 0; i < 7; i++) {
     const d = new Date(monday);
     d.setUTCDate(monday.getUTCDate() + i);
@@ -204,11 +195,8 @@ export function getWeekDates(isoYear: number, isoWeek: number): string[] {
 
 /**
  * Returns the number of ISO weeks in a given ISO week-year (52 or 53).
- * According to ISO 8601, an ISO week-year has 53 weeks if and only if
- * January 1 falls on a Thursday, or in a leap year on a Wednesday (meaning
- * December 31 falls on a Thursday).
  */
-export function getISOWeeksInYear(year: number): number {
+export function getISOWeeksInYear(year) {
   const jan1Day = new Date(Date.UTC(year, 0, 1)).getUTCDay();
   const dec31Day = new Date(Date.UTC(year, 11, 31)).getUTCDay();
   return jan1Day === 4 || dec31Day === 4 ? 53 : 52;
@@ -216,9 +204,8 @@ export function getISOWeeksInYear(year: number): number {
 
 /**
  * Validates whether a week number is valid for a given calendar year under ISO 8601.
- * Rejects week 53 when the year has only 52 weeks.
  */
-export function isValidISOWeek(year: number, week: number): boolean {
+export function isValidISOWeek(year, week) {
   if (!Number.isInteger(year) || year < 2000 || year > 2100) return false;
   if (!Number.isInteger(week) || week < 1) return false;
   const maxWeeks = getISOWeeksInYear(year);
@@ -226,10 +213,9 @@ export function isValidISOWeek(year: number, week: number): boolean {
 }
 
 /**
- * Validates whether a string is a canonical ISO date formatted as YYYY-MM-DD
- * with realistic year (2000-2100), month, and day ranges.
+ * Validates whether a string is a canonical ISO date formatted as YYYY-MM-DD.
  */
-export function isValidDateStr(dateStr: string): boolean {
+export function isValidDateStr(dateStr) {
   if (!/^\d{4}-\d{2}-\d{2}$/.test(dateStr)) return false;
   const [y, m, d] = dateStr.split('-').map(Number);
   if (y < 2000 || y > 2100 || m < 1 || m > 12) return false;
@@ -239,9 +225,8 @@ export function isValidDateStr(dateStr: string): boolean {
 
 /**
  * Returns the canonical YYYY-MM-DD for the day immediately preceding dateStr.
- * Safely handles month underflow, leap year February 29th, and year rollovers.
  */
-export function getPreviousDay(dateStr: string): string {
+export function getPreviousDay(dateStr) {
   const [y, m, d] = dateStr.split('-').map(Number);
   const date = new Date(Date.UTC(y, m - 1, d - 1));
   return formatDateStr(date.getUTCFullYear(), date.getUTCMonth() + 1, date.getUTCDate());
@@ -249,9 +234,8 @@ export function getPreviousDay(dateStr: string): string {
 
 /**
  * Returns the canonical YYYY-MM-DD for the day immediately following dateStr.
- * Safely handles month overflow, leap year transitions, and year rollovers.
  */
-export function getNextDay(dateStr: string): string {
+export function getNextDay(dateStr) {
   const [y, m, d] = dateStr.split('-').map(Number);
   const date = new Date(Date.UTC(y, m - 1, d + 1));
   return formatDateStr(date.getUTCFullYear(), date.getUTCMonth() + 1, date.getUTCDate());
@@ -270,7 +254,7 @@ const WEEKDAY_NAMES = [
 /**
  * Returns full English name of the day of the week (e.g. "Monday", "Sunday").
  */
-export function getDayOfWeekName(dateStr: string): string {
+export function getDayOfWeekName(dateStr) {
   const [y, m, d] = dateStr.split('-').map(Number);
   const date = new Date(Date.UTC(y, m - 1, d));
   return WEEKDAY_NAMES[date.getUTCDay()] || '';
@@ -280,11 +264,9 @@ export function getDayOfWeekName(dateStr: string): string {
  * Formats a canonical date string into a rich journal heading.
  * e.g. "Monday, October 15, 2026"
  */
-export function formatDisplayDate(dateStr: string): string {
+export function formatDisplayDate(dateStr) {
   const [y, m, d] = dateStr.split('-').map(Number);
   const dayName = getDayOfWeekName(dateStr);
   const monthName = getMonthName(m);
   return `${dayName}, ${monthName} ${d}, ${y}`;
 }
-
-
