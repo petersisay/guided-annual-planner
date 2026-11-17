@@ -1,9 +1,9 @@
 import mongoose from 'mongoose';
-import { env } from './env';
+import { env } from './env.js';
 
-let memoryServerInstance: any = null;
+let memoryServerInstance = null;
 
-export async function connectDB(uri?: string): Promise<typeof mongoose> {
+export async function connectDB(uri) {
   const mongoUri = uri || env.MONGODB_URI;
   try {
     const conn = await mongoose.connect(mongoUri, {
@@ -19,7 +19,6 @@ export async function connectDB(uri?: string): Promise<typeof mongoose> {
       console.warn(`[MongoDB] No external daemon listening on ${mongoUri}.`);
       console.log(`[MongoDB] Starting embedded MongoDB engine (mongodb-memory-server) for local development...`);
       try {
-        // @ts-ignore
         const { MongoMemoryServer } = await import('mongodb-memory-server');
         if (!memoryServerInstance) {
           memoryServerInstance = await MongoMemoryServer.create();
@@ -41,7 +40,7 @@ export async function connectDB(uri?: string): Promise<typeof mongoose> {
   }
 }
 
-export async function disconnectDB(): Promise<void> {
+export async function disconnectDB() {
   await mongoose.disconnect();
   if (memoryServerInstance) {
     await memoryServerInstance.stop();
