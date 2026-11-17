@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { envSchema, parseServerEnv } from './env';
+import { envSchema, parseServerEnv } from './env.js';
 
 describe('Server Environment Configuration & Production Hardening (env.ts)', () => {
   it('parses valid development configuration with defaults', () => {
@@ -79,6 +79,6 @@ describe('Server Environment Configuration & Production Hardening (env.ts)', () 
       NODE_ENV: 'production',
       SESSION_SECRET: 'short',
     };
-    expect(() => parseServerEnv(raw as any)).toThrow('Invalid environment configuration');
+    expect(() => parseServerEnv(raw)).toThrow('Invalid environment configuration');
   });
 });
