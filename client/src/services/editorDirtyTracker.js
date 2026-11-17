@@ -5,23 +5,14 @@
  * across all active planner spread views.
  */
 
-export interface ActiveEditor {
-  id: string;
-  isDirty: () => boolean;
-  hasConflict: () => boolean;
-  flush: () => Promise<boolean>;
-}
-
-export type FlushFailureReason = 'conflict' | 'save_failed' | 'network_unavailable';
-
 class EditorDirtyTracker {
-  private editors = new Map<string, ActiveEditor>();
+  editors = new Map();
 
   /**
    * Registers an active planner editor / autosave instance.
    * Returns an unregister cleanup function.
    */
-  public register(editor: ActiveEditor): () => void {
+  register(editor) {
     this.editors.set(editor.id, editor);
     return () => {
       this.editors.delete(editor.id);
@@ -32,7 +23,7 @@ class EditorDirtyTracker {
    * Returns true if any registered editor currently has uncommitted in-memory
    * changes or an in-flight network save.
    */
-  public isAnyDirty(): boolean {
+  isAnyDirty() {
     for (const editor of this.editors.values()) {
       if (editor.isDirty()) {
         return true;
@@ -44,7 +35,7 @@ class EditorDirtyTracker {
   /**
    * Returns true if any registered editor has an unresolved concurrency conflict.
    */
-  public hasUnresolvedConflicts(): boolean {
+  hasUnresolvedConflicts() {
     for (const editor of this.editors.values()) {
       if (editor.hasConflict()) {
         return true;
@@ -57,7 +48,7 @@ class EditorDirtyTracker {
    * Flushes all registered editors, executing any pending debounced updates
    * and awaiting full persistence (server or verified offline cache).
    */
-  public async flushAll(): Promise<{ success: boolean; reason?: FlushFailureReason }> {
+  async flushAll() {
     if (this.hasUnresolvedConflicts()) {
       return { success: false, reason: 'conflict' };
     }
@@ -88,7 +79,7 @@ class EditorDirtyTracker {
   /**
    * Returns the count of registered editors (used for testing and diagnostics)
    */
-  public getRegisteredCount(): number {
+  getRegisteredCount() {
     return this.editors.size;
   }
 }
