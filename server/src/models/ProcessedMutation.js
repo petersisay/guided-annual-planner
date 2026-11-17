@@ -1,20 +1,6 @@
-import { Schema, model, Document, Types } from 'mongoose';
+import { Schema, model } from 'mongoose';
 
-export type ProcessedMutationStatus = 'in_progress' | 'completed' | 'failed';
-
-export interface IProcessedMutationDocument extends Document<Types.ObjectId> {
-  userId: Types.ObjectId;
-  mutationId: string;
-  endpoint: string;
-  method: string;
-  requestHash?: string;
-  status: ProcessedMutationStatus;
-  statusCode?: number;
-  responseBody?: unknown;
-  createdAt: Date;
-}
-
-const ProcessedMutationSchema = new Schema<IProcessedMutationDocument>(
+const ProcessedMutationSchema = new Schema(
   {
     userId: {
       type: Schema.Types.ObjectId,
@@ -63,10 +49,6 @@ const ProcessedMutationSchema = new Schema<IProcessedMutationDocument>(
   { versionKey: false }
 );
 
-// Compound unique index ensuring idempotency per user per mutation ID
 ProcessedMutationSchema.index({ userId: 1, mutationId: 1 }, { unique: true });
 
-export const ProcessedMutation = model<IProcessedMutationDocument>(
-  'ProcessedMutation',
-  ProcessedMutationSchema
-);
+export const ProcessedMutation = model('ProcessedMutation', ProcessedMutationSchema);
