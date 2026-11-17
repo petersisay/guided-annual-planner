@@ -1,7 +1,7 @@
 import { Router } from 'express';
-import { monthlyController } from '../controllers/monthly.controller';
-import { requireAuth } from '../middleware/auth.middleware';
-import { idempotencyMiddleware } from '../middleware/idempotency.middleware';
+import { monthlyController } from '../controllers/monthly.controller.js';
+import { requireAuth } from '../middleware/auth.middleware.js';
+import { idempotencyMiddleware } from '../middleware/idempotency.middleware.js';
 
 export const monthlyRouter = Router();
 
