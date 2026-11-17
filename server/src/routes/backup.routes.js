@@ -1,6 +1,6 @@
 import { Router } from 'express';
-import { backupController } from '../controllers/backup.controller';
-import { requireAuth } from '../middleware/auth.middleware';
+import { backupController } from '../controllers/backup.controller.js';
+import { requireAuth } from '../middleware/auth.middleware.js';
 
 export const backupRouter = Router();
 
