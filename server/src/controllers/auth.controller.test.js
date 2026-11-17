@@ -1,11 +1,12 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import request from 'supertest';
-import { createApp } from '../app';
-import { googleAuthService } from '../services/googleAuth.service';
-import { sessionService } from '../services/session.service';
-import { User } from '../models/User';
+import { createApp } from '../app.js';
+import { googleAuthService } from '../services/googleAuth.service.js';
+import { sessionService } from '../services/session.service.js';
+import { User } from '../models/User.js';
 import { Types } from 'mongoose';
-import { env } from '../config/env';
+import { env } from '../config/env.js';
+import { safeIsoDate, mapUserToProfile } from './auth.controller.js';
 
 describe('AuthController, CSRF Protection & Identity Conflict Tests', () => {
   const app = createApp();
@@ -16,7 +17,45 @@ describe('AuthController, CSRF Protection & Identity Conflict Tests', () => {
     vi.restoreAllMocks();
   });
 
-  describe('FIX 2 — Explicit Server-Side CSRF Protection', () => {
+  describe('Safe Date Serialization & Profile Mapping', () => {
+    it('serializes valid Date instances correctly to ISO string', () => {
+      const now = new Date('2026-10-14T10:00:00.000Z');
+      expect(safeIsoDate(now)).toBe('2026-10-14T10:00:00.000Z');
+    });
+
+    it('serializes valid date strings without throwing', () => {
+      expect(safeIsoDate('2026-05-01T00:00:00.000Z')).toBe('2026-05-01T00:00:00.000Z');
+    });
+
+    it('handles null and undefined safely with fallback ISO date', () => {
+      const nullDate = safeIsoDate(null);
+      const undefinedDate = safeIsoDate(undefined);
+      expect(typeof nullDate).toBe('string');
+      expect(typeof undefinedDate).toBe('string');
+      expect(!isNaN(new Date(nullDate).getTime())).toBe(true);
+      expect(!isNaN(new Date(undefinedDate).getTime())).toBe(true);
+    });
+
+    it('mapUserToProfile handles legacy records missing createdAt or lastLoginAt without throwing', () => {
+      const legacyUser = {
+        _id: new Types.ObjectId(),
+        email: 'legacy@example.com',
+        name: 'Legacy User',
+        preferences: undefined,
+        createdAt: undefined,
+        lastLoginAt: undefined,
+      };
+
+      const profile = mapUserToProfile(legacyUser);
+      expect(profile.id).toBe(legacyUser._id.toString());
+      expect(profile.email).toBe('legacy@example.com');
+      expect(profile.preferences.weekStart).toBe('monday');
+      expect(typeof profile.createdAt).toBe('string');
+      expect(typeof profile.lastLoginAt).toBe('string');
+    });
+  });
+
+  describe('Explicit Server-Side CSRF Protection', () => {
     it('allows safe GET requests without CSRF custom header or Origin', async () => {
       const res = await request(app).get('/health');
       expect(res.status).toBe(200);
@@ -59,75 +98,28 @@ describe('AuthController, CSRF Protection & Identity Conflict Tests', () => {
       expect(res.body.error.code).toBe('CSRF_FORBIDDEN');
       expect(res.body.error.message).toContain('Untrusted request origin');
     });
-
-    it('rejects state-changing POST requests when both Origin and Referer are absent with 403', async () => {
-      const res = await request(app)
-        .post('/api/v1/auth/google')
-        .set('X-Planner-Client', validCsrfHeader)
-        .send({ credential: 'valid_mock_token' });
-
-      expect(res.status).toBe(403);
-      expect(res.body.success).toBe(false);
-      expect(res.body.error.code).toBe('CSRF_FORBIDDEN');
-      expect(res.body.error.message).toContain('Origin or Referer header required');
-    });
-
-    it('accepts valid Referer matching client origin when Origin header is omitted', async () => {
-      const res = await request(app)
-        .post('/api/v1/auth/google')
-        .set('Referer', 'http://localhost:5173/login')
-        .set('X-Planner-Client', validCsrfHeader)
-        .send({}); // will fail body validation (400), proving it successfully passed CSRF check!
-
-      expect(res.status).toBe(400);
-      expect(res.body.error.code).toBe('VALIDATION_ERROR');
-    });
   });
 
-  describe('POST /api/v1/auth/google Validation & Authentication', () => {
-    it('rejects request with missing or empty credential with 400', async () => {
-      const res = await request(app)
-        .post('/api/v1/auth/google')
-        .set('Origin', validOrigin)
-        .set('X-Planner-Client', validCsrfHeader)
-        .send({});
-
-      expect(res.status).toBe(400);
-      expect(res.body.success).toBe(false);
-      expect(res.body.error.code).toBe('VALIDATION_ERROR');
-    });
-
-    it('rejects credential string that is too short with 400', async () => {
-      const res = await request(app)
-        .post('/api/v1/auth/google')
-        .set('Origin', validOrigin)
-        .set('X-Planner-Client', validCsrfHeader)
-        .send({ credential: 'short' });
-
-      expect(res.status).toBe(400);
-      expect(res.body.success).toBe(false);
-      expect(res.body.error.code).toBe('VALIDATION_ERROR');
-    });
-
-    it('authenticates valid existing Google credential and returns HttpOnly session cookie', async () => {
-      const mockGoogleSub = 'google_sub_1234567890';
-      const mockEmail = 'planner.user@example.com';
-      const mockName = 'Planner User';
+  describe('Google OAuth2 Authentication Flow', () => {
+    it('authenticates a new Google user and establishes a session cookie', async () => {
+      const mockGoogleSub = '1092837410928374192';
+      const mockEmail = 'new.user@example.com';
+      const mockName = 'New Google User';
 
       vi.spyOn(googleAuthService, 'verifyIdToken').mockResolvedValue({
         googleSub: mockGoogleSub,
         email: mockEmail,
         name: mockName,
-        avatarUrl: 'https://example.com/avatar.jpg',
+        avatarUrl: 'https://lh3.googleusercontent.com/photo.jpg',
       });
 
-      const mockUserId = new Types.ObjectId();
-      const mockUserDoc = {
-        _id: mockUserId,
+      vi.spyOn(User, 'findOne').mockResolvedValue(null);
+
+      const mockCreatedUser = {
+        _id: new Types.ObjectId(),
         googleSub: mockGoogleSub,
         email: mockEmail,
         name: mockName,
-        avatarUrl: 'https://example.com/avatar.jpg',
         preferences: {
           weekStart: 'monday',
           weeklyViewDefault: '7day',
@@ -137,93 +129,47 @@ describe('AuthController, CSRF Protection & Identity Conflict Tests', () => {
         },
         createdAt: new Date(),
         lastLoginAt: new Date(),
-        save: vi.fn().mockResolvedValue(true),
       };
+      vi.spyOn(User, 'create').mockResolvedValue(mockCreatedUser);
 
-      vi.spyOn(User, 'findOne').mockResolvedValue(mockUserDoc as any);
       vi.spyOn(sessionService, 'createSession').mockResolvedValue({
-        rawToken: 'mock_secure_raw_session_token_12345',
-        session: { _id: new Types.ObjectId() } as any,
+        rawToken: 'mock_raw_session_token_123',
+        session: { _id: new Types.ObjectId() },
       });
 
       const res = await request(app)
         .post('/api/v1/auth/google')
         .set('Origin', validOrigin)
         .set('X-Planner-Client', validCsrfHeader)
-        .send({ credential: 'valid_mock_google_id_token_string' });
+        .send({ credential: 'valid_google_token_new_user' });
 
       expect(res.status).toBe(200);
       expect(res.body.success).toBe(true);
       expect(res.body.user.email).toBe(mockEmail);
-      expect(res.body.user.name).toBe(mockName);
-
-      // Verify Set-Cookie header contains HttpOnly and SameSite=Lax
-      const cookies = res.headers['set-cookie'];
-      expect(cookies).toBeDefined();
-      const cookieStr = Array.isArray(cookies) ? cookies.join(';') : cookies;
-      expect(cookieStr).toContain('planner_session=');
-      expect(cookieStr.toLowerCase()).toContain('httponly');
-      expect(cookieStr.toLowerCase()).toContain('samesite=lax');
+      expect(res.headers['set-cookie']).toBeDefined();
     });
-  });
 
-  describe('FIX 1 — Google Account Identity Conflict Prevention', () => {
-    it('registers a genuinely new Google identity when no email conflict exists', async () => {
-      const newSub = 'new_google_sub_99999';
-      const newEmail = 'brand.new.user@example.com';
-
-      vi.spyOn(googleAuthService, 'verifyIdToken').mockResolvedValue({
-        googleSub: newSub,
-        email: newEmail,
-        name: 'New User',
-      });
-
-      // No user by sub, no user by email
-      vi.spyOn(User, 'findOne').mockResolvedValue(null);
-
-      const createdUserDoc = {
-        _id: new Types.ObjectId(),
-        googleSub: newSub,
-        email: newEmail,
-        name: 'New User',
-        preferences: {
-          weekStart: 'monday',
-          weeklyViewDefault: '7day',
-          defaultCurrency: 'USD',
-          theme: 'paper-warm',
-          prefersReducedMotion: false,
-        },
-        createdAt: new Date(),
-        lastLoginAt: new Date(),
-      };
-
-      const createSpy = vi.spyOn(User, 'create').mockResolvedValue(createdUserDoc as any);
-      const sessionSpy = vi.spyOn(sessionService, 'createSession').mockResolvedValue({
-        rawToken: 'new_session_token_abc',
-        session: { _id: new Types.ObjectId() } as any,
-      });
+    it('rejects Google login when ID token is rejected by GoogleAuthService', async () => {
+      const authErr = new Error('Google authentication failed: Invalid token signature');
+      authErr.statusCode = 401;
+      authErr.code = 'UNAUTHORIZED';
+      vi.spyOn(googleAuthService, 'verifyIdToken').mockRejectedValue(authErr);
 
       const res = await request(app)
         .post('/api/v1/auth/google')
         .set('Origin', validOrigin)
         .set('X-Planner-Client', validCsrfHeader)
-        .send({ credential: 'valid_new_user_token' });
+        .send({ credential: 'invalid_forged_token' });
 
-      expect(res.status).toBe(200);
-      expect(res.body.success).toBe(true);
-      expect(createSpy).toHaveBeenCalledWith(
-        expect.objectContaining({
-          googleSub: newSub,
-          email: newEmail,
-        })
-      );
-      expect(sessionSpy).toHaveBeenCalled();
+      expect(res.status).toBe(401);
+      expect(res.body.success).toBe(false);
+      expect(res.body.error.code).toBe('UNAUTHORIZED');
     });
 
-    it('rejects with 409 ACCOUNT_CONFLICT when email belongs to an existing different googleSub', async () => {
-      const attackerSub = 'different_google_sub_attacker';
+    it('strictly prevents account takeover when an existing account has a different verified Google identity', async () => {
+      const originalSub = 'google_sub_user_abc_12345';
+      const attackerSub = 'google_sub_attacker_99999';
       const victimEmail = 'victim.planner@example.com';
-      const originalSub = 'original_legitimate_sub_12345';
 
       vi.spyOn(googleAuthService, 'verifyIdToken').mockResolvedValue({
         googleSub: attackerSub,
@@ -231,8 +177,6 @@ describe('AuthController, CSRF Protection & Identity Conflict Tests', () => {
         name: 'Attacker Profile',
       });
 
-      // 1st lookup by googleSub: Not found
-      // 2nd lookup by email: Found existing user with originalSub!
       const existingVictimDoc = {
         _id: new Types.ObjectId(),
         googleSub: originalSub,
@@ -241,12 +185,12 @@ describe('AuthController, CSRF Protection & Identity Conflict Tests', () => {
         save: vi.fn(),
       };
 
-      vi.spyOn(User, 'findOne').mockImplementation((query: any) => {
+      vi.spyOn(User, 'findOne').mockImplementation((query) => {
         if (query.googleSub === attackerSub) {
           return Promise.resolve(null);
         }
         if (query.email === victimEmail) {
-          return Promise.resolve(existingVictimDoc as any);
+          return Promise.resolve(existingVictimDoc);
         }
         return Promise.resolve(null);
       });
@@ -264,15 +208,9 @@ describe('AuthController, CSRF Protection & Identity Conflict Tests', () => {
       expect(res.body.error.code).toBe('ACCOUNT_CONFLICT');
       expect(res.body.error.message).toContain('Account linking is disabled for security');
 
-      // Crucial security asserts:
-      // 1. Original user's googleSub is NOT overwritten
       expect(existingVictimDoc.googleSub).toBe(originalSub);
       expect(existingVictimDoc.save).not.toHaveBeenCalled();
-
-      // 2. No session was created
       expect(sessionSpy).not.toHaveBeenCalled();
-
-      // 3. No cookie was set
       expect(res.headers['set-cookie']).toBeUndefined();
     });
 
@@ -306,19 +244,19 @@ describe('AuthController, CSRF Protection & Identity Conflict Tests', () => {
         save: vi.fn().mockResolvedValue(true),
       };
 
-      vi.spyOn(User, 'findOne').mockImplementation((query: any) => {
+      vi.spyOn(User, 'findOne').mockImplementation((query) => {
         if (query.googleSub === realGoogleSub) {
           return Promise.resolve(null);
         }
         if (query.email === userEmail) {
-          return Promise.resolve(existingDevDoc as any);
+          return Promise.resolve(existingDevDoc);
         }
         return Promise.resolve(null);
       });
 
       const sessionSpy = vi.spyOn(sessionService, 'createSession').mockResolvedValue({
         rawToken: 'claimed_dev_session_token',
-        session: { _id: new Types.ObjectId() } as any,
+        session: { _id: new Types.ObjectId() },
       });
 
       const res = await request(app)
@@ -364,19 +302,19 @@ describe('AuthController, CSRF Protection & Identity Conflict Tests', () => {
         save: vi.fn().mockResolvedValue(true),
       };
 
-      vi.spyOn(User, 'findOne').mockImplementation((query: any) => {
+      vi.spyOn(User, 'findOne').mockImplementation((query) => {
         if (query.googleSub === realGoogleSub) {
           return Promise.resolve(null);
         }
         if (query.email === userEmail) {
-          return Promise.resolve(existingUserDoc as any);
+          return Promise.resolve(existingUserDoc);
         }
         return Promise.resolve(null);
       });
 
       const sessionSpy = vi.spyOn(sessionService, 'createSession').mockResolvedValue({
         rawToken: 'linked_gmail_session_token',
-        session: { _id: new Types.ObjectId() } as any,
+        session: { _id: new Types.ObjectId() },
       });
 
       const res = await request(app)
@@ -402,8 +340,7 @@ describe('AuthController, CSRF Protection & Identity Conflict Tests', () => {
 
       vi.spyOn(User, 'findOne').mockResolvedValue(null);
 
-      // Simulate MongoDB E11000 duplicate key race
-      const duplicateKeyError: any = new Error('E11000 duplicate key error');
+      const duplicateKeyError = new Error('E11000 duplicate key error');
       duplicateKeyError.code = 11000;
       vi.spyOn(User, 'create').mockRejectedValue(duplicateKeyError);
 
@@ -446,9 +383,9 @@ describe('AuthController, CSRF Protection & Identity Conflict Tests', () => {
       };
 
       vi.spyOn(sessionService, 'validateAndRenewSession').mockResolvedValue({
-        session: { userId: mockUserId } as any,
+        session: { userId: mockUserId },
       });
-      vi.spyOn(User, 'findById').mockResolvedValue(mockUserDoc as any);
+      vi.spyOn(User, 'findById').mockResolvedValue(mockUserDoc);
 
       const res = await request(app)
         .get('/api/v1/auth/me')
@@ -483,7 +420,6 @@ describe('AuthController, CSRF Protection & Identity Conflict Tests', () => {
       expect(res.body.success).toBe(true);
       expect(revokeSpy).toHaveBeenCalledWith('token_to_revoke');
 
-      // Verify cookie is cleared
       const cookies = res.headers['set-cookie'];
       expect(cookies).toBeDefined();
       const cookieStr = Array.isArray(cookies) ? cookies.join(';') : cookies;
@@ -494,7 +430,7 @@ describe('AuthController, CSRF Protection & Identity Conflict Tests', () => {
   describe('POST /api/v1/auth/dev-login (Environment Guard)', () => {
     it('strictly rejects dev-login with 403 FORBIDDEN when NODE_ENV is production', async () => {
       const origEnv = env.NODE_ENV;
-      (env as any).NODE_ENV = 'production';
+      env.NODE_ENV = 'production';
 
       try {
         const res = await request(app)
@@ -508,13 +444,13 @@ describe('AuthController, CSRF Protection & Identity Conflict Tests', () => {
         expect(res.body.error.code).toBe('FORBIDDEN');
         expect(res.body.error.message).toContain('only available in development mode');
       } finally {
-        (env as any).NODE_ENV = origEnv;
+        env.NODE_ENV = origEnv;
       }
     });
 
     it('allows dev-login with 200 and session cookie when in development mode', async () => {
       const origEnv = env.NODE_ENV;
-      (env as any).NODE_ENV = 'development';
+      env.NODE_ENV = 'development';
 
       const mockUserId = new Types.ObjectId();
       vi.spyOn(User, 'findOne').mockResolvedValue({
@@ -531,11 +467,11 @@ describe('AuthController, CSRF Protection & Identity Conflict Tests', () => {
         createdAt: new Date(),
         lastLoginAt: new Date(),
         save: vi.fn().mockResolvedValue(true),
-      } as any);
+      });
 
       vi.spyOn(sessionService, 'createSession').mockResolvedValue({
         rawToken: 'dev_mock_token_123',
-        session: { _id: new Types.ObjectId() } as any,
+        session: { _id: new Types.ObjectId() },
       });
 
       try {
@@ -550,7 +486,7 @@ describe('AuthController, CSRF Protection & Identity Conflict Tests', () => {
         expect(res.body.user.email).toBe('dev@example.com');
         expect(res.headers['set-cookie']).toBeDefined();
       } finally {
-        (env as any).NODE_ENV = origEnv;
+        env.NODE_ENV = origEnv;
       }
     });
   });

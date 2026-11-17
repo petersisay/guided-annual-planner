@@ -84,10 +84,14 @@ export class AuthController {
             sub.startsWith('test_') ||
             sub === 'placeholder';
 
+          const isAuthoritativeGoogleDomain =
+            typeof verified.email === 'string' &&
+            (verified.email.endsWith('@gmail.com') || verified.email.endsWith('@googlemail.com'));
+
           // Legitimate account claim / Google identity link:
           // The email is cryptographically verified by Google. If the existing record
-          // has a dev/placeholder sub or an email verified by Google, update to the verified Google sub.
-          if (isDevOrMockSub || verified.email) {
+          // has a dev/placeholder sub or an authoritative Google domain, update to the verified Google sub.
+          if (isDevOrMockSub || isAuthoritativeGoogleDomain) {
             existingEmailUser.googleSub = verified.googleSub;
             if (verified.avatarUrl) existingEmailUser.avatarUrl = verified.avatarUrl;
             if (verified.name) existingEmailUser.name = verified.name;
