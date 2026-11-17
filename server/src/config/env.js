@@ -39,9 +39,7 @@ export const envSchema = z
     }
   });
 
-export type ServerEnv = z.infer<typeof envSchema>;
-
-export function parseServerEnv(envInput: NodeJS.ProcessEnv): ServerEnv {
+export function parseServerEnv(envInput) {
   const parsed = envSchema.safeParse(envInput);
   if (!parsed.success) {
     console.error('Invalid server environment variables:', parsed.error.format());
