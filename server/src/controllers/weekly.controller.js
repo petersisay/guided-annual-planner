@@ -1,17 +1,14 @@
-import { Response, NextFunction } from 'express';
 import crypto from 'crypto';
 import {
   updateWeeklyPlanSchema,
-  WeeklyPlan as IWeeklyPlanDto,
   getWeekDates,
-  DayPlan,
   getISOWeeksInYear,
   isValidISOWeek,
 } from '@planner/shared';
-import { WeeklyPlan, IWeeklyPlanDocument } from '../models/WeeklyPlan';
-import { AuthenticatedRequest } from '../middleware/auth.middleware';
+import { WeeklyPlan } from '../models/WeeklyPlan.js';
+import { safeIsoDate } from './auth.controller.js';
 
-function mapWeeklyPlanToDto(doc: IWeeklyPlanDocument): IWeeklyPlanDto {
+function mapWeeklyPlanToDto(doc) {
   return {
     id: doc._id.toString(),
     userId: doc.userId.toString(),
@@ -29,12 +26,12 @@ function mapWeeklyPlanToDto(doc: IWeeklyPlanDocument): IWeeklyPlanDto {
     reminder: doc.reminder || '',
     nextWeek: doc.nextWeek || [],
     notes: doc.notes || '',
-    createdAt: doc.createdAt.toISOString(),
-    updatedAt: doc.updatedAt.toISOString(),
+    createdAt: safeIsoDate(doc.createdAt),
+    updatedAt: safeIsoDate(doc.updatedAt),
   };
 }
 
-function createDefaultDays(year: number, week: number): DayPlan[] {
+function createDefaultDays(year, week) {
   const dates = getWeekDates(year, week);
   return dates.map((date) => ({
     date,
@@ -47,11 +44,7 @@ function createDefaultDays(year: number, week: number): DayPlan[] {
 }
 
 export class WeeklyController {
-  async getWeeklyPlan(
-    req: AuthenticatedRequest,
-    res: Response,
-    next: NextFunction
-  ): Promise<void> {
+  async getWeeklyPlan(req, res, next) {
     try {
       const year = parseInt(String(req.params.year), 10);
       const week = parseInt(String(req.params.week), 10);
@@ -76,7 +69,7 @@ export class WeeklyController {
         return;
       }
 
-      const userId = req.user!._id;
+      const userId = req.user._id;
 
       let plan = await WeeklyPlan.findOne({ userId, year, isoWeek: week });
       if (!plan) {
@@ -91,7 +84,7 @@ export class WeeklyController {
             nextWeek: [],
             notes: '',
           });
-        } catch (createErr: any) {
+        } catch (createErr) {
           if (createErr?.code === 11000) {
             plan = await WeeklyPlan.findOne({ userId, year, isoWeek: week });
             if (!plan) throw createErr;
@@ -110,11 +103,7 @@ export class WeeklyController {
     }
   }
 
-  async updateWeeklyPlan(
-    req: AuthenticatedRequest,
-    res: Response,
-    next: NextFunction
-  ): Promise<void> {
+  async updateWeeklyPlan(req, res, next) {
     try {
       const year = parseInt(String(req.params.year), 10);
       const week = parseInt(String(req.params.week), 10);
@@ -140,16 +129,16 @@ export class WeeklyController {
       }
 
       const updates = updateWeeklyPlanSchema.parse(req.body);
-      const userId = req.user!._id;
+      const userId = req.user._id;
 
-      const setPayload: Record<string, unknown> = {};
+      const setPayload = {};
       if (updates.days !== undefined) setPayload.days = updates.days;
       if (updates.priorities !== undefined) setPayload.priorities = updates.priorities;
       if (updates.reminder !== undefined) setPayload.reminder = updates.reminder;
       if (updates.nextWeek !== undefined) setPayload.nextWeek = updates.nextWeek;
       if (updates.notes !== undefined) setPayload.notes = updates.notes;
 
-      let plan: IWeeklyPlanDocument | null = null;
+      let plan = null;
       if (updates.expectedUpdatedAt) {
         const expectedDate = new Date(updates.expectedUpdatedAt);
         plan = await WeeklyPlan.findOneAndUpdate(
@@ -187,10 +176,13 @@ export class WeeklyController {
         try {
           plan = await WeeklyPlan.findOneAndUpdate(
             { userId, year, isoWeek: week },
-            { $set: setPayload },
+            {
+              $set: setPayload,
+              $setOnInsert: { userId, year, isoWeek: week },
+            },
             { new: true, upsert: true }
           );
-        } catch (upsertErr: any) {
+        } catch (upsertErr) {
           if (upsertErr?.code === 11000) {
             plan = await WeeklyPlan.findOneAndUpdate(
               { userId, year, isoWeek: week },
