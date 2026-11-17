@@ -1,31 +1,21 @@
 import crypto from 'crypto';
-import { Types } from 'mongoose';
-import { Session, ISessionDocument } from '../models/Session';
-import { env } from '../config/env';
+import { Session } from '../models/Session.js';
+import { env } from '../config/env.js';
 
 export const SLIDING_WINDOW_MS = 30 * 24 * 60 * 60 * 1000; // 30 days
 export const RENEWAL_THRESHOLD_MS = 15 * 24 * 60 * 60 * 1000; // 15 days
 export const ABSOLUTE_LIFETIME_MS = 60 * 24 * 60 * 60 * 1000; // 60 days hard ceiling
 export const GRACE_PERIOD_MS = 30 * 1000; // 30 seconds for concurrent requests during rotation
 
-export interface SessionValidationResult {
-  session: ISessionDocument;
-  newRawToken?: string;
-}
-
 export class SessionService {
-  hashToken(rawToken: string): string {
+  hashToken(rawToken) {
     return crypto
       .createHmac('sha256', env.SESSION_SECRET)
       .update(rawToken)
       .digest('hex');
   }
 
-  async createSession(
-    userId: Types.ObjectId,
-    userAgent?: string,
-    ipAddress?: string
-  ): Promise<{ rawToken: string; session: ISessionDocument }> {
+  async createSession(userId, userAgent, ipAddress) {
     const rawToken = crypto.randomBytes(32).toString('hex');
     const sessionTokenHash = this.hashToken(rawToken);
 
@@ -46,7 +36,7 @@ export class SessionService {
     return { rawToken, session };
   }
 
-  async validateAndRenewSession(rawToken: string): Promise<SessionValidationResult | null> {
+  async validateAndRenewSession(rawToken) {
     if (!rawToken || typeof rawToken !== 'string') {
       return null;
     }
@@ -107,7 +97,7 @@ export class SessionService {
     return { session };
   }
 
-  async revokeSession(rawToken: string): Promise<boolean> {
+  async revokeSession(rawToken) {
     if (!rawToken) return false;
     const tokenHash = this.hashToken(rawToken);
     const result = await Session.deleteOne({
@@ -116,7 +106,7 @@ export class SessionService {
     return result.deletedCount > 0;
   }
 
-  async revokeAllUserSessions(userId: Types.ObjectId): Promise<number> {
+  async revokeAllUserSessions(userId) {
     const result = await Session.deleteMany({ userId });
     return result.deletedCount;
   }
