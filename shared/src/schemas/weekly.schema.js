@@ -25,5 +25,3 @@ export const updateWeeklyPlanSchema = z.object({
   notes: z.string().max(5000).optional(),
   expectedUpdatedAt: z.string().optional(),
 });
-
-export type UpdateWeeklyPlanInput = z.infer<typeof updateWeeklyPlanSchema>;
