@@ -1,21 +1,6 @@
-import { Schema, model, Document, Types } from 'mongoose';
-import { ChecklistItem, BookEntry } from '@planner/shared';
+import { Schema, model } from 'mongoose';
 
-export interface IMonthlyPlanDocument extends Document<Types.ObjectId> {
-  userId: Types.ObjectId;
-  year: number;
-  month: number;
-  mustDos: ChecklistItem[];
-  newHabits: string[];
-  toBuy: ChecklistItem[];
-  books: BookEntry[];
-  selfChangeReflection: string;
-  calendarNotes: Map<string, string>;
-  createdAt: Date;
-  updatedAt: Date;
-}
-
-const ChecklistItemSchema = new Schema<ChecklistItem>(
+const ChecklistItemSchema = new Schema(
   {
     id: { type: String, required: true },
     text: { type: String, default: '', maxlength: 300 },
@@ -24,7 +9,7 @@ const ChecklistItemSchema = new Schema<ChecklistItem>(
   { _id: false }
 );
 
-const BookEntrySchema = new Schema<BookEntry>(
+const BookEntrySchema = new Schema(
   {
     id: { type: String, required: true },
     title: { type: String, default: '', maxlength: 200 },
@@ -35,7 +20,7 @@ const BookEntrySchema = new Schema<BookEntry>(
   { _id: false }
 );
 
-const MonthlyPlanSchema = new Schema<IMonthlyPlanDocument>(
+const MonthlyPlanSchema = new Schema(
   {
     userId: {
       type: Schema.Types.ObjectId,
@@ -89,4 +74,4 @@ const MonthlyPlanSchema = new Schema<IMonthlyPlanDocument>(
 
 MonthlyPlanSchema.index({ userId: 1, year: 1, month: 1 }, { unique: true });
 
-export const MonthlyPlan = model<IMonthlyPlanDocument>('MonthlyPlan', MonthlyPlanSchema);
+export const MonthlyPlan = model('MonthlyPlan', MonthlyPlanSchema);
