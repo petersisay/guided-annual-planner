@@ -1,6 +1,6 @@
-import { createApp } from './app';
-import { env } from './config/env';
-import { connectDB } from './config/db';
+import { createApp } from './app.js';
+import { env } from './config/env.js';
+import { connectDB } from './config/db.js';
 
 async function bootstrap() {
   try {
@@ -14,7 +14,7 @@ async function bootstrap() {
       console.log(`[Planner API] Allowed Client Origin: ${env.CLIENT_ORIGIN}`);
     });
 
-    const shutdown = async (signal: string) => {
+    const shutdown = async (signal) => {
       console.log(`\n[Planner API] Received ${signal}. Gracefully shutting down...`);
       server.close(() => {
         console.log('[Planner API] HTTP server closed.');
