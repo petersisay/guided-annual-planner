@@ -1,9 +1,8 @@
-import { Response, NextFunction } from 'express';
-import { annualPlanUpdateSchema, AnnualPlan as IAnnualPlanDto } from '@planner/shared';
-import { AnnualPlan, IAnnualPlanDocument } from '../models/AnnualPlan';
-import { AuthenticatedRequest } from '../middleware/auth.middleware';
+import { annualPlanUpdateSchema } from '@planner/shared';
+import { AnnualPlan } from '../models/AnnualPlan.js';
+import { safeIsoDate } from './auth.controller.js';
 
-function mapAnnualPlanToDto(doc: IAnnualPlanDocument): IAnnualPlanDto {
+function mapAnnualPlanToDto(doc) {
   return {
     id: doc._id.toString(),
     userId: doc.userId.toString(),
@@ -11,17 +10,13 @@ function mapAnnualPlanToDto(doc: IAnnualPlanDocument): IAnnualPlanDto {
     themeOrWord: doc.themeOrWord,
     annualIntentions: doc.annualIntentions || [],
     annualReview: doc.annualReview || {},
-    createdAt: doc.createdAt.toISOString(),
-    updatedAt: doc.updatedAt.toISOString(),
+    createdAt: safeIsoDate(doc.createdAt),
+    updatedAt: safeIsoDate(doc.updatedAt),
   };
 }
 
 export class AnnualController {
-  async getAnnualPlan(
-    req: AuthenticatedRequest,
-    res: Response,
-    next: NextFunction
-  ): Promise<void> {
+  async getAnnualPlan(req, res, next) {
     try {
       const year = parseInt(String(req.params.year), 10);
       if (isNaN(year) || year < 2000 || year > 2100) {
@@ -32,7 +27,7 @@ export class AnnualController {
         return;
       }
 
-      const userId = req.user!._id;
+      const userId = req.user._id;
 
       // Find or create initial annual plan container
       let plan = await AnnualPlan.findOne({ userId, year });
@@ -45,7 +40,7 @@ export class AnnualController {
             annualIntentions: [],
             annualReview: {},
           });
-        } catch (createErr: any) {
+        } catch (createErr) {
           if (createErr?.code === 11000) {
             plan = await AnnualPlan.findOne({ userId, year });
             if (!plan) throw createErr;
@@ -64,11 +59,7 @@ export class AnnualController {
     }
   }
 
-  async updateAnnualPlan(
-    req: AuthenticatedRequest,
-    res: Response,
-    next: NextFunction
-  ): Promise<void> {
+  async updateAnnualPlan(req, res, next) {
     try {
       const year = parseInt(String(req.params.year), 10);
       if (isNaN(year) || year < 2000 || year > 2100) {
@@ -80,7 +71,7 @@ export class AnnualController {
       }
 
       const updates = annualPlanUpdateSchema.parse(req.body);
-      const userId = req.user!._id;
+      const userId = req.user._id;
 
       const setPayload = {
         ...(updates.themeOrWord !== undefined && { themeOrWord: updates.themeOrWord }),
@@ -88,7 +79,7 @@ export class AnnualController {
         ...(updates.annualReview !== undefined && { annualReview: updates.annualReview }),
       };
 
-      let plan: IAnnualPlanDocument | null = null;
+      let plan = null;
       if (updates.expectedUpdatedAt) {
         const expectedDate = new Date(updates.expectedUpdatedAt);
         plan = await AnnualPlan.findOneAndUpdate(
@@ -132,7 +123,7 @@ export class AnnualController {
             },
             { new: true, upsert: true }
           );
-        } catch (upsertErr: any) {
+        } catch (upsertErr) {
           if (upsertErr?.code === 11000) {
             plan = await AnnualPlan.findOneAndUpdate(
               { userId, year },
