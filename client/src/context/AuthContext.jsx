@@ -1,32 +1,18 @@
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { UserProfile, AuthResponse, ApiErrorResponse } from '@planner/shared';
-import { handleUserLogout } from '../utils/localStorageBackup';
-import { syncManager } from '../services/syncManager';
+import React, { createContext, useContext, useState, useEffect } from 'react';
+import { handleUserLogout } from '../utils/localStorageBackup.js';
+import { syncManager } from '../services/syncManager.js';
 
-interface AuthContextType {
-  user: UserProfile | null;
-  loading: boolean;
-  error: string | null;
-  pendingSyncCount: number;
-  loginWithGoogle: (credential: string) => Promise<boolean>;
-  loginDev: () => Promise<boolean>;
-  logout: () => Promise<void>;
-  refreshUser: () => Promise<void>;
-  updateUser: (updatedFields: Partial<UserProfile>) => void;
-  clearError: () => void;
-}
+const AuthContext = createContext(undefined);
 
-const AuthContext = createContext<AuthContextType | undefined>(undefined);
-
-export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const [user, setUser] = useState<UserProfile | null>(null);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
-  const [pendingSyncCount, setPendingSyncCount] = useState<number>(0);
+export const AuthProvider = ({ children }) => {
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [pendingSyncCount, setPendingSyncCount] = useState(0);
 
   const clearError = () => setError(null);
 
-  const updateUser = (updatedFields: Partial<UserProfile>) => {
+  const updateUser = (updatedFields) => {
     setUser((prev) => (prev ? { ...prev, ...updatedFields } : null));
   };
 
@@ -40,7 +26,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       });
 
       if (res.ok) {
-        const data: AuthResponse = await res.json();
+        const data = await res.json();
         setUser(data.user);
       } else {
         setUser(null);
@@ -65,7 +51,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     return () => unsub();
   }, [user]);
 
-  const loginWithGoogle = async (credential: string): Promise<boolean> => {
+  const loginWithGoogle = async (credential) => {
     setLoading(true);
     setError(null);
     try {
@@ -79,20 +65,18 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         body: JSON.stringify({ credential }),
       });
 
-      const data: AuthResponse | ApiErrorResponse = await res.json();
+      const data = await res.json();
 
       if (!res.ok || !data.success) {
-        const errMsg =
-          'error' in data ? data.error.message : 'Google authentication failed';
+        const errMsg = data.error?.message || 'Google authentication failed';
         setError(errMsg);
         return false;
       }
 
-      setUser((data as AuthResponse).user);
+      setUser(data.user);
       return true;
-    } catch (err: unknown) {
-      const errMsg =
-        err instanceof Error ? err.message : 'Network error during Google sign-in';
+    } catch (err) {
+      const errMsg = err instanceof Error ? err.message : 'Network error during Google sign-in';
       setError(errMsg);
       return false;
     } finally {
@@ -100,7 +84,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     }
   };
 
-  const loginDev = async (): Promise<boolean> => {
+  const loginDev = async () => {
     setLoading(true);
     setError(null);
     try {
@@ -121,7 +105,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
       setUser(data.user);
       return true;
-    } catch (err: unknown) {
+    } catch (err) {
       setError(err instanceof Error ? err.message : 'Dev login error');
       return false;
     } finally {
@@ -171,7 +155,7 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   );
 };
 
-export const useAuth = (): AuthContextType => {
+export const useAuth = () => {
   const context = useContext(AuthContext);
   if (!context) {
     throw new Error('useAuth must be used within an AuthProvider');
