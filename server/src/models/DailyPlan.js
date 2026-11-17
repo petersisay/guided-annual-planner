@@ -1,43 +1,7 @@
-import { Schema, model, Document, Types } from 'mongoose';
+import crypto from 'crypto';
+import { Schema, model } from 'mongoose';
 
-export interface IDayTaskSubdoc {
-  id: string;
-  text: string;
-  done: boolean;
-}
-
-export interface IScheduleBlockSubdoc {
-  id: string;
-  timeSlot: string;
-  activity: string;
-  done: boolean;
-}
-
-export interface IDailyJournalSubdoc {
-  gratitude: [string, string, string];
-  wins: string;
-  challengesAndLessons: string;
-  freeWriting: string;
-}
-
-export interface IDailyPlanDocument extends Document {
-  _id: Types.ObjectId;
-  userId: Types.ObjectId;
-  date: string; // YYYY-MM-DD
-  year: number;
-  month: number;
-  isoWeek: number;
-  intention: string;
-  primaryPriorities: IDayTaskSubdoc[];
-  additionalTasks: IDayTaskSubdoc[];
-  schedule: IScheduleBlockSubdoc[];
-  reflection: string;
-  journal: IDailyJournalSubdoc;
-  createdAt: Date;
-  updatedAt: Date;
-}
-
-const DayTaskSubdocSchema = new Schema<IDayTaskSubdoc>(
+const DayTaskSubdocSchema = new Schema(
   {
     id: { type: String, required: true },
     text: { type: String, default: '', maxlength: 300 },
@@ -46,7 +10,7 @@ const DayTaskSubdocSchema = new Schema<IDayTaskSubdoc>(
   { _id: false }
 );
 
-const ScheduleBlockSubdocSchema = new Schema<IScheduleBlockSubdoc>(
+const ScheduleBlockSubdocSchema = new Schema(
   {
     id: { type: String, required: true },
     timeSlot: { type: String, required: true, maxlength: 50 },
@@ -56,12 +20,12 @@ const ScheduleBlockSubdocSchema = new Schema<IScheduleBlockSubdoc>(
   { _id: false }
 );
 
-const DailyJournalSubdocSchema = new Schema<IDailyJournalSubdoc>(
+const DailyJournalSubdocSchema = new Schema(
   {
     gratitude: {
       type: [String],
       default: ['', '', ''],
-      validate: [(val: string[]) => val.length === 3, 'Must have exactly 3 gratitude lines'],
+      validate: [(val) => val.length === 3, 'Must have exactly 3 gratitude lines'],
     },
     wins: { type: String, default: '', maxlength: 3000 },
     challengesAndLessons: { type: String, default: '', maxlength: 3000 },
@@ -70,7 +34,7 @@ const DailyJournalSubdocSchema = new Schema<IDailyJournalSubdoc>(
   { _id: false }
 );
 
-const DailyPlanSchema = new Schema<IDailyPlanDocument>(
+const DailyPlanSchema = new Schema(
   {
     userId: { type: Schema.Types.ObjectId, ref: 'User', required: true, index: true },
     date: {
@@ -89,7 +53,7 @@ const DailyPlanSchema = new Schema<IDailyPlanDocument>(
         { id: crypto.randomUUID(), text: '', done: false },
         { id: crypto.randomUUID(), text: '', done: false },
       ],
-      validate: [(val: IDayTaskSubdoc[]) => val.length === 3, 'Must have exactly 3 primary priorities'],
+      validate: [(val) => val.length === 3, 'Must have exactly 3 primary priorities'],
     },
     additionalTasks: {
       type: [DayTaskSubdocSchema],
@@ -113,8 +77,7 @@ const DailyPlanSchema = new Schema<IDailyPlanDocument>(
   { timestamps: true }
 );
 
-// Compound unique index ensuring one daily plan per user per canonical date
 DailyPlanSchema.index({ userId: 1, date: 1 }, { unique: true });
 DailyPlanSchema.index({ userId: 1, year: 1, month: 1 });
 
-export const DailyPlan = model<IDailyPlanDocument>('DailyPlan', DailyPlanSchema);
+export const DailyPlan = model('DailyPlan', DailyPlanSchema);
