@@ -26,5 +26,3 @@ export const updateMonthlyPlanSchema = z.object({
   ).optional(),
   expectedUpdatedAt: z.string().optional(),
 });
-
-export type UpdateMonthlyPlanInput = z.infer<typeof updateMonthlyPlanSchema>;
