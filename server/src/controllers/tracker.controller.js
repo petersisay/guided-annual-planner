@@ -1,17 +1,14 @@
-import { Response, NextFunction } from 'express';
 import {
   moodEntrySchema,
   habitCreateSchema,
   habitUpdateSchema,
   habitToggleSchema,
-  MoodEntry as IMoodEntryDto,
-  Habit as IHabitDto,
 } from '@planner/shared';
-import { MoodEntry, IMoodEntryDocument } from '../models/MoodEntry';
-import { Habit, IHabitDocument } from '../models/Habit';
-import { AuthenticatedRequest } from '../middleware/auth.middleware';
+import { MoodEntry } from '../models/MoodEntry.js';
+import { Habit } from '../models/Habit.js';
+import { safeIsoDate } from './auth.controller.js';
 
-function mapMoodToDto(doc: IMoodEntryDocument): IMoodEntryDto {
+function mapMoodToDto(doc) {
   return {
     id: doc._id.toString(),
     userId: doc.userId.toString(),
@@ -21,12 +18,12 @@ function mapMoodToDto(doc: IMoodEntryDocument): IMoodEntryDto {
     colorHex: doc.colorHex,
     label: doc.label,
     note: doc.note,
-    updatedAt: doc.updatedAt.toISOString(),
+    updatedAt: safeIsoDate(doc.updatedAt),
   };
 }
 
-function mapHabitToDto(doc: IHabitDocument): IHabitDto {
-  const completionDates: Record<string, boolean> = {};
+function mapHabitToDto(doc) {
+  const completionDates = {};
   if (doc.completionDates) {
     for (const [k, v] of doc.completionDates.entries()) {
       if (v) {
@@ -43,19 +40,15 @@ function mapHabitToDto(doc: IHabitDocument): IHabitDto {
     activeYear: doc.activeYear,
     archived: doc.archived,
     completionDates,
-    createdAt: doc.createdAt.toISOString(),
-    updatedAt: doc.updatedAt.toISOString(),
+    createdAt: safeIsoDate(doc.createdAt),
+    updatedAt: safeIsoDate(doc.updatedAt),
   };
 }
 
 export class TrackerController {
   // --- MOOD TRACKER ENDPOINTS ---
 
-  async getMoodsForYear(
-    req: AuthenticatedRequest,
-    res: Response,
-    next: NextFunction
-  ): Promise<void> {
+  async getMoodsForYear(req, res, next) {
     try {
       const year = parseInt(String(req.params.year), 10);
       if (isNaN(year) || year < 2000 || year > 2100) {
@@ -67,7 +60,7 @@ export class TrackerController {
       }
 
       const moods = await MoodEntry.find({
-        userId: req.user!._id,
+        userId: req.user._id,
         year,
       }).sort({ date: 1 });
 
@@ -80,15 +73,11 @@ export class TrackerController {
     }
   }
 
-  async upsertMoodEntry(
-    req: AuthenticatedRequest,
-    res: Response,
-    next: NextFunction
-  ): Promise<void> {
+  async upsertMoodEntry(req, res, next) {
     try {
       const input = moodEntrySchema.parse(req.body);
       const year = parseInt(input.date.slice(0, 4), 10);
-      const userId = req.user!._id;
+      const userId = req.user._id;
 
       const mood = await MoodEntry.findOneAndUpdate(
         { userId, date: input.date },
@@ -113,11 +102,7 @@ export class TrackerController {
     }
   }
 
-  async deleteMoodEntry(
-    req: AuthenticatedRequest,
-    res: Response,
-    next: NextFunction
-  ): Promise<void> {
+  async deleteMoodEntry(req, res, next) {
     try {
       const date = String(req.params.date);
       if (!/^\d{4}-\d{2}-\d{2}$/.test(date)) {
@@ -129,7 +114,7 @@ export class TrackerController {
       }
 
       await MoodEntry.deleteOne({
-        userId: req.user!._id,
+        userId: req.user._id,
         date,
       });
 
@@ -144,17 +129,13 @@ export class TrackerController {
 
   // --- HABIT TRACKER ENDPOINTS ---
 
-  async getHabits(
-    req: AuthenticatedRequest,
-    res: Response,
-    next: NextFunction
-  ): Promise<void> {
+  async getHabits(req, res, next) {
     try {
       const yearParam = req.query.year;
       const year = yearParam ? parseInt(String(yearParam), 10) : new Date().getFullYear();
 
       const habits = await Habit.find({
-        userId: req.user!._id,
+        userId: req.user._id,
         activeYear: year,
       }).sort({ createdAt: 1 });
 
@@ -167,14 +148,10 @@ export class TrackerController {
     }
   }
 
-  async createHabit(
-    req: AuthenticatedRequest,
-    res: Response,
-    next: NextFunction
-  ): Promise<void> {
+  async createHabit(req, res, next) {
     try {
       const input = habitCreateSchema.parse(req.body);
-      const userId = req.user!._id;
+      const userId = req.user._id;
 
       const habit = await Habit.create({
         userId,
@@ -193,18 +170,14 @@ export class TrackerController {
     }
   }
 
-  async updateHabit(
-    req: AuthenticatedRequest,
-    res: Response,
-    next: NextFunction
-  ): Promise<void> {
+  async updateHabit(req, res, next) {
     try {
       const { id } = req.params;
       const input = habitUpdateSchema.parse(req.body);
 
       const habit = await Habit.findOne({
         _id: id,
-        userId: req.user!._id,
+        userId: req.user._id,
       });
 
       if (!habit) {
@@ -230,15 +203,11 @@ export class TrackerController {
     }
   }
 
-  async toggleHabitDate(
-    req: AuthenticatedRequest,
-    res: Response,
-    next: NextFunction
-  ): Promise<void> {
+  async toggleHabitDate(req, res, next) {
     try {
       const { id } = req.params;
       const input = habitToggleSchema.parse(req.body);
-      const userId = req.user!._id;
+      const userId = req.user._id;
 
       const updateOp = input.completed
         ? { $set: { [`completionDates.${input.date}`]: true } }
@@ -270,16 +239,12 @@ export class TrackerController {
     }
   }
 
-  async deleteHabit(
-    req: AuthenticatedRequest,
-    res: Response,
-    next: NextFunction
-  ): Promise<void> {
+  async deleteHabit(req, res, next) {
     try {
       const { id } = req.params;
       const result = await Habit.deleteOne({
         _id: id,
-        userId: req.user!._id,
+        userId: req.user._id,
       });
 
       if (result.deletedCount === 0) {
