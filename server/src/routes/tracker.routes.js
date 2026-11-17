@@ -1,7 +1,7 @@
 import { Router } from 'express';
-import { trackerController } from '../controllers/tracker.controller';
-import { requireAuth } from '../middleware/auth.middleware';
-import { idempotencyMiddleware } from '../middleware/idempotency.middleware';
+import { trackerController } from '../controllers/tracker.controller.js';
+import { requireAuth } from '../middleware/auth.middleware.js';
+import { idempotencyMiddleware } from '../middleware/idempotency.middleware.js';
 
 export const trackerRouter = Router();
 
