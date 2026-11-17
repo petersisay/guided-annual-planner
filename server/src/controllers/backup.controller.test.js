@@ -1,14 +1,14 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import request from 'supertest';
-import { createApp } from '../app';
-import { sessionService } from '../services/session.service';
-import { User } from '../models/User';
-import { AnnualPlan } from '../models/AnnualPlan';
-import { MonthlyPlan } from '../models/MonthlyPlan';
-import { WeeklyPlan } from '../models/WeeklyPlan';
-import { DailyPlan } from '../models/DailyPlan';
-import { MoodEntry } from '../models/MoodEntry';
-import { Habit } from '../models/Habit';
+import { createApp } from '../app.js';
+import { sessionService } from '../services/session.service.js';
+import { User } from '../models/User.js';
+import { AnnualPlan } from '../models/AnnualPlan.js';
+import { MonthlyPlan } from '../models/MonthlyPlan.js';
+import { WeeklyPlan } from '../models/WeeklyPlan.js';
+import { DailyPlan } from '../models/DailyPlan.js';
+import { MoodEntry } from '../models/MoodEntry.js';
+import { Habit } from '../models/Habit.js';
 import { Types } from 'mongoose';
 import { BACKUP_FORMAT_IDENTIFIER, BACKUP_SCHEMA_VERSION, plannerBackupSchema } from '@planner/shared';
 
@@ -19,7 +19,7 @@ describe('Backup & Restore Endpoints (/api/v1/planner/backup)', () => {
 
   const userAId = new Types.ObjectId();
 
-  const mockUserDoc: any = {
+  const mockUserDoc = {
     _id: userAId,
     email: 'user.a@example.com',
     name: 'Peter Sisay',
@@ -52,12 +52,12 @@ describe('Backup & Restore Endpoints (/api/v1/planner/backup)', () => {
       },
     },
     preferences: {
-      weekStart: 'sunday' as const,
-      weeklyViewDefault: '5day' as const,
+      weekStart: 'sunday',
+      weeklyViewDefault: '5day',
       defaultCurrency: 'EUR',
-      theme: 'paper-editorial' as const,
+      theme: 'paper-editorial',
       prefersReducedMotion: true,
-      onboardingStatus: 'completed' as const,
+      onboardingStatus: 'completed',
       onboardingStep: 4,
       defaultYear: 2026,
     },
@@ -121,7 +121,7 @@ describe('Backup & Restore Endpoints (/api/v1/planner/backup)', () => {
         schedule: [{ id: '00000000-0000-0000-0000-000000000010', timeSlot: '09:00 AM', activity: 'Writing block', done: true }],
         reflection: 'Productive and peaceful',
         journal: {
-          gratitude: ['Silence', 'Fresh coffee', 'Clarity'] as [string, string, string],
+          gratitude: ['Silence', 'Fresh coffee', 'Clarity'],
           wins: 'Finished section 2',
           challengesAndLessons: 'Limit phone checks',
           freeWriting: 'Flow was good today.',
@@ -153,7 +153,7 @@ describe('Backup & Restore Endpoints (/api/v1/planner/backup)', () => {
     vi.restoreAllMocks();
 
     vi.spyOn(sessionService, 'validateAndRenewSession').mockResolvedValue({
-      session: { userId: userAId } as any,
+      session: { userId: userAId },
     });
     vi.spyOn(User, 'findById').mockResolvedValue(mockUserDoc);
   });
@@ -190,7 +190,7 @@ describe('Backup & Restore Endpoints (/api/v1/planner/backup)', () => {
             },
           ]),
         }),
-      } as any);
+      });
 
       const monthlyFindSpy = vi.spyOn(MonthlyPlan, 'find').mockReturnValue({
         sort: vi.fn().mockReturnValue({
@@ -206,25 +206,25 @@ describe('Backup & Restore Endpoints (/api/v1/planner/backup)', () => {
             },
           ]),
         }),
-      } as any);
+      });
 
       vi.spyOn(WeeklyPlan, 'find').mockReturnValue({
         sort: vi.fn().mockReturnValue({
           lean: vi.fn().mockResolvedValue([]),
         }),
-      } as any);
+      });
 
       vi.spyOn(DailyPlan, 'find').mockReturnValue({
         sort: vi.fn().mockReturnValue({
           lean: vi.fn().mockResolvedValue([]),
         }),
-      } as any);
+      });
 
       vi.spyOn(MoodEntry, 'find').mockReturnValue({
         sort: vi.fn().mockReturnValue({
           lean: vi.fn().mockResolvedValue([]),
         }),
-      } as any);
+      });
 
       vi.spyOn(Habit, 'find').mockReturnValue({
         sort: vi.fn().mockReturnValue({
@@ -238,7 +238,7 @@ describe('Backup & Restore Endpoints (/api/v1/planner/backup)', () => {
             },
           ]),
         }),
-      } as any);
+      });
 
       const res = await request(app)
         .get('/api/v1/planner/backup/export')
@@ -353,22 +353,22 @@ describe('Backup & Restore Endpoints (/api/v1/planner/backup)', () => {
     it('restores in merge mode without wiping existing records', async () => {
       // Mock existing records
       vi.spyOn(AnnualPlan, 'findOne').mockResolvedValue(null);
-      const annualCreateSpy = vi.spyOn(AnnualPlan, 'create').mockResolvedValue([{} as any] as any);
+      const annualCreateSpy = vi.spyOn(AnnualPlan, 'create').mockResolvedValue([{}]);
 
       vi.spyOn(MonthlyPlan, 'findOne').mockResolvedValue(null);
-      const monthlyCreateSpy = vi.spyOn(MonthlyPlan, 'create').mockResolvedValue([{} as any] as any);
+      const monthlyCreateSpy = vi.spyOn(MonthlyPlan, 'create').mockResolvedValue([{}]);
 
       vi.spyOn(WeeklyPlan, 'findOne').mockResolvedValue(null);
-      const weeklyCreateSpy = vi.spyOn(WeeklyPlan, 'create').mockResolvedValue([{} as any] as any);
+      const weeklyCreateSpy = vi.spyOn(WeeklyPlan, 'create').mockResolvedValue([{}]);
 
       vi.spyOn(DailyPlan, 'findOne').mockResolvedValue(null);
-      const dailyCreateSpy = vi.spyOn(DailyPlan, 'create').mockResolvedValue([{} as any] as any);
+      const dailyCreateSpy = vi.spyOn(DailyPlan, 'create').mockResolvedValue([{}]);
 
       vi.spyOn(MoodEntry, 'findOne').mockResolvedValue(null);
-      const moodCreateSpy = vi.spyOn(MoodEntry, 'create').mockResolvedValue([{} as any] as any);
+      const moodCreateSpy = vi.spyOn(MoodEntry, 'create').mockResolvedValue([{}]);
 
       vi.spyOn(Habit, 'findOne').mockResolvedValue(null);
-      const habitCreateSpy = vi.spyOn(Habit, 'create').mockResolvedValue([{} as any] as any);
+      const habitCreateSpy = vi.spyOn(Habit, 'create').mockResolvedValue([{}]);
 
       const deleteManySpy = vi.spyOn(DailyPlan, 'deleteMany');
 
@@ -418,28 +418,28 @@ describe('Backup & Restore Endpoints (/api/v1/planner/backup)', () => {
 
     it('restores in replace mode by safely wiping planner documents while preserving user credentials', async () => {
       // Mock existing planner docs for rollback snapshot
-      vi.spyOn(AnnualPlan, 'find').mockReturnValue({ lean: vi.fn().mockResolvedValue([]) } as any);
-      vi.spyOn(MonthlyPlan, 'find').mockReturnValue({ lean: vi.fn().mockResolvedValue([]) } as any);
-      vi.spyOn(WeeklyPlan, 'find').mockReturnValue({ lean: vi.fn().mockResolvedValue([]) } as any);
-      vi.spyOn(DailyPlan, 'find').mockReturnValue({ lean: vi.fn().mockResolvedValue([]) } as any);
-      vi.spyOn(MoodEntry, 'find').mockReturnValue({ lean: vi.fn().mockResolvedValue([]) } as any);
-      vi.spyOn(Habit, 'find').mockReturnValue({ lean: vi.fn().mockResolvedValue([]) } as any);
+      vi.spyOn(AnnualPlan, 'find').mockReturnValue({ lean: vi.fn().mockResolvedValue([]) });
+      vi.spyOn(MonthlyPlan, 'find').mockReturnValue({ lean: vi.fn().mockResolvedValue([]) });
+      vi.spyOn(WeeklyPlan, 'find').mockReturnValue({ lean: vi.fn().mockResolvedValue([]) });
+      vi.spyOn(DailyPlan, 'find').mockReturnValue({ lean: vi.fn().mockResolvedValue([]) });
+      vi.spyOn(MoodEntry, 'find').mockReturnValue({ lean: vi.fn().mockResolvedValue([]) });
+      vi.spyOn(Habit, 'find').mockReturnValue({ lean: vi.fn().mockResolvedValue([]) });
 
-      const annualDeleteSpy = vi.spyOn(AnnualPlan, 'deleteMany').mockResolvedValue({} as any);
-      const monthlyDeleteSpy = vi.spyOn(MonthlyPlan, 'deleteMany').mockResolvedValue({} as any);
-      const weeklyDeleteSpy = vi.spyOn(WeeklyPlan, 'deleteMany').mockResolvedValue({} as any);
-      const dailyDeleteSpy = vi.spyOn(DailyPlan, 'deleteMany').mockResolvedValue({} as any);
-      const moodDeleteSpy = vi.spyOn(MoodEntry, 'deleteMany').mockResolvedValue({} as any);
-      const habitDeleteSpy = vi.spyOn(Habit, 'deleteMany').mockResolvedValue({} as any);
+      const annualDeleteSpy = vi.spyOn(AnnualPlan, 'deleteMany').mockResolvedValue({});
+      const monthlyDeleteSpy = vi.spyOn(MonthlyPlan, 'deleteMany').mockResolvedValue({});
+      const weeklyDeleteSpy = vi.spyOn(WeeklyPlan, 'deleteMany').mockResolvedValue({});
+      const dailyDeleteSpy = vi.spyOn(DailyPlan, 'deleteMany').mockResolvedValue({});
+      const moodDeleteSpy = vi.spyOn(MoodEntry, 'deleteMany').mockResolvedValue({});
+      const habitDeleteSpy = vi.spyOn(Habit, 'deleteMany').mockResolvedValue({});
       const userDeleteSpy = vi.spyOn(User, 'deleteMany');
 
-      vi.spyOn(AnnualPlan, 'insertMany').mockResolvedValue([] as any);
-      vi.spyOn(MonthlyPlan, 'insertMany').mockResolvedValue([] as any);
-      vi.spyOn(WeeklyPlan, 'insertMany').mockResolvedValue([] as any);
-      vi.spyOn(DailyPlan, 'insertMany').mockResolvedValue([] as any);
-      vi.spyOn(MoodEntry, 'insertMany').mockResolvedValue([] as any);
-      vi.spyOn(Habit, 'insertMany').mockResolvedValue([] as any);
-      vi.spyOn(User, 'findByIdAndUpdate').mockResolvedValue({} as any);
+      vi.spyOn(AnnualPlan, 'insertMany').mockResolvedValue([]);
+      vi.spyOn(MonthlyPlan, 'insertMany').mockResolvedValue([]);
+      vi.spyOn(WeeklyPlan, 'insertMany').mockResolvedValue([]);
+      vi.spyOn(DailyPlan, 'insertMany').mockResolvedValue([]);
+      vi.spyOn(MoodEntry, 'insertMany').mockResolvedValue([]);
+      vi.spyOn(Habit, 'insertMany').mockResolvedValue([]);
+      vi.spyOn(User, 'findByIdAndUpdate').mockResolvedValue({});
 
       const res = await request(app)
         .post('/api/v1/planner/backup/restore')
