@@ -1,9 +1,9 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import request from 'supertest';
-import { createApp } from '../app';
-import { sessionService } from '../services/session.service';
-import { User } from '../models/User';
-import { AnnualPlan } from '../models/AnnualPlan';
+import { createApp } from '../app.js';
+import { sessionService } from '../services/session.service.js';
+import { User } from '../models/User.js';
+import { AnnualPlan } from '../models/AnnualPlan.js';
 import { Types } from 'mongoose';
 
 describe('User Controller & Onboarding Endpoints (/api/v1/user)', () => {
@@ -12,7 +12,7 @@ describe('User Controller & Onboarding Endpoints (/api/v1/user)', () => {
   const validCsrf = 'WebApp';
 
   const userAId = new Types.ObjectId();
-  const mockUserDoc: any = {
+  const mockUserDoc = {
     _id: userAId,
     email: 'user.a@example.com',
     name: 'Peter Sisay',
@@ -36,7 +36,7 @@ describe('User Controller & Onboarding Endpoints (/api/v1/user)', () => {
     vi.restoreAllMocks();
 
     vi.spyOn(sessionService, 'validateAndRenewSession').mockResolvedValue({
-      session: { userId: userAId } as any,
+      session: { userId: userAId },
     });
     vi.spyOn(User, 'findById').mockResolvedValue(mockUserDoc);
   });
@@ -88,7 +88,7 @@ describe('User Controller & Onboarding Endpoints (/api/v1/user)', () => {
   });
 
   it('PUT /api/v1/user/onboarding marks onboarding as completed and sets annual intention idempotently', async () => {
-    const mockAnnualDoc: any = {
+    const mockAnnualDoc = {
       userId: userAId,
       year: 2026,
       themeOrWord: '',
@@ -124,7 +124,7 @@ describe('User Controller & Onboarding Endpoints (/api/v1/user)', () => {
   });
 
   it('PUT /api/v1/user/onboarding does not overwrite existing annual plan data when revisited', async () => {
-    const mockExistingAnnualDoc: any = {
+    const mockExistingAnnualDoc = {
       userId: userAId,
       year: 2026,
       themeOrWord: 'Existing Sacred Theme',
@@ -149,9 +149,7 @@ describe('User Controller & Onboarding Endpoints (/api/v1/user)', () => {
       });
 
     expect(res.status).toBe(200);
-    // Preserves existing theme without overwriting it
     expect(mockExistingAnnualDoc.themeOrWord).toBe('Existing Sacred Theme');
-    // Appends new intention without wiping existing ones
     expect(mockExistingAnnualDoc.annualIntentions).toEqual(['Existing Priority 1', 'New Priority 2']);
   });
 
