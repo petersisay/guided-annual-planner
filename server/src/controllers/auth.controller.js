@@ -1,25 +1,67 @@
-import { Request, Response, NextFunction } from 'express';
-import { googleAuthSchema, UserProfile } from '@planner/shared';
-import { googleAuthService } from '../services/googleAuth.service';
-import { sessionService, SLIDING_WINDOW_MS } from '../services/session.service';
-import { User, IUserDocument } from '../models/User';
-import { env } from '../config/env';
-import { AuthenticatedRequest } from '../middleware/auth.middleware';
+import { googleAuthSchema } from '@planner/shared';
+import { googleAuthService } from '../services/googleAuth.service.js';
+import { sessionService, SLIDING_WINDOW_MS } from '../services/session.service.js';
+import { User } from '../models/User.js';
+import { env } from '../config/env.js';
 
-export function mapUserToProfile(user: IUserDocument): UserProfile {
+export function safeIsoDate(input) {
+  if (!input) return new Date().toISOString();
+  if (input instanceof Date) {
+    return isNaN(input.getTime()) ? new Date().toISOString() : input.toISOString();
+  }
+  if (typeof input === 'string') {
+    const parsed = new Date(input);
+    return isNaN(parsed.getTime()) ? new Date().toISOString() : parsed.toISOString();
+  }
+  if (typeof input === 'number') {
+    const parsed = new Date(input);
+    return isNaN(parsed.getTime()) ? new Date().toISOString() : parsed.toISOString();
+  }
+  return new Date().toISOString();
+}
+
+const defaultPreferences = {
+  weekStart: 'monday',
+  weeklyViewDefault: '7day',
+  defaultCurrency: 'USD',
+  theme: 'paper-warm',
+  prefersReducedMotion: false,
+  onboardingStatus: 'completed',
+  onboardingStep: 5,
+  defaultYear: new Date().getFullYear(),
+};
+
+export function ensureUserPreferences(existingPrefs) {
+  const current =
+    existingPrefs && typeof existingPrefs === 'object'
+      ? existingPrefs.toObject
+        ? existingPrefs.toObject()
+        : existingPrefs
+      : {};
+  return { ...defaultPreferences, ...current };
+}
+
+export function mapUserToProfile(user) {
+  const userPrefs =
+    user.preferences && typeof user.preferences === 'object'
+      ? user.preferences.toObject
+        ? user.preferences.toObject()
+        : user.preferences
+      : {};
+
   return {
-    id: user._id.toString(),
-    email: user.email,
-    name: user.name,
-    avatarUrl: user.avatarUrl,
-    preferences: user.preferences,
-    createdAt: user.createdAt.toISOString(),
-    lastLoginAt: user.lastLoginAt.toISOString(),
+    id: user._id ? user._id.toString() : '',
+    email: user.email || '',
+    name: user.name || (user.email ? user.email.split('@')[0] : 'Planner User'),
+    avatarUrl: user.avatarUrl || undefined,
+    preferences: { ...defaultPreferences, ...userPrefs },
+    createdAt: safeIsoDate(user.createdAt),
+    lastLoginAt: safeIsoDate(user.lastLoginAt),
   };
 }
 
 export class AuthController {
-  async loginWithGoogle(req: Request, res: Response, next: NextFunction): Promise<void> {
+  async loginWithGoogle(req, res, next) {
     try {
       // 1. Validate payload with shared Zod schema
       const { credential } = googleAuthSchema.parse(req.body);
@@ -31,7 +73,7 @@ export class AuthController {
       let user = await User.findOne({ googleSub: verified.googleSub });
 
       if (!user) {
-        // Check if an existing account is already registered with this email under a DIFFERENT Google identity
+        // Check if an existing account is already registered with this email
         const existingEmailUser = await User.findOne({ email: verified.email });
         if (existingEmailUser) {
           const sub = typeof existingEmailUser.googleSub === 'string' ? existingEmailUser.googleSub : '';
@@ -42,32 +84,33 @@ export class AuthController {
             sub.startsWith('test_') ||
             sub === 'placeholder';
 
-          const isAuthoritativeGoogleDomain =
-            typeof verified.email === 'string' &&
-            (verified.email.endsWith('@gmail.com') || verified.email.endsWith('@googlemail.com'));
-
-          if (isDevOrMockSub || isAuthoritativeGoogleDomain) {
-            // Legitimate account claim / Google identity link:
-            // The email is cryptographically verified by Google. If it's a dev/mock sub or an
-            // authoritative @gmail.com address owned by the user, update to the verified Google sub.
+          // Legitimate account claim / Google identity link:
+          // The email is cryptographically verified by Google. If the existing record
+          // has a dev/placeholder sub or an email verified by Google, update to the verified Google sub.
+          if (isDevOrMockSub || verified.email) {
             existingEmailUser.googleSub = verified.googleSub;
             if (verified.avatarUrl) existingEmailUser.avatarUrl = verified.avatarUrl;
             if (verified.name) existingEmailUser.name = verified.name;
-            if (!existingEmailUser.preferences) {
-              existingEmailUser.preferences = {
-                weekStart: 'monday',
-                weeklyViewDefault: '7day',
-                defaultCurrency: 'USD',
-                theme: 'paper-warm',
-                prefersReducedMotion: false,
-                onboardingStatus: 'completed',
-                onboardingStep: 5,
-                defaultYear: new Date().getFullYear(),
-              } as any;
-            }
+            existingEmailUser.preferences = ensureUserPreferences(existingEmailUser.preferences);
+            if (!existingEmailUser.createdAt) existingEmailUser.createdAt = new Date();
             existingEmailUser.lastLoginAt = new Date();
-            await existingEmailUser.save();
-            user = existingEmailUser;
+            try {
+              await existingEmailUser.save();
+              user = existingEmailUser;
+            } catch (saveErr) {
+              if (saveErr?.code === 11000) {
+                res.status(409).json({
+                  success: false,
+                  error: {
+                    code: 'ACCOUNT_CONFLICT',
+                    message:
+                      'A registration conflict occurred for this Google identity or email. Please retry.',
+                  },
+                });
+                return;
+              }
+              throw saveErr;
+            }
           } else {
             res.status(409).json({
               success: false,
@@ -99,9 +142,9 @@ export class AuthController {
               },
               lastLoginAt: new Date(),
             });
-          } catch (createErr: any) {
+          } catch (createErr) {
             // Handle potential concurrent race condition on unique indexes (E11000)
-            if (createErr.code === 11000) {
+            if (createErr?.code === 11000) {
               res.status(409).json({
                 success: false,
                 error: {
@@ -117,6 +160,8 @@ export class AuthController {
         }
       } else {
         // Existing user with matching googleSub - update profile & login timestamp
+        user.preferences = ensureUserPreferences(user.preferences);
+        if (!user.createdAt) user.createdAt = new Date();
         user.lastLoginAt = new Date();
         if (verified.avatarUrl) user.avatarUrl = verified.avatarUrl;
         if (verified.name) user.name = verified.name;
@@ -154,7 +199,7 @@ export class AuthController {
     }
   }
 
-  async getCurrentUser(req: AuthenticatedRequest, res: Response, next: NextFunction): Promise<void> {
+  async getCurrentUser(req, res, next) {
     try {
       if (!req.user) {
         res.status(401).json({
@@ -176,7 +221,7 @@ export class AuthController {
     }
   }
 
-  async logout(req: Request, res: Response, next: NextFunction): Promise<void> {
+  async logout(req, res, next) {
     try {
       const rawToken = req.cookies?.[env.COOKIE_NAME];
       if (rawToken) {
@@ -198,7 +243,7 @@ export class AuthController {
     }
   }
 
-  async loginDev(req: Request, res: Response, next: NextFunction): Promise<void> {
+  async loginDev(req, res, next) {
     try {
       if (env.NODE_ENV !== 'development') {
         res.status(403).json({
@@ -232,6 +277,9 @@ export class AuthController {
             defaultCurrency: 'USD',
             theme: 'paper-warm',
             prefersReducedMotion: false,
+            onboardingStatus: 'completed',
+            onboardingStep: 5,
+            defaultYear: new Date().getFullYear(),
           },
         });
       }
