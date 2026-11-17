@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import rateLimit from 'express-rate-limit';
-import { authController } from '../controllers/auth.controller';
-import { requireAuth } from '../middleware/auth.middleware';
+import { authController } from '../controllers/auth.controller.js';
+import { requireAuth } from '../middleware/auth.middleware.js';
 
 export const authRouter = Router();
 
