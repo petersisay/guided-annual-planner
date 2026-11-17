@@ -1,10 +1,12 @@
 import { z } from 'zod';
-import { BACKUP_FORMAT_IDENTIFIER, BACKUP_SCHEMA_VERSION } from '../types/backup';
-import { userPreferencesSchema } from './user.schema';
-import { annualReviewSchema } from './annual.schema';
-import { checklistItemSchema, bookEntrySchema } from './monthly.schema';
-import { dayPlanSchema, priorityItemSchema, dayTaskSchema } from './weekly.schema';
-import { scheduleBlockSchema, dailyJournalSchema } from './daily.schema';
+import { userPreferencesSchema } from './user.schema.js';
+import { annualReviewSchema } from './annual.schema.js';
+import { checklistItemSchema, bookEntrySchema } from './monthly.schema.js';
+import { dayPlanSchema, priorityItemSchema, dayTaskSchema } from './weekly.schema.js';
+import { scheduleBlockSchema, dailyJournalSchema } from './daily.schema.js';
+
+export const BACKUP_FORMAT_IDENTIFIER = 'guided-annual-planner-backup';
+export const BACKUP_SCHEMA_VERSION = '1.0.0';
 
 const dateRegex = /^\d{4}-\d{2}-\d{2}$/;
 
@@ -20,7 +22,7 @@ const FORBIDDEN_KEYS = [
   'privatekey',
 ];
 
-function containsForbiddenKeys(obj: any): boolean {
+function containsForbiddenKeys(obj) {
   if (!obj || typeof obj !== 'object') return false;
   for (const key of Object.keys(obj)) {
     const lower = key.toLowerCase();
@@ -127,12 +129,8 @@ export const plannerBackupSchema = z
     message: 'Backup file contains disallowed credential or security-sensitive fields',
   });
 
-export type PlannerBackupInput = z.infer<typeof plannerBackupSchema>;
-
 export const restoreRequestSchema = z.object({
   mode: z.enum(['merge', 'replace']),
   confirmReplace: z.boolean().optional(),
   backup: plannerBackupSchema,
 });
-
-export type RestoreRequestInput = z.infer<typeof restoreRequestSchema>;
