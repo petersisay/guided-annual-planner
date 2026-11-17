@@ -1,10 +1,10 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import request from 'supertest';
-import { createApp } from '../app';
-import { sessionService } from '../services/session.service';
-import { User } from '../models/User';
-import { MonthlyPlan } from '../models/MonthlyPlan';
-import { WeeklyPlan } from '../models/WeeklyPlan';
+import { createApp } from '../app.js';
+import { sessionService } from '../services/session.service.js';
+import { User } from '../models/User.js';
+import { MonthlyPlan } from '../models/MonthlyPlan.js';
+import { WeeklyPlan } from '../models/WeeklyPlan.js';
 import { Types } from 'mongoose';
 
 describe('Monthly & Weekly Planner Endpoints', () => {
@@ -23,9 +23,9 @@ describe('Monthly & Weekly Planner Endpoints', () => {
     vi.restoreAllMocks();
 
     vi.spyOn(sessionService, 'validateAndRenewSession').mockResolvedValue({
-      session: { userId: userAId } as any,
+      session: { userId: userAId },
     });
-    vi.spyOn(User, 'findById').mockResolvedValue(userADoc as any);
+    vi.spyOn(User, 'findById').mockResolvedValue(userADoc);
   });
 
   describe('Monthly Endpoints (/api/v1/planner/monthly)', () => {
@@ -45,7 +45,7 @@ describe('Monthly & Weekly Planner Endpoints', () => {
         updatedAt: new Date(),
       };
 
-      vi.spyOn(MonthlyPlan, 'findOne').mockResolvedValue(mockMonthly as any);
+      vi.spyOn(MonthlyPlan, 'findOne').mockResolvedValue(mockMonthly);
 
       const res = await request(app)
         .get('/api/v1/planner/monthly/2026/1')
@@ -75,7 +75,7 @@ describe('Monthly & Weekly Planner Endpoints', () => {
         updatedAt: new Date(),
       };
 
-      vi.spyOn(MonthlyPlan, 'findOneAndUpdate').mockResolvedValue(updatedDoc as any);
+      vi.spyOn(MonthlyPlan, 'findOneAndUpdate').mockResolvedValue(updatedDoc);
 
       const res = await request(app)
         .put('/api/v1/planner/monthly/2026/1')
@@ -119,7 +119,7 @@ describe('Monthly & Weekly Planner Endpoints', () => {
 
       const findOneAndUpdateSpy = vi
         .spyOn(MonthlyPlan, 'findOneAndUpdate')
-        .mockResolvedValue(updatedBooksDoc as any);
+        .mockResolvedValue(updatedBooksDoc);
 
       const res = await request(app)
         .put('/api/v1/planner/monthly/2026/1')
@@ -180,7 +180,7 @@ describe('Monthly & Weekly Planner Endpoints', () => {
         updatedAt: new Date(),
       };
 
-      vi.spyOn(WeeklyPlan, 'findOne').mockResolvedValue(mockWeekly as any);
+      vi.spyOn(WeeklyPlan, 'findOne').mockResolvedValue(mockWeekly);
 
       const res = await request(app)
         .get('/api/v1/planner/weekly/2026/2')
@@ -207,7 +207,7 @@ describe('Monthly & Weekly Planner Endpoints', () => {
         updatedAt: new Date(),
       };
 
-      vi.spyOn(WeeklyPlan, 'findOneAndUpdate').mockResolvedValue(updatedDoc as any);
+      vi.spyOn(WeeklyPlan, 'findOneAndUpdate').mockResolvedValue(updatedDoc);
 
       const res = await request(app)
         .put('/api/v1/planner/weekly/2026/2')
@@ -225,7 +225,6 @@ describe('Monthly & Weekly Planner Endpoints', () => {
     });
 
     it('rejects week 53 for a 52-week year with HTTP 400 and INVALID_WEEK', async () => {
-      // 2025 has only 52 ISO weeks
       const resGet = await request(app)
         .get('/api/v1/planner/weekly/2025/53')
         .set('Cookie', ['planner_session=active_token']);
@@ -248,7 +247,6 @@ describe('Monthly & Weekly Planner Endpoints', () => {
     });
 
     it('allows week 53 for a 53-week year', async () => {
-      // 2026 has 53 ISO weeks
       const mockWeekly = {
         _id: new Types.ObjectId(),
         userId: userAId,
@@ -263,7 +261,7 @@ describe('Monthly & Weekly Planner Endpoints', () => {
         updatedAt: new Date(),
       };
 
-      vi.spyOn(WeeklyPlan, 'findOne').mockResolvedValue(mockWeekly as any);
+      vi.spyOn(WeeklyPlan, 'findOne').mockResolvedValue(mockWeekly);
 
       const res = await request(app)
         .get('/api/v1/planner/weekly/2026/53')
@@ -289,11 +287,10 @@ describe('Monthly & Weekly Planner Endpoints', () => {
         updatedAt: new Date(),
       };
 
-      // First findOne returns null, create throws duplicate key error 11000, second findOne returns doc
       const findOneSpy = vi.spyOn(WeeklyPlan, 'findOne');
-      findOneSpy.mockResolvedValueOnce(null).mockResolvedValueOnce(mockCreatedPlan as any);
+      findOneSpy.mockResolvedValueOnce(null).mockResolvedValueOnce(mockCreatedPlan);
 
-      const duplicateKeyError: any = new Error('E11000 duplicate key error');
+      const duplicateKeyError = new Error('E11000 duplicate key error');
       duplicateKeyError.code = 11000;
       vi.spyOn(WeeklyPlan, 'create').mockRejectedValueOnce(duplicateKeyError);
 
@@ -313,7 +310,6 @@ describe('Monthly & Weekly Planner Endpoints', () => {
         .set('X-Planner-Client', validCsrf)
         .set('Cookie', ['planner_session=active_token'])
         .send({
-          // notes exceeded max length (5000 characters)
           notes: 'A'.repeat(5001),
         });
 
@@ -322,7 +318,7 @@ describe('Monthly & Weekly Planner Endpoints', () => {
       expect(res.body.error.code).toBe('VALIDATION_ERROR');
       expect(res.body.error.message).toBe('The submitted data failed validation requirements');
       expect(Array.isArray(res.body.error.details)).toBe(true);
-      expect(res.body.error.details.some((d: any) => d.field === 'notes')).toBe(true);
+      expect(res.body.error.details.some((d) => d.field === 'notes')).toBe(true);
     });
   });
 });
