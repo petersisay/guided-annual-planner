@@ -1,10 +1,9 @@
-import { Response, NextFunction } from 'express';
-import { updateMonthlyPlanSchema, MonthlyPlan as IMonthlyPlanDto } from '@planner/shared';
-import { MonthlyPlan, IMonthlyPlanDocument } from '../models/MonthlyPlan';
-import { AuthenticatedRequest } from '../middleware/auth.middleware';
+import { updateMonthlyPlanSchema } from '@planner/shared';
+import { MonthlyPlan } from '../models/MonthlyPlan.js';
+import { safeIsoDate } from './auth.controller.js';
 
-function mapMonthlyPlanToDto(doc: IMonthlyPlanDocument): IMonthlyPlanDto {
-  const calendarNotesObj: Record<string, string> = {};
+function mapMonthlyPlanToDto(doc) {
+  const calendarNotesObj = {};
   if (doc.calendarNotes instanceof Map) {
     doc.calendarNotes.forEach((val, key) => {
       calendarNotesObj[key] = val;
@@ -24,17 +23,13 @@ function mapMonthlyPlanToDto(doc: IMonthlyPlanDocument): IMonthlyPlanDto {
     books: doc.books || [],
     selfChangeReflection: doc.selfChangeReflection || '',
     calendarNotes: calendarNotesObj,
-    createdAt: doc.createdAt.toISOString(),
-    updatedAt: doc.updatedAt.toISOString(),
+    createdAt: safeIsoDate(doc.createdAt),
+    updatedAt: safeIsoDate(doc.updatedAt),
   };
 }
 
 export class MonthlyController {
-  async getMonthlyPlan(
-    req: AuthenticatedRequest,
-    res: Response,
-    next: NextFunction
-  ): Promise<void> {
+  async getMonthlyPlan(req, res, next) {
     try {
       const year = parseInt(String(req.params.year), 10);
       const month = parseInt(String(req.params.month), 10);
@@ -55,7 +50,7 @@ export class MonthlyController {
         return;
       }
 
-      const userId = req.user!._id;
+      const userId = req.user._id;
 
       let plan = await MonthlyPlan.findOne({ userId, year, month });
       if (!plan) {
@@ -71,7 +66,7 @@ export class MonthlyController {
             selfChangeReflection: '',
             calendarNotes: new Map(),
           });
-        } catch (createErr: any) {
+        } catch (createErr) {
           if (createErr?.code === 11000) {
             plan = await MonthlyPlan.findOne({ userId, year, month });
             if (!plan) throw createErr;
@@ -90,11 +85,7 @@ export class MonthlyController {
     }
   }
 
-  async updateMonthlyPlan(
-    req: AuthenticatedRequest,
-    res: Response,
-    next: NextFunction
-  ): Promise<void> {
+  async updateMonthlyPlan(req, res, next) {
     try {
       const year = parseInt(String(req.params.year), 10);
       const month = parseInt(String(req.params.month), 10);
@@ -116,9 +107,9 @@ export class MonthlyController {
       }
 
       const updates = updateMonthlyPlanSchema.parse(req.body);
-      const userId = req.user!._id;
+      const userId = req.user._id;
 
-      const setPayload: Record<string, unknown> = {};
+      const setPayload = {};
       if (updates.mustDos !== undefined) setPayload.mustDos = updates.mustDos;
       if (updates.newHabits !== undefined) setPayload.newHabits = updates.newHabits;
       if (updates.toBuy !== undefined) setPayload.toBuy = updates.toBuy;
@@ -126,7 +117,7 @@ export class MonthlyController {
       if (updates.selfChangeReflection !== undefined) setPayload.selfChangeReflection = updates.selfChangeReflection;
       if (updates.calendarNotes !== undefined) setPayload.calendarNotes = updates.calendarNotes;
 
-      let plan: IMonthlyPlanDocument | null = null;
+      let plan = null;
       if (updates.expectedUpdatedAt) {
         const expectedDate = new Date(updates.expectedUpdatedAt);
         plan = await MonthlyPlan.findOneAndUpdate(
@@ -170,7 +161,7 @@ export class MonthlyController {
             },
             { new: true, upsert: true }
           );
-        } catch (upsertErr: any) {
+        } catch (upsertErr) {
           if (upsertErr?.code === 11000) {
             plan = await MonthlyPlan.findOneAndUpdate(
               { userId, year, month },
