@@ -1,11 +1,11 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import request from 'supertest';
-import { createApp } from '../app';
-import { sessionService } from '../services/session.service';
-import { User } from '../models/User';
-import { AnnualPlan } from '../models/AnnualPlan';
-import { MoodEntry } from '../models/MoodEntry';
-import { Habit } from '../models/Habit';
+import { createApp } from '../app.js';
+import { sessionService } from '../services/session.service.js';
+import { User } from '../models/User.js';
+import { AnnualPlan } from '../models/AnnualPlan.js';
+import { MoodEntry } from '../models/MoodEntry.js';
+import { Habit } from '../models/Habit.js';
 import { Types } from 'mongoose';
 
 describe('Phase 2 — Annual Plan & Tracker Endpoints', () => {
@@ -34,9 +34,9 @@ describe('Phase 2 — Annual Plan & Tracker Endpoints', () => {
 
     // Default mock authentication as User A
     vi.spyOn(sessionService, 'validateAndRenewSession').mockResolvedValue({
-      session: { userId: userAId } as any,
+      session: { userId: userAId },
     });
-    vi.spyOn(User, 'findById').mockResolvedValue(userADoc as any);
+    vi.spyOn(User, 'findById').mockResolvedValue(userADoc);
   });
 
   describe('Annual Plan Endpoints (/api/v1/planner/year)', () => {
@@ -52,7 +52,7 @@ describe('Phase 2 — Annual Plan & Tracker Endpoints', () => {
         updatedAt: new Date(),
       };
 
-      vi.spyOn(AnnualPlan, 'findOne').mockResolvedValue(mockPlan as any);
+      vi.spyOn(AnnualPlan, 'findOne').mockResolvedValue(mockPlan);
 
       const res = await request(app)
         .get('/api/v1/planner/year/2026')
@@ -76,7 +76,7 @@ describe('Phase 2 — Annual Plan & Tracker Endpoints', () => {
         createdAt: new Date(),
         updatedAt: new Date(),
       };
-      vi.spyOn(AnnualPlan, 'create').mockResolvedValue(createdPlan as any);
+      vi.spyOn(AnnualPlan, 'create').mockResolvedValue(createdPlan);
 
       const res = await request(app)
         .get('/api/v1/planner/year/2026')
@@ -99,7 +99,7 @@ describe('Phase 2 — Annual Plan & Tracker Endpoints', () => {
         updatedAt: new Date(),
       };
 
-      const findUpdateSpy = vi.spyOn(AnnualPlan, 'findOneAndUpdate').mockResolvedValue(updatedPlan as any);
+      const findUpdateSpy = vi.spyOn(AnnualPlan, 'findOneAndUpdate').mockResolvedValue(updatedPlan);
 
       const res = await request(app)
         .put('/api/v1/planner/year/2026')
@@ -152,7 +152,7 @@ describe('Phase 2 — Annual Plan & Tracker Endpoints', () => {
 
       const findSpy = vi.spyOn(MoodEntry, 'find').mockReturnValue({
         sort: vi.fn().mockResolvedValue(mockMoods),
-      } as any);
+      });
 
       const res = await request(app)
         .get('/api/v1/trackers/mood/2026')
@@ -179,7 +179,7 @@ describe('Phase 2 — Annual Plan & Tracker Endpoints', () => {
         updatedAt: new Date(),
       };
 
-      vi.spyOn(MoodEntry, 'findOneAndUpdate').mockResolvedValue(savedMood as any);
+      vi.spyOn(MoodEntry, 'findOneAndUpdate').mockResolvedValue(savedMood);
 
       const res = await request(app)
         .post('/api/v1/trackers/mood')
@@ -217,7 +217,7 @@ describe('Phase 2 — Annual Plan & Tracker Endpoints', () => {
     });
 
     it('DELETE /mood/:date removes the specified day mood entry for authenticated user', async () => {
-      const deleteSpy = vi.spyOn(MoodEntry, 'deleteOne').mockResolvedValue({ deletedCount: 1 } as any);
+      const deleteSpy = vi.spyOn(MoodEntry, 'deleteOne').mockResolvedValue({ deletedCount: 1 });
 
       const res = await request(app)
         .delete('/api/v1/trackers/mood/2026-10-14')
@@ -245,7 +245,7 @@ describe('Phase 2 — Annual Plan & Tracker Endpoints', () => {
         updatedAt: new Date(),
       };
 
-      const createSpy = vi.spyOn(Habit, 'create').mockResolvedValue(createdHabit as any);
+      const createSpy = vi.spyOn(Habit, 'create').mockResolvedValue(createdHabit);
 
       const res = await request(app)
         .post('/api/v1/trackers/habits')
@@ -271,7 +271,7 @@ describe('Phase 2 — Annual Plan & Tracker Endpoints', () => {
 
     it('POST /habits/:id/toggle toggles completion for a specific calendar date', async () => {
       const habitId = new Types.ObjectId();
-      const completionMap = new Map<string, boolean>();
+      const completionMap = new Map();
 
       const mockHabit = {
         _id: habitId,
@@ -287,11 +287,11 @@ describe('Phase 2 — Annual Plan & Tracker Endpoints', () => {
         updatedAt: new Date(),
       };
 
-      const findAndUpdateSpy = vi.spyOn(Habit, 'findOneAndUpdate').mockImplementation(async (query: any, update: any) => {
+      const findAndUpdateSpy = vi.spyOn(Habit, 'findOneAndUpdate').mockImplementation(async (query, update) => {
         if (update.$set) {
           completionMap.set('2026-10-14', true);
         }
-        return mockHabit as any;
+        return mockHabit;
       });
 
       const res = await request(app)
@@ -318,7 +318,6 @@ describe('Phase 2 — Annual Plan & Tracker Endpoints', () => {
     it('prevents cross-user modification (User A cannot toggle User B habit)', async () => {
       const otherUserHabitId = new Types.ObjectId();
 
-      // Query looking for habitId owned by userAId returns null because it belongs to userB!
       vi.spyOn(Habit, 'findOneAndUpdate').mockResolvedValue(null);
 
       const res = await request(app)
@@ -337,7 +336,7 @@ describe('Phase 2 — Annual Plan & Tracker Endpoints', () => {
 
     it('DELETE /habits/:id deletes habit only if owned by authenticated user', async () => {
       const habitId = new Types.ObjectId();
-      const deleteSpy = vi.spyOn(Habit, 'deleteOne').mockResolvedValue({ deletedCount: 1 } as any);
+      const deleteSpy = vi.spyOn(Habit, 'deleteOne').mockResolvedValue({ deletedCount: 1 });
 
       const res = await request(app)
         .delete(`/api/v1/trackers/habits/${habitId}`)
