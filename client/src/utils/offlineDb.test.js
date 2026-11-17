@@ -1,10 +1,9 @@
-import { describe, it, expect, beforeEach, vi } from 'vitest';
-import * as offlineDb from './offlineDb';
-import { OfflineMutation } from '@planner/shared';
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
+import * as offlineDb from './offlineDb.js';
 
 describe('Offline Database (IndexedDB Service)', () => {
-  let mockQueueStore: Map<string, OfflineMutation>;
-  let mockCacheStore: Map<string, offlineDb.CachedRecord>;
+  let mockQueueStore;
+  let mockCacheStore;
 
   beforeEach(() => {
     mockQueueStore = new Map();
@@ -12,49 +11,49 @@ describe('Offline Database (IndexedDB Service)', () => {
 
     // Mock IDBDatabase transaction & objectStore implementation
     const fakeDb = {
-      transaction: (storeNames: string | string[], mode: string) => {
+      transaction: (storeNames, mode) => {
         const storeName = Array.isArray(storeNames) ? storeNames[0] : storeNames;
 
         if (storeName === 'mutationQueue') {
           return {
             objectStore: () => ({
-              add: (item: OfflineMutation) => {
+              add: (item) => {
                 mockQueueStore.set(item.id, item);
-                const req: any = {};
+                const req = {};
                 setTimeout(() => req.onsuccess && req.onsuccess({ target: { result: item.id } }), 0);
                 return req;
               },
-              put: (item: OfflineMutation) => {
+              put: (item) => {
                 mockQueueStore.set(item.id, item);
-                const req: any = {};
+                const req = {};
                 setTimeout(() => req.onsuccess && req.onsuccess({ target: { result: item.id } }), 0);
                 return req;
               },
-              get: (id: string) => {
-                const req: any = {};
+              get: (id) => {
+                const req = {};
                 setTimeout(() => {
                   req.result = mockQueueStore.get(id);
                   req.onsuccess && req.onsuccess();
                 }, 0);
                 return req;
               },
-              delete: (id: string) => {
+              delete: (id) => {
                 mockQueueStore.delete(id);
-                const req: any = {};
+                const req = {};
                 setTimeout(() => req.onsuccess && req.onsuccess(), 0);
                 return req;
               },
               getAll: () => {
-                const req: any = {};
+                const req = {};
                 setTimeout(() => {
                   req.result = Array.from(mockQueueStore.values());
                   req.onsuccess && req.onsuccess();
                 }, 0);
                 return req;
               },
-              index: (indexName: string) => ({
-                getAll: (range: any) => {
-                  const req: any = {};
+              index: (indexName) => ({
+                getAll: (range) => {
+                  const req = {};
                   setTimeout(() => {
                     const userId = range?.lower || range;
                     const items = Array.from(mockQueueStore.values()).filter(
@@ -65,8 +64,8 @@ describe('Offline Database (IndexedDB Service)', () => {
                   }, 0);
                   return req;
                 },
-                openCursor: (range: any) => {
-                  const req: any = {};
+                openCursor: (range) => {
+                  const req = {};
                   setTimeout(() => {
                     const userId = range?.lower || range;
                     const userKeys = Array.from(mockQueueStore.entries())
@@ -86,14 +85,14 @@ describe('Offline Database (IndexedDB Service)', () => {
         if (storeName === 'cachedRecords') {
           return {
             objectStore: () => ({
-              put: (record: offlineDb.CachedRecord) => {
+              put: (record) => {
                 mockCacheStore.set(record.id, record);
-                const req: any = {};
+                const req = {};
                 setTimeout(() => req.onsuccess && req.onsuccess(), 0);
                 return req;
               },
-              get: (id: string) => {
-                const req: any = {};
+              get: (id) => {
+                const req = {};
                 setTimeout(() => {
                   req.result = mockCacheStore.get(id);
                   req.onsuccess && req.onsuccess();
@@ -101,8 +100,8 @@ describe('Offline Database (IndexedDB Service)', () => {
                 return req;
               },
               index: () => ({
-                openCursor: (range: any) => {
-                  const req: any = {};
+                openCursor: (range) => {
+                  const req = {};
                   setTimeout(() => {
                     const userId = range?.lower || range;
                     const userKeys = Array.from(mockCacheStore.entries())
@@ -123,7 +122,7 @@ describe('Offline Database (IndexedDB Service)', () => {
       },
     };
 
-    offlineDb.setOfflineDbForTesting(fakeDb as any);
+    offlineDb.setOfflineDbForTesting(fakeDb);
   });
 
   afterEach(() => {

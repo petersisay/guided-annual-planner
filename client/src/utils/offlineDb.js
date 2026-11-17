@@ -1,32 +1,17 @@
-import {
-  OfflineMutation,
-  EntityType,
-} from '@planner/shared';
-
 const DB_NAME = 'guided_planner_offline_db';
 const DB_VERSION = 1;
 
-export interface CachedRecord<T = unknown> {
-  id: string; // ${userId}:${entityType}:${entityKey}
-  userId: string;
-  entityType: EntityType;
-  entityKey: string;
-  data: T;
-  updatedAt: string;
-  cachedAt: number;
-}
+let dbPromise = null;
 
-let dbPromise: Promise<IDBDatabase> | null = null;
-
-export function setOfflineDbForTesting(db: IDBDatabase | null): void {
+export function setOfflineDbForTesting(db) {
   dbPromise = db ? Promise.resolve(db) : null;
 }
 
-export function isIndexedDbSupported(): boolean {
+export function isIndexedDbSupported() {
   return (typeof window !== 'undefined' && !!window.indexedDB) || dbPromise !== null;
 }
 
-export function getOfflineDb(): Promise<IDBDatabase> {
+export function getOfflineDb() {
   if (dbPromise) return dbPromise;
 
   dbPromise = new Promise((resolve, reject) => {
@@ -39,7 +24,7 @@ export function getOfflineDb(): Promise<IDBDatabase> {
     const request = window.indexedDB.open(DB_NAME, DB_VERSION);
 
     request.onupgradeneeded = (event) => {
-      const db = (event.target as IDBOpenDBRequest).result;
+      const db = event.target.result;
 
       // 1. Mutation Queue Store
       if (!db.objectStoreNames.contains('mutationQueue')) {
@@ -75,11 +60,9 @@ export function getOfflineDb(): Promise<IDBDatabase> {
 /**
  * Enqueue a new mutation to be synced when online, or coalesce into an existing pending mutation.
  */
-export async function enqueueMutation(
-  mutationData: Omit<OfflineMutation, 'id' | 'createdAt' | 'retryCount' | 'status'>
-): Promise<OfflineMutation> {
+export async function enqueueMutation(mutationData) {
   const id = crypto.randomUUID();
-  const mutation: OfflineMutation = {
+  const mutation = {
     ...mutationData,
     id,
     createdAt: Date.now(),
@@ -97,11 +80,11 @@ export async function enqueueMutation(
     const tx = db.transaction('mutationQueue', 'readwrite');
     const store = tx.objectStore('mutationQueue');
     const index = store.index('userId');
-    const keyRange = typeof IDBKeyRange !== 'undefined' ? IDBKeyRange.only(mutationData.userId) : (mutationData.userId as any);
+    const keyRange = typeof IDBKeyRange !== 'undefined' ? IDBKeyRange.only(mutationData.userId) : mutationData.userId;
     const getReq = index.getAll(keyRange);
 
     getReq.onsuccess = () => {
-      const allUserMutations: OfflineMutation[] = getReq.result || [];
+      const allUserMutations = getReq.result || [];
       const existing = allUserMutations.find(
         (m) =>
           m.entityType === mutationData.entityType &&
@@ -114,7 +97,7 @@ export async function enqueueMutation(
           ...(existing.payload || {}),
           ...(mutationData.payload || {}),
         };
-        const updated: OfflineMutation = {
+        const updated = {
           ...existing,
           payload: mergedPayload,
           // Retain earliest expectedUpdatedAt to avoid artificial self-conflicts
@@ -141,7 +124,7 @@ export async function enqueueMutation(
 /**
  * Retrieve pending/failed mutations strictly scoped to the specified user.
  */
-export async function getPendingMutations(userId: string): Promise<OfflineMutation[]> {
+export async function getPendingMutations(userId) {
   if (!isIndexedDbSupported()) return [];
   const db = await getOfflineDb();
 
@@ -149,11 +132,11 @@ export async function getPendingMutations(userId: string): Promise<OfflineMutati
     const tx = db.transaction('mutationQueue', 'readonly');
     const store = tx.objectStore('mutationQueue');
     const index = store.index('userId');
-    const keyRange = typeof IDBKeyRange !== 'undefined' ? IDBKeyRange.only(userId) : (userId as any);
+    const keyRange = typeof IDBKeyRange !== 'undefined' ? IDBKeyRange.only(userId) : userId;
     const req = index.getAll(keyRange);
 
     req.onsuccess = () => {
-      const allUserMutations: OfflineMutation[] = req.result || [];
+      const allUserMutations = req.result || [];
       const pending = allUserMutations
         .filter((m) => m.status === 'pending' || m.status === 'failed' || m.status === 'processing')
         .sort((a, b) => Number(a.createdAt) - Number(b.createdAt));
@@ -166,7 +149,7 @@ export async function getPendingMutations(userId: string): Promise<OfflineMutati
 /**
  * Retrieve mutations in conflict state strictly scoped to the specified user.
  */
-export async function getConflictedMutations(userId: string): Promise<OfflineMutation[]> {
+export async function getConflictedMutations(userId) {
   if (!isIndexedDbSupported()) return [];
   const db = await getOfflineDb();
 
@@ -174,11 +157,11 @@ export async function getConflictedMutations(userId: string): Promise<OfflineMut
     const tx = db.transaction('mutationQueue', 'readonly');
     const store = tx.objectStore('mutationQueue');
     const index = store.index('userId');
-    const keyRange = typeof IDBKeyRange !== 'undefined' ? IDBKeyRange.only(userId) : (userId as any);
+    const keyRange = typeof IDBKeyRange !== 'undefined' ? IDBKeyRange.only(userId) : userId;
     const req = index.getAll(keyRange);
 
     req.onsuccess = () => {
-      const allUserMutations: OfflineMutation[] = req.result || [];
+      const allUserMutations = req.result || [];
       const conflicted = allUserMutations
         .filter((m) => m.status === 'conflict')
         .sort((a, b) => Number(a.createdAt) - Number(b.createdAt));
@@ -191,7 +174,7 @@ export async function getConflictedMutations(userId: string): Promise<OfflineMut
 /**
  * Count pending mutations strictly scoped to the user (including conflicted).
  */
-export async function getPendingMutationsCount(userId: string): Promise<number> {
+export async function getPendingMutationsCount(userId) {
   if (!isIndexedDbSupported()) return 0;
   const db = await getOfflineDb();
 
@@ -199,11 +182,11 @@ export async function getPendingMutationsCount(userId: string): Promise<number> 
     const tx = db.transaction('mutationQueue', 'readonly');
     const store = tx.objectStore('mutationQueue');
     const index = store.index('userId');
-    const keyRange = typeof IDBKeyRange !== 'undefined' ? IDBKeyRange.only(userId) : (userId as any);
+    const keyRange = typeof IDBKeyRange !== 'undefined' ? IDBKeyRange.only(userId) : userId;
     const req = index.getAll(keyRange);
 
     req.onsuccess = () => {
-      const allUserMutations: OfflineMutation[] = req.result || [];
+      const allUserMutations = req.result || [];
       const pending = allUserMutations.filter(
         (m) => m.status === 'pending' || m.status === 'failed' || m.status === 'processing' || m.status === 'conflict'
       );
@@ -216,7 +199,7 @@ export async function getPendingMutationsCount(userId: string): Promise<number> 
 /**
  * Retrieve ALL pending mutations across all accounts (used for global warnings before clearing).
  */
-export async function getAllPendingMutations(): Promise<OfflineMutation[]> {
+export async function getAllPendingMutations() {
   if (!isIndexedDbSupported()) return [];
   const db = await getOfflineDb();
 
@@ -226,7 +209,7 @@ export async function getAllPendingMutations(): Promise<OfflineMutation[]> {
     const req = store.getAll();
 
     req.onsuccess = () => {
-      const all: OfflineMutation[] = req.result || [];
+      const all = req.result || [];
       resolve(all.filter((m) => m.status === 'pending' || m.status === 'failed' || m.status === 'processing'));
     };
     req.onerror = () => reject(req.error);
@@ -236,10 +219,7 @@ export async function getAllPendingMutations(): Promise<OfflineMutation[]> {
 /**
  * Update the status, error, or retry count of a queued mutation.
  */
-export async function updateMutation(
-  id: string,
-  updates: Partial<OfflineMutation>
-): Promise<void> {
+export async function updateMutation(id, updates) {
   if (!isIndexedDbSupported()) return;
   const db = await getOfflineDb();
 
@@ -249,13 +229,13 @@ export async function updateMutation(
     const getReq = store.get(id);
 
     getReq.onsuccess = () => {
-      const existing = getReq.result as OfflineMutation | undefined;
+      const existing = getReq.result;
       if (!existing) {
         resolve();
         return;
       }
 
-      const updated: OfflineMutation = {
+      const updated = {
         ...existing,
         ...updates,
       };
@@ -272,7 +252,7 @@ export async function updateMutation(
 /**
  * Delete a mutation once confirmed synced or discarded by user.
  */
-export async function deleteMutation(id: string): Promise<void> {
+export async function deleteMutation(id) {
   if (!isIndexedDbSupported()) return;
   const db = await getOfflineDb();
 
@@ -289,7 +269,7 @@ export async function deleteMutation(id: string): Promise<void> {
 /**
  * Clear all mutations for a specific user (e.g. account purge or test reset).
  */
-export async function clearUserMutations(userId: string): Promise<void> {
+export async function clearUserMutations(userId) {
   if (!isIndexedDbSupported()) return;
   const db = await getOfflineDb();
 
@@ -297,7 +277,7 @@ export async function clearUserMutations(userId: string): Promise<void> {
     const tx = db.transaction('mutationQueue', 'readwrite');
     const store = tx.objectStore('mutationQueue');
     const index = store.index('userId');
-    const keyRange = typeof IDBKeyRange !== 'undefined' ? IDBKeyRange.only(userId) : (userId as any);
+    const keyRange = typeof IDBKeyRange !== 'undefined' ? IDBKeyRange.only(userId) : userId;
     const req = index.openCursor(keyRange);
 
     req.onsuccess = () => {
@@ -316,18 +296,12 @@ export async function clearUserMutations(userId: string): Promise<void> {
 /**
  * Save or update a locally cached record with its known server updatedAt timestamp.
  */
-export async function saveCachedRecord<T = unknown>(
-  userId: string,
-  entityType: EntityType,
-  entityKey: string,
-  data: T,
-  updatedAt: string
-): Promise<void> {
+export async function saveCachedRecord(userId, entityType, entityKey, data, updatedAt) {
   if (!isIndexedDbSupported()) return;
   const db = await getOfflineDb();
   const id = `${userId}:${entityType}:${entityKey}`;
 
-  const record: CachedRecord<T> = {
+  const record = {
     id,
     userId,
     entityType,
@@ -350,11 +324,7 @@ export async function saveCachedRecord<T = unknown>(
 /**
  * Retrieve a cached record for offline fallback viewing.
  */
-export async function getCachedRecord<T = unknown>(
-  userId: string,
-  entityType: EntityType,
-  entityKey: string
-): Promise<CachedRecord<T> | null> {
+export async function getCachedRecord(userId, entityType, entityKey) {
   if (!isIndexedDbSupported()) return null;
   const db = await getOfflineDb();
   const id = `${userId}:${entityType}:${entityKey}`;
@@ -372,7 +342,7 @@ export async function getCachedRecord<T = unknown>(
 /**
  * Clear cached records for a user.
  */
-export async function clearUserCache(userId: string): Promise<void> {
+export async function clearUserCache(userId) {
   if (!isIndexedDbSupported()) return;
   const db = await getOfflineDb();
 
@@ -380,7 +350,7 @@ export async function clearUserCache(userId: string): Promise<void> {
     const tx = db.transaction('cachedRecords', 'readwrite');
     const store = tx.objectStore('cachedRecords');
     const index = store.index('userId');
-    const keyRange = typeof IDBKeyRange !== 'undefined' ? IDBKeyRange.only(userId) : (userId as any);
+    const keyRange = typeof IDBKeyRange !== 'undefined' ? IDBKeyRange.only(userId) : userId;
     const req = index.openCursor(keyRange);
 
     req.onsuccess = () => {
