@@ -15,19 +15,6 @@
 export const CACHE_NAME = 'gp-planner-shell-v1';
 export const CACHE_PREFIX = 'gp-planner-';
 
-export type CacheAction = 'CACHE_FIRST' | 'STALE_WHILE_REVALIDATE' | 'NETWORK_ONLY';
-
-export interface RequestLike {
-  url: string;
-  method?: string;
-  mode?: string;
-  credentials?: RequestCredentials | string;
-  headers?: {
-    get(name: string): string | null;
-    has?(name: string): boolean;
-  } | Record<string, string | null | undefined>;
-}
-
 const STATIC_EXTENSIONS = [
   '.js',
   '.css',
@@ -45,7 +32,7 @@ const STATIC_EXTENSIONS = [
 /**
  * Checks if a pathname represents an API, auth, or health endpoint.
  */
-export function isProtectedEndpoint(pathname: string): boolean {
+export function isProtectedEndpoint(pathname) {
   const normalized = pathname.toLowerCase();
   return (
     normalized === '/api' ||
@@ -61,9 +48,9 @@ export function isProtectedEndpoint(pathname: string): boolean {
  * Evaluates whether a request should be served/saved from/to the Service Worker Cache Storage.
  */
 export function evaluateRequestCachePolicy(
-  req: RequestLike,
-  currentOrigin: string = typeof window !== 'undefined' ? window.location.origin : 'http://localhost:5173'
-): { action: CacheAction; reason: string } {
+  req,
+  currentOrigin = typeof window !== 'undefined' ? window.location.origin : 'http://localhost:5173'
+) {
   const method = (req.method || 'GET').toUpperCase();
 
   // 1. Strict rejection of non-GET methods
@@ -71,7 +58,7 @@ export function evaluateRequestCachePolicy(
     return { action: 'NETWORK_ONLY', reason: 'Non-GET method' };
   }
 
-  let parsedUrl: URL;
+  let parsedUrl;
   try {
     parsedUrl = new URL(req.url, currentOrigin);
   } catch {
@@ -90,8 +77,8 @@ export function evaluateRequestCachePolicy(
   }
 
   if (req.headers) {
-    if (typeof (req.headers as any).has === 'function') {
-      const h = req.headers as { has(n: string): boolean; get(n: string): string | null };
+    if (typeof req.headers.has === 'function') {
+      const h = req.headers;
       if (
         h.has('authorization') ||
         h.has('cookie') ||
@@ -102,7 +89,7 @@ export function evaluateRequestCachePolicy(
         hasCredentials = true;
       }
     } else {
-      const h = req.headers as Record<string, string | null | undefined>;
+      const h = req.headers;
       if (
         Boolean(h['authorization'] || h['Authorization']) ||
         Boolean(h['cookie'] || h['Cookie']) ||
