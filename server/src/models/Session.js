@@ -1,20 +1,6 @@
-import { Schema, model, Document, Types } from 'mongoose';
+import { Schema, model } from 'mongoose';
 
-export interface ISessionDocument extends Document<Types.ObjectId> {
-  userId: Types.ObjectId;
-  sessionTokenHash: string;
-  previousTokenHash?: string;
-  gracePeriodExpiresAt?: Date;
-  userAgent?: string;
-  ipAddress?: string;
-  expiresAt: Date;
-  absoluteExpiresAt: Date;
-  lastRotatedAt: Date;
-  createdAt: Date;
-  updatedAt: Date;
-}
-
-const SessionSchema = new Schema<ISessionDocument>(
+const SessionSchema = new Schema(
   {
     userId: {
       type: Schema.Types.ObjectId,
@@ -65,4 +51,4 @@ const SessionSchema = new Schema<ISessionDocument>(
 // TTL index for automatic database garbage collection (as secondary cleanup)
 SessionSchema.index({ expiresAt: 1 }, { expireAfterSeconds: 0 });
 
-export const Session = model<ISessionDocument>('Session', SessionSchema);
+export const Session = model('Session', SessionSchema);
