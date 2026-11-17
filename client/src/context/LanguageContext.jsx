@@ -1,18 +1,12 @@
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { SupportedLanguage, TranslationDictionary, translations } from '../i18n/translations';
+import React, { createContext, useContext, useState, useEffect } from 'react';
+import { translations } from '../i18n/translations.js';
 
-interface LanguageContextType {
-  language: SupportedLanguage;
-  setLanguage: (lang: SupportedLanguage) => void;
-  t: TranslationDictionary;
-}
-
-const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
+const LanguageContext = createContext(undefined);
 
 const LANGUAGE_STORAGE_KEY = 'planner_selected_language';
 
-export const LanguageProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const [language, setLanguageState] = useState<SupportedLanguage>(() => {
+export const LanguageProvider = ({ children }) => {
+  const [language, setLanguageState] = useState(() => {
     try {
       const saved = localStorage.getItem(LANGUAGE_STORAGE_KEY);
       if (saved === 'am' || saved === 'en') {
@@ -24,7 +18,7 @@ export const LanguageProvider: React.FC<{ children: ReactNode }> = ({ children }
     return 'en';
   });
 
-  const setLanguage = (lang: SupportedLanguage) => {
+  const setLanguage = (lang) => {
     setLanguageState(lang);
     try {
       localStorage.setItem(LANGUAGE_STORAGE_KEY, lang);
@@ -47,7 +41,7 @@ export const LanguageProvider: React.FC<{ children: ReactNode }> = ({ children }
   );
 };
 
-export const useLanguage = (): LanguageContextType => {
+export const useLanguage = () => {
   const context = useContext(LanguageContext);
   if (!context) {
     // Graceful fallback for tests that might render components without LanguageProvider
