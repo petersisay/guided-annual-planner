@@ -1,13 +1,13 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import request from 'supertest';
-import { createApp } from '../app';
-import { sessionService } from '../services/session.service';
-import { User } from '../models/User';
-import { DailyPlan } from '../models/DailyPlan';
-import { WeeklyPlan } from '../models/WeeklyPlan';
-import { MonthlyPlan } from '../models/MonthlyPlan';
-import { AnnualPlan } from '../models/AnnualPlan';
-import { ProcessedMutation } from '../models/ProcessedMutation';
+import { createApp } from '../app.js';
+import { sessionService } from '../services/session.service.js';
+import { User } from '../models/User.js';
+import { DailyPlan } from '../models/DailyPlan.js';
+import { WeeklyPlan } from '../models/WeeklyPlan.js';
+import { MonthlyPlan } from '../models/MonthlyPlan.js';
+import { AnnualPlan } from '../models/AnnualPlan.js';
+import { ProcessedMutation } from '../models/ProcessedMutation.js';
 import { Types } from 'mongoose';
 
 describe('Concurrency Control & Idempotency Safeguards', () => {
@@ -32,18 +32,18 @@ describe('Concurrency Control & Idempotency Safeguards', () => {
   beforeEach(() => {
     vi.restoreAllMocks();
 
-    vi.spyOn(sessionService, 'validateAndRenewSession').mockImplementation(async (token: string) => {
+    vi.spyOn(sessionService, 'validateAndRenewSession').mockImplementation(async (token) => {
       if (token === 'user-b-session') {
-        return { session: { userId: userBId } as any };
+        return { session: { userId: userBId } };
       }
-      return { session: { userId: userAId } as any };
+      return { session: { userId: userAId } };
     });
 
-    vi.spyOn(User, 'findById').mockImplementation(async (id: any) => {
+    vi.spyOn(User, 'findById').mockImplementation(async (id) => {
       if (id?.toString() === userBId.toString()) {
-        return userBDoc as any;
+        return userBDoc;
       }
-      return userADoc as any;
+      return userADoc;
     });
 
     vi.spyOn(WeeklyPlan, 'findOne').mockResolvedValue(null);
@@ -54,10 +54,8 @@ describe('Concurrency Control & Idempotency Safeguards', () => {
       const serverDate = new Date('2026-10-15T12:00:00.000Z');
       const clientStaleDate = new Date('2026-10-15T11:00:00.000Z').toISOString();
 
-      // Mock findOneAndUpdate returning null because updatedAt didn't match expectedDate
       vi.spyOn(DailyPlan, 'findOneAndUpdate').mockResolvedValue(null);
 
-      // Mock findOne finding the server's newer version
       vi.spyOn(DailyPlan, 'findOne').mockResolvedValue({
         _id: new Types.ObjectId(),
         userId: userAId,
@@ -73,7 +71,7 @@ describe('Concurrency Control & Idempotency Safeguards', () => {
         journal: { gratitude: [], wins: '', challengesAndLessons: '', freeWriting: '' },
         createdAt: new Date('2026-10-15T08:00:00.000Z'),
         updatedAt: serverDate,
-      } as any);
+      });
 
       const res = await request(app)
         .put('/api/v1/planner/daily/2026-10-15')
@@ -97,7 +95,7 @@ describe('Concurrency Control & Idempotency Safeguards', () => {
       const clientStaleDate = new Date('2026-10-15T11:00:00.000Z').toISOString();
 
       vi.spyOn(DailyPlan, 'findOneAndUpdate').mockResolvedValue(null);
-      vi.spyOn(DailyPlan, 'findOne').mockResolvedValue(null); // Not found on server
+      vi.spyOn(DailyPlan, 'findOne').mockResolvedValue(null);
 
       const res = await request(app)
         .put('/api/v1/planner/daily/2026-10-15')
@@ -130,7 +128,7 @@ describe('Concurrency Control & Idempotency Safeguards', () => {
         notes: 'Server notes',
         createdAt: new Date('2026-10-15T08:00:00.000Z'),
         updatedAt: new Date('2026-10-15T12:00:00.000Z'),
-      } as any);
+      });
 
       const res = await request(app)
         .put('/api/v1/planner/weekly/2026/42')
@@ -164,7 +162,7 @@ describe('Concurrency Control & Idempotency Safeguards', () => {
         calendarNotes: new Map(),
         createdAt: new Date('2026-10-15T08:00:00.000Z'),
         updatedAt: new Date('2026-10-15T12:00:00.000Z'),
-      } as any);
+      });
 
       const res = await request(app)
         .put('/api/v1/planner/monthly/2026/10')
@@ -193,7 +191,7 @@ describe('Concurrency Control & Idempotency Safeguards', () => {
         annualReview: {},
         createdAt: new Date('2026-10-15T08:00:00.000Z'),
         updatedAt: new Date('2026-10-15T12:00:00.000Z'),
-      } as any);
+      });
 
       const res = await request(app)
         .put('/api/v1/planner/year/2026')
@@ -217,7 +215,7 @@ describe('Concurrency Control & Idempotency Safeguards', () => {
       const updatedDate = new Date('2026-10-15T12:00:00.000Z');
 
       vi.spyOn(ProcessedMutation, 'findOne').mockResolvedValue(null);
-      const createSpy = vi.spyOn(ProcessedMutation, 'create').mockResolvedValue({} as any);
+      const createSpy = vi.spyOn(ProcessedMutation, 'create').mockResolvedValue({});
 
       vi.spyOn(DailyPlan, 'findOneAndUpdate').mockResolvedValue({
         _id: new Types.ObjectId(),
@@ -234,7 +232,7 @@ describe('Concurrency Control & Idempotency Safeguards', () => {
         journal: { gratitude: [], wins: '', challengesAndLessons: '', freeWriting: '' },
         createdAt: updatedDate,
         updatedAt: updatedDate,
-      } as any);
+      });
 
       const res = await request(app)
         .put('/api/v1/planner/daily/2026-10-15')
@@ -279,9 +277,8 @@ describe('Concurrency Control & Idempotency Safeguards', () => {
         statusCode: 200,
         responseBody: cachedResponseBody,
         createdAt: new Date(),
-      } as any);
+      });
 
-      // DailyPlan findOneAndUpdate should NOT be called because cached response is returned immediately
       const updateSpy = vi.spyOn(DailyPlan, 'findOneAndUpdate');
 
       const res = await request(app)
@@ -310,7 +307,7 @@ describe('Concurrency Control & Idempotency Safeguards', () => {
         method: 'PUT',
         status: 'in_progress',
         createdAt: new Date(),
-      } as any);
+      });
 
       const res = await request(app)
         .put('/api/v1/planner/daily/2026-10-15')
@@ -333,16 +330,16 @@ describe('Concurrency Control & Idempotency Safeguards', () => {
       vi.spyOn(ProcessedMutation, 'findOne').mockResolvedValue({
         userId: userAId,
         mutationId,
-        endpoint: '/api/v1/planner/daily/2026-10-14', // Different date!
+        endpoint: '/api/v1/planner/daily/2026-10-14',
         method: 'PUT',
         status: 'completed',
         statusCode: 200,
         responseBody: { success: true },
         createdAt: new Date(),
-      } as any);
+      });
 
       const res = await request(app)
-        .put('/api/v1/planner/daily/2026-10-15') // Today's date
+        .put('/api/v1/planner/daily/2026-10-15')
         .set('Origin', validOrigin)
         .set('X-Planner-Client', validCsrf)
         .set('Cookie', ['planner_session=active_token'])
@@ -359,10 +356,9 @@ describe('Concurrency Control & Idempotency Safeguards', () => {
     it('isolates mutations per-user: user B mutation ID does not match user A query', async () => {
       const mutationId = 'shared-uuid-different-users';
 
-      // Mock findOne: when querying with userId userBId, return null
-      const findSpy = vi.spyOn(ProcessedMutation, 'findOne').mockImplementation(async (query: any) => {
+      const findSpy = vi.spyOn(ProcessedMutation, 'findOne').mockImplementation(async (query) => {
         if (query.userId.toString() === userBId.toString()) {
-          return null; // User B hasn't run this
+          return null;
         }
         return {
           userId: userAId,
@@ -370,7 +366,7 @@ describe('Concurrency Control & Idempotency Safeguards', () => {
           status: 'completed',
           statusCode: 200,
           responseBody: { success: true, plan: { intention: 'User A intention' } },
-        } as any;
+        };
       });
 
       vi.spyOn(DailyPlan, 'findOneAndUpdate').mockResolvedValue({
@@ -388,9 +384,9 @@ describe('Concurrency Control & Idempotency Safeguards', () => {
         journal: { gratitude: [], wins: '', challengesAndLessons: '', freeWriting: '' },
         createdAt: new Date(),
         updatedAt: new Date(),
-      } as any);
+      });
 
-      const createSpy = vi.spyOn(ProcessedMutation, 'create').mockResolvedValue({} as any);
+      const createSpy = vi.spyOn(ProcessedMutation, 'create').mockResolvedValue({});
 
       const res = await request(app)
         .put('/api/v1/planner/daily/2026-10-15')
@@ -427,7 +423,7 @@ describe('Concurrency Control & Idempotency Safeguards', () => {
         status: 'completed',
         statusCode: 200,
         responseBody: { success: true },
-      } as any);
+      });
 
       const res = await request(app)
         .put('/api/v1/planner/daily/2026-10-15')
@@ -447,9 +443,8 @@ describe('Concurrency Control & Idempotency Safeguards', () => {
       const mutationId = 'mut-failure-injection-test';
 
       vi.spyOn(ProcessedMutation, 'findOne').mockResolvedValue(null);
-      vi.spyOn(ProcessedMutation, 'create').mockResolvedValue({} as any);
-      const deleteSpy = vi.spyOn(ProcessedMutation, 'deleteOne').mockResolvedValue({} as any);
-      // Simulate failure when saving cached idempotency record
+      vi.spyOn(ProcessedMutation, 'create').mockResolvedValue({});
+      const deleteSpy = vi.spyOn(ProcessedMutation, 'deleteOne').mockResolvedValue({});
       vi.spyOn(ProcessedMutation, 'updateOne').mockRejectedValue(new Error('Disk write error'));
 
       vi.spyOn(DailyPlan, 'findOneAndUpdate').mockResolvedValue({
@@ -467,7 +462,7 @@ describe('Concurrency Control & Idempotency Safeguards', () => {
         journal: { gratitude: [], wins: '', challengesAndLessons: '', freeWriting: '' },
         createdAt: new Date(),
         updatedAt: new Date(),
-      } as any);
+      });
 
       const res = await request(app)
         .put('/api/v1/planner/daily/2026-10-15')
@@ -481,14 +476,13 @@ describe('Concurrency Control & Idempotency Safeguards', () => {
 
       expect(res.status).toBe(200);
       expect(res.body.success).toBe(true);
-      // Await tick for error catch block
       await new Promise((r) => setTimeout(r, 10));
       expect(deleteSpy).toHaveBeenCalledWith({ userId: userAId, mutationId });
     });
 
     it('recovers from stale in_progress lock older than 30 seconds', async () => {
       const mutationId = 'mut-stale-lock-test';
-      const staleDate = new Date(Date.now() - 35000); // 35 seconds ago
+      const staleDate = new Date(Date.now() - 35000);
 
       vi.spyOn(ProcessedMutation, 'findOne').mockResolvedValue({
         userId: userAId,
@@ -497,9 +491,9 @@ describe('Concurrency Control & Idempotency Safeguards', () => {
         method: 'PUT',
         status: 'in_progress',
         createdAt: staleDate,
-      } as any);
-      const deleteSpy = vi.spyOn(ProcessedMutation, 'deleteOne').mockResolvedValue({} as any);
-      vi.spyOn(ProcessedMutation, 'create').mockResolvedValue({} as any);
+      });
+      const deleteSpy = vi.spyOn(ProcessedMutation, 'deleteOne').mockResolvedValue({});
+      vi.spyOn(ProcessedMutation, 'create').mockResolvedValue({});
 
       vi.spyOn(DailyPlan, 'findOneAndUpdate').mockResolvedValue({
         _id: new Types.ObjectId(),
@@ -516,7 +510,7 @@ describe('Concurrency Control & Idempotency Safeguards', () => {
         journal: { gratitude: [], wins: '', challengesAndLessons: '', freeWriting: '' },
         createdAt: new Date(),
         updatedAt: new Date(),
-      } as any);
+      });
 
       const res = await request(app)
         .put('/api/v1/planner/daily/2026-10-15')
