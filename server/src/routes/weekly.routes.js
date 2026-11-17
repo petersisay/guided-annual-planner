@@ -1,7 +1,7 @@
 import { Router } from 'express';
-import { weeklyController } from '../controllers/weekly.controller';
-import { requireAuth } from '../middleware/auth.middleware';
-import { idempotencyMiddleware } from '../middleware/idempotency.middleware';
+import { weeklyController } from '../controllers/weekly.controller.js';
+import { requireAuth } from '../middleware/auth.middleware.js';
+import { idempotencyMiddleware } from '../middleware/idempotency.middleware.js';
 
 export const weeklyRouter = Router();
 
