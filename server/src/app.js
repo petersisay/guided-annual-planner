@@ -1,20 +1,24 @@
 import path from 'path';
 import fs from 'fs';
+import { fileURLToPath } from 'url';
 import express from 'express';
 import helmet from 'helmet';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
-import { env } from './config/env';
-import { authRouter } from './routes/auth.routes';
-import { annualRouter } from './routes/annual.routes';
-import { monthlyRouter } from './routes/monthly.routes';
-import { weeklyRouter } from './routes/weekly.routes';
-import { dailyRouter } from './routes/daily.routes';
-import { trackerRouter } from './routes/tracker.routes';
-import { userRouter } from './routes/user.routes';
-import { backupRouter } from './routes/backup.routes';
-import { errorHandler } from './middleware/error.middleware';
-import { csrfProtection } from './middleware/csrf.middleware';
+import { env } from './config/env.js';
+import { authRouter } from './routes/auth.routes.js';
+import { annualRouter } from './routes/annual.routes.js';
+import { monthlyRouter } from './routes/monthly.routes.js';
+import { weeklyRouter } from './routes/weekly.routes.js';
+import { dailyRouter } from './routes/daily.routes.js';
+import { trackerRouter } from './routes/tracker.routes.js';
+import { userRouter } from './routes/user.routes.js';
+import { backupRouter } from './routes/backup.routes.js';
+import { errorHandler } from './middleware/error.middleware.js';
+import { csrfProtection } from './middleware/csrf.middleware.js';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 export function createApp() {
   const app = express();
@@ -94,7 +98,7 @@ export function createApp() {
     });
   });
 
-  // 7. Centralized Error Handler
+  // 9. Centralized Error Handler
   app.use(errorHandler);
 
   return app;
