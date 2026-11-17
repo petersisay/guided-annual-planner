@@ -1,16 +1,10 @@
-import { Request, Response, NextFunction } from 'express';
 import { ZodError } from 'zod';
-import { env } from '../config/env';
+import { env } from '../config/env.js';
 
-export function errorHandler(
-  err: any,
-  _req: Request,
-  res: Response,
-  _next: NextFunction
-): void {
+export function errorHandler(err, _req, res, _next) {
   // Zod Validation Errors (checking both instanceof and name for monorepo safety)
   if (err instanceof ZodError || err?.name === 'ZodError') {
-    const details = err.errors?.map((e: any) => ({
+    const details = err.errors?.map((e) => ({
       field: e.path?.join('.'),
       issue: e.message,
     })) || [];
@@ -27,7 +21,7 @@ export function errorHandler(
 
   // Mongoose Validation Error
   if (err?.name === 'ValidationError') {
-    const details = Object.values(err.errors || {}).map((e: any) => ({
+    const details = Object.values(err.errors || {}).map((e) => ({
       field: e.path,
       issue: e.message,
     }));
@@ -43,7 +37,7 @@ export function errorHandler(
   }
 
   // Mongoose Duplicate Key Error (code 11000)
-  if (err.code === 11000) {
+  if (err?.code === 11000) {
     const field = Object.keys(err.keyValue || {})[0] || 'resource';
     res.status(409).json({
       success: false,
@@ -55,8 +49,14 @@ export function errorHandler(
     return;
   }
 
-  // Default Internal Error
-  const statusCode = typeof err.statusCode === 'number' ? err.statusCode : 500;
+  // Default Internal or Client Error
+  const statusCode =
+    typeof err.statusCode === 'number'
+      ? err.statusCode
+      : typeof err.status === 'number'
+      ? err.status
+      : 500;
+
   const message =
     env.NODE_ENV === 'production' && statusCode === 500
       ? 'An unexpected error occurred. Please try again later.'
@@ -69,7 +69,7 @@ export function errorHandler(
   res.status(statusCode).json({
     success: false,
     error: {
-      code: err.code || 'SERVER_ERROR',
+      code: err.code || (statusCode === 500 ? 'SERVER_ERROR' : 'REQUEST_ERROR'),
       message,
     },
   });
