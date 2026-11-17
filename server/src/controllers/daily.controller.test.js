@@ -1,13 +1,13 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import request from 'supertest';
-import { createApp } from '../app';
-import { sessionService } from '../services/session.service';
-import { User } from '../models/User';
-import { DailyPlan } from '../models/DailyPlan';
-import { WeeklyPlan } from '../models/WeeklyPlan';
-import { MonthlyPlan } from '../models/MonthlyPlan';
-import { MoodEntry } from '../models/MoodEntry';
-import { Habit } from '../models/Habit';
+import { createApp } from '../app.js';
+import { sessionService } from '../services/session.service.js';
+import { User } from '../models/User.js';
+import { DailyPlan } from '../models/DailyPlan.js';
+import { WeeklyPlan } from '../models/WeeklyPlan.js';
+import { MonthlyPlan } from '../models/MonthlyPlan.js';
+import { MoodEntry } from '../models/MoodEntry.js';
+import { Habit } from '../models/Habit.js';
 import { Types } from 'mongoose';
 
 describe('Daily Planner & Journaling Endpoints (/api/v1/planner/daily)', () => {
@@ -26,9 +26,9 @@ describe('Daily Planner & Journaling Endpoints (/api/v1/planner/daily)', () => {
     vi.restoreAllMocks();
 
     vi.spyOn(sessionService, 'validateAndRenewSession').mockResolvedValue({
-      session: { userId: userAId } as any,
+      session: { userId: userAId },
     });
-    vi.spyOn(User, 'findById').mockResolvedValue(userADoc as any);
+    vi.spyOn(User, 'findById').mockResolvedValue(userADoc);
     vi.spyOn(WeeklyPlan, 'findOne').mockResolvedValue(null);
   });
 
@@ -62,13 +62,13 @@ describe('Daily Planner & Journaling Endpoints (/api/v1/planner/daily)', () => {
       updatedAt: new Date(),
     };
 
-    vi.spyOn(DailyPlan, 'findOne').mockResolvedValue(mockDaily as any);
+    vi.spyOn(DailyPlan, 'findOne').mockResolvedValue(mockDaily);
     vi.spyOn(MoodEntry, 'findOne').mockResolvedValue({
       moodKey: 'radiant',
       colorHex: '#7A9A48',
       label: 'Radiant & Energized',
       note: 'Deeply fulfilled',
-    } as any);
+    });
     vi.spyOn(Habit, 'find').mockResolvedValue([
       {
         _id: new Types.ObjectId(),
@@ -76,10 +76,10 @@ describe('Daily Planner & Journaling Endpoints (/api/v1/planner/daily)', () => {
         colorHex: '#7A9A48',
         completionDates: new Map([['2026-10-15', true]]),
       },
-    ] as any);
+    ]);
     vi.spyOn(MonthlyPlan, 'findOne').mockResolvedValue({
       mustDos: [{ id: 'm1', text: 'Complete quarterly manuscript', checked: false }],
-    } as any);
+    });
 
     const res = await request(app)
       .get('/api/v1/planner/daily/2026-10-15')
@@ -92,7 +92,6 @@ describe('Daily Planner & Journaling Endpoints (/api/v1/planner/daily)', () => {
     expect(res.body.plan.primaryPriorities[0].text).toBe('Draft chapter 1');
     expect(res.body.plan.primaryPriorities[0].done).toBe(true);
 
-    // Context aggregated cleanly without duplicate records
     expect(res.body.context.mood.moodKey).toBe('radiant');
     expect(res.body.context.habits[0].completed).toBe(true);
     expect(res.body.context.monthlyMustDos[0].text).toBe('Complete quarterly manuscript');
@@ -135,9 +134,8 @@ describe('Daily Planner & Journaling Endpoints (/api/v1/planner/daily)', () => {
       updatedAt: new Date(),
     };
 
-    vi.spyOn(DailyPlan, 'findOneAndUpdate').mockResolvedValue(updatedDailyDoc as any);
+    vi.spyOn(DailyPlan, 'findOneAndUpdate').mockResolvedValue(updatedDailyDoc);
 
-    // Weekly sync mock
     const mockWeeklyDoc = {
       days: [
         {
@@ -151,7 +149,7 @@ describe('Daily Planner & Journaling Endpoints (/api/v1/planner/daily)', () => {
       ],
       save: vi.fn().mockResolvedValue(true),
     };
-    vi.spyOn(WeeklyPlan, 'findOne').mockResolvedValue(mockWeeklyDoc as any);
+    vi.spyOn(WeeklyPlan, 'findOne').mockResolvedValue(mockWeeklyDoc);
 
     const res = await request(app)
       .put('/api/v1/planner/daily/2026-10-15')
@@ -177,7 +175,6 @@ describe('Daily Planner & Journaling Endpoints (/api/v1/planner/daily)', () => {
     expect(res.body.plan.primaryPriorities[0].text).toBe('Updated Priority 1');
     expect(res.body.plan.primaryPriorities[0].done).toBe(true);
 
-    // Verify weekly plan was synchronized
     expect(mockWeeklyDoc.days[0].tasks[0].text).toBe('Updated Priority 1');
     expect(mockWeeklyDoc.days[0].tasks[0].done).toBe(true);
     expect(mockWeeklyDoc.save).toHaveBeenCalled();
@@ -206,9 +203,9 @@ describe('Daily Planner & Journaling Endpoints (/api/v1/planner/daily)', () => {
     };
 
     const findOneSpy = vi.spyOn(DailyPlan, 'findOne');
-    findOneSpy.mockResolvedValueOnce(null).mockResolvedValueOnce(mockCreatedDaily as any);
+    findOneSpy.mockResolvedValueOnce(null).mockResolvedValueOnce(mockCreatedDaily);
 
-    const duplicateError: any = new Error('E11000 duplicate key error');
+    const duplicateError = new Error('E11000 duplicate key error');
     duplicateError.code = 11000;
     vi.spyOn(DailyPlan, 'create').mockRejectedValueOnce(duplicateError);
 
