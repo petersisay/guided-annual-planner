@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
-import { googleAuthSchema } from './auth.schema';
-import { userPreferencesSchema } from './user.schema';
+import { googleAuthSchema } from './auth.schema.js';
+import { userPreferencesSchema } from './user.schema.js';
 
 describe('Shared Zod Schemas', () => {
   it('validates googleAuthSchema correctly', () => {

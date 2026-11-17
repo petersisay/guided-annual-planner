@@ -13,5 +13,3 @@ export const annualPlanUpdateSchema = z.object({
   annualReview: annualReviewSchema.optional(),
   expectedUpdatedAt: z.string().optional(),
 });
-
-export type AnnualPlanUpdateInput = z.infer<typeof annualPlanUpdateSchema>;
