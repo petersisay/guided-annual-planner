@@ -2,15 +2,12 @@
   "name": "@planner/shared",
   "version": "1.0.0",
   "private": true,
-  "main": "./dist/index.js",
-  "types": "./dist/index.d.ts",
+  "type": "module",
+  "main": "./src/index.js",
   "scripts": {
-    "build": "tsc",
-    "dev": "tsc --watch",
     "test": "vitest run"
   },
   "dependencies": {
-    "typescript": "^5.7.3",
     "zod": "^3.24.2"
   },
   "devDependencies": {
