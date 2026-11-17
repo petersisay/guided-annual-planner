@@ -1,17 +1,6 @@
-import { Schema, model, Document, Types } from 'mongoose';
+import { Schema, model } from 'mongoose';
 
-export interface IHabitDocument extends Document<Types.ObjectId> {
-  userId: Types.ObjectId;
-  title: string;
-  colorHex: string;
-  activeYear: number;
-  archived: boolean;
-  completionDates: Map<string, boolean>; // "YYYY-MM-DD" -> true
-  createdAt: Date;
-  updatedAt: Date;
-}
-
-const HabitSchema = new Schema<IHabitDocument>(
+const HabitSchema = new Schema(
   {
     userId: {
       type: Schema.Types.ObjectId,
@@ -50,7 +39,6 @@ const HabitSchema = new Schema<IHabitDocument>(
   }
 );
 
-// Fast lookup of active habits for a user and year
 HabitSchema.index({ userId: 1, activeYear: 1, archived: 1 });
 
-export const Habit = model<IHabitDocument>('Habit', HabitSchema);
+export const Habit = model('Habit', HabitSchema);
