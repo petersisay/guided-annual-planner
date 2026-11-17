@@ -1,32 +1,31 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
-import { syncManager } from './syncManager';
-import * as offlineDb from '../utils/offlineDb';
-import { OfflineMutation } from '@planner/shared';
+import { syncManager } from './syncManager.js';
+import * as offlineDb from '../utils/offlineDb.js';
 
 describe('SyncManager Service', () => {
   const userId = 'user-sync-test';
-  let mockMutations: OfflineMutation[] = [];
+  let mockMutations = [];
 
   beforeEach(() => {
     vi.restoreAllMocks();
     mockMutations = [];
 
-    vi.spyOn(offlineDb, 'getPendingMutations').mockImplementation(async (uid: string) => {
+    vi.spyOn(offlineDb, 'getPendingMutations').mockImplementation(async (uid) => {
       return mockMutations.filter((m) => m.userId === uid && m.status !== 'conflict');
     });
 
-    vi.spyOn(offlineDb, 'getPendingMutationsCount').mockImplementation(async (uid: string) => {
+    vi.spyOn(offlineDb, 'getPendingMutationsCount').mockImplementation(async (uid) => {
       return mockMutations.filter((m) => m.userId === uid).length;
     });
 
-    vi.spyOn(offlineDb, 'updateMutation').mockImplementation(async (id: string, updates: any) => {
+    vi.spyOn(offlineDb, 'updateMutation').mockImplementation(async (id, updates) => {
       const idx = mockMutations.findIndex((m) => m.id === id);
       if (idx !== -1) {
         mockMutations[idx] = { ...mockMutations[idx], ...updates };
       }
     });
 
-    vi.spyOn(offlineDb, 'deleteMutation').mockImplementation(async (id: string) => {
+    vi.spyOn(offlineDb, 'deleteMutation').mockImplementation(async (id) => {
       mockMutations = mockMutations.filter((m) => m.id !== id);
     });
 
@@ -47,7 +46,7 @@ describe('SyncManager Service', () => {
   });
 
   it('syncs pending mutation online with X-Mutation-Id header', async () => {
-    const testMutation: OfflineMutation = {
+    const testMutation = {
       id: 'mut-1234-uuid',
       userId,
       entityType: 'daily',
@@ -96,7 +95,7 @@ describe('SyncManager Service', () => {
   });
 
   it('detects 409 conflict, pauses sync, and dispatches conflict event', async () => {
-    const testMutation: OfflineMutation = {
+    const testMutation = {
       id: 'mut-conflict-uuid',
       userId,
       entityType: 'daily',
@@ -199,7 +198,7 @@ describe('SyncManager Service', () => {
   });
 
   it('handles multi-entity offline recovery across daily, weekly, monthly, annual, mood, and habit', async () => {
-    const entities: OfflineMutation[] = [
+    const entities = [
       {
         id: 'mut-daily-1',
         userId,
@@ -276,8 +275,8 @@ describe('SyncManager Service', () => {
 
     mockMutations.push(...entities);
 
-    const calledEndpoints: string[] = [];
-    const fetchSpy = vi.fn().mockImplementation(async (url: string) => {
+    const calledEndpoints = [];
+    const fetchSpy = vi.fn().mockImplementation(async (url) => {
       calledEndpoints.push(url);
       return {
         ok: true,
