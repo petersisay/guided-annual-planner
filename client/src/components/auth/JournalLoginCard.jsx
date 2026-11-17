@@ -1,13 +1,13 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { GoogleLogin, CredentialResponse } from '@react-oauth/google';
+import { GoogleLogin } from '@react-oauth/google';
 import { BookOpen, Calendar, CheckCircle2, ShieldCheck, AlertCircle } from 'lucide-react';
-import { useAuth } from '../../context/AuthContext';
+import { useAuth } from '../../context/AuthContext.js';
 
-export const JournalLoginCard: React.FC = () => {
+export const JournalLoginCard = () => {
   const { loginWithGoogle, loginDev, loading, error, clearError } = useAuth();
 
-  const handleGoogleSuccess = async (credentialResponse: CredentialResponse) => {
+  const handleGoogleSuccess = async (credentialResponse) => {
     if (credentialResponse.credential) {
       await loginWithGoogle(credentialResponse.credential);
     }
@@ -163,7 +163,8 @@ export const JournalLoginCard: React.FC = () => {
                     theme="outline"
                     size="large"
                     shape="rectangular"
-                    text="continue_with"
+                    text="signin_with"
+                    prompt="select_account"
                     logo_alignment="left"
                     width="100%"
                   />
