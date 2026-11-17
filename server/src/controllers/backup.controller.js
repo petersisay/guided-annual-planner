@@ -1,34 +1,25 @@
-import { Response, NextFunction } from 'express';
-import mongoose from 'mongoose';
+import crypto from 'crypto';
 import {
   BACKUP_FORMAT_IDENTIFIER,
   BACKUP_SCHEMA_VERSION,
-  PlannerBackupData,
-  BackupRecordCounts,
   plannerBackupSchema,
   restoreRequestSchema,
-  RestoreResult,
 } from '@planner/shared';
-import { AuthenticatedRequest } from '../middleware/auth.middleware';
-import { User } from '../models/User';
-import { AnnualPlan } from '../models/AnnualPlan';
-import { MonthlyPlan } from '../models/MonthlyPlan';
-import { WeeklyPlan } from '../models/WeeklyPlan';
-import { DailyPlan } from '../models/DailyPlan';
-import { MoodEntry } from '../models/MoodEntry';
-import { Habit } from '../models/Habit';
+import { User } from '../models/User.js';
+import { AnnualPlan } from '../models/AnnualPlan.js';
+import { MonthlyPlan } from '../models/MonthlyPlan.js';
+import { WeeklyPlan } from '../models/WeeklyPlan.js';
+import { DailyPlan } from '../models/DailyPlan.js';
+import { MoodEntry } from '../models/MoodEntry.js';
+import { Habit } from '../models/Habit.js';
 
 export class BackupController {
   /**
    * Generates a complete, consistent server snapshot of all planner data owned by the user.
    */
-  async exportBackup(
-    req: AuthenticatedRequest,
-    res: Response,
-    next: NextFunction
-  ): Promise<void> {
+  async exportBackup(req, res, next) {
     try {
-      const userId = req.user!._id;
+      const userId = req.user._id;
 
       // Query all user-owned data in parallel
       const [
@@ -50,7 +41,7 @@ export class BackupController {
       ]);
 
       // Sanitize Annual Plans
-      const annualPlans = annualDocs.map((doc: any) => ({
+      const annualPlans = annualDocs.map((doc) => ({
         year: doc.year,
         themeOrWord: doc.themeOrWord || '',
         annualIntentions: doc.annualIntentions || [],
@@ -65,8 +56,8 @@ export class BackupController {
       }));
 
       // Sanitize Monthly Plans
-      const monthlyPlans = monthlyDocs.map((doc: any) => {
-        let calendarNotes: Record<string, string> = {};
+      const monthlyPlans = monthlyDocs.map((doc) => {
+        let calendarNotes = {};
         if (doc.calendarNotes instanceof Map) {
           calendarNotes = Object.fromEntries(doc.calendarNotes.entries());
         } else if (doc.calendarNotes && typeof doc.calendarNotes === 'object') {
@@ -76,18 +67,18 @@ export class BackupController {
         return {
           year: doc.year,
           month: doc.month,
-          mustDos: (doc.mustDos || []).map((m: any) => ({
+          mustDos: (doc.mustDos || []).map((m) => ({
             id: m.id,
             text: m.text || '',
             checked: Boolean(m.checked),
           })),
           newHabits: doc.newHabits || [],
-          toBuy: (doc.toBuy || []).map((b: any) => ({
+          toBuy: (doc.toBuy || []).map((b) => ({
             id: b.id,
             text: b.text || '',
             checked: Boolean(b.checked),
           })),
-          books: (doc.books || []).map((b: any) => ({
+          books: (doc.books || []).map((b) => ({
             id: b.id,
             title: b.title || '',
             author: b.author || '',
@@ -100,11 +91,11 @@ export class BackupController {
       });
 
       // Sanitize Weekly Plans
-      const weeklyPlans = weeklyDocs.map((doc: any) => ({
+      const weeklyPlans = weeklyDocs.map((doc) => ({
         year: doc.year,
         isoWeek: doc.isoWeek,
-        days: (doc.days || []).map((d: any) => {
-          const rawTasks = (d.tasks || []).map((t: any) => ({
+        days: (doc.days || []).map((d) => {
+          const rawTasks = (d.tasks || []).map((t) => ({
             id: t.id || crypto.randomUUID(),
             text: t.text || '',
             done: Boolean(t.done),
@@ -118,10 +109,10 @@ export class BackupController {
           }
           return {
             date: d.date,
-            tasks: rawTasks.slice(0, 3) as [any, any, any],
+            tasks: rawTasks.slice(0, 3),
           };
         }),
-        priorities: (doc.priorities || []).map((p: any) => ({
+        priorities: (doc.priorities || []).map((p) => ({
           id: p.id,
           text: p.text || '',
           done: Boolean(p.done),
@@ -132,23 +123,23 @@ export class BackupController {
       }));
 
       // Sanitize Daily Plans
-      const dailyPlans = dailyDocs.map((doc: any) => ({
+      const dailyPlans = dailyDocs.map((doc) => ({
         date: doc.date,
         year: doc.year,
         month: doc.month,
         isoWeek: doc.isoWeek,
         intention: doc.intention || '',
-        primaryPriorities: (doc.primaryPriorities || []).map((p: any) => ({
+        primaryPriorities: (doc.primaryPriorities || []).map((p) => ({
           id: p.id,
           text: p.text || '',
           done: Boolean(p.done),
         })),
-        additionalTasks: (doc.additionalTasks || []).map((t: any) => ({
+        additionalTasks: (doc.additionalTasks || []).map((t) => ({
           id: t.id,
           text: t.text || '',
           done: Boolean(t.done),
         })),
-        schedule: (doc.schedule || []).map((s: any) => ({
+        schedule: (doc.schedule || []).map((s) => ({
           id: s.id,
           timeSlot: s.timeSlot,
           activity: s.activity || '',
@@ -160,7 +151,7 @@ export class BackupController {
             doc.journal?.gratitude?.[0] || '',
             doc.journal?.gratitude?.[1] || '',
             doc.journal?.gratitude?.[2] || '',
-          ] as [string, string, string],
+          ],
           wins: doc.journal?.wins || '',
           challengesAndLessons: doc.journal?.challengesAndLessons || '',
           freeWriting: doc.journal?.freeWriting || '',
@@ -168,7 +159,7 @@ export class BackupController {
       }));
 
       // Sanitize Moods
-      const moods = moodDocs.map((doc: any) => ({
+      const moods = moodDocs.map((doc) => ({
         date: doc.date,
         year: doc.year,
         moodKey: doc.moodKey,
@@ -178,8 +169,8 @@ export class BackupController {
       }));
 
       // Sanitize Habits
-      const habits = habitDocs.map((doc: any) => {
-        let completionDates: string[] = [];
+      const habits = habitDocs.map((doc) => {
+        let completionDates = [];
         if (doc.completionDates instanceof Map) {
           completionDates = Array.from(doc.completionDates.keys());
         } else if (doc.completionDates && typeof doc.completionDates === 'object') {
@@ -195,7 +186,7 @@ export class BackupController {
         };
       });
 
-      const counts: BackupRecordCounts = {
+      const counts = {
         annualPlans: annualPlans.length,
         monthlyPlans: monthlyPlans.length,
         weeklyPlans: weeklyPlans.length,
@@ -204,7 +195,7 @@ export class BackupController {
         habits: habits.length,
       };
 
-      const backup: PlannerBackupData = {
+      const backup = {
         metadata: {
           format: BACKUP_FORMAT_IDENTIFIER,
           version: BACKUP_SCHEMA_VERSION,
@@ -236,16 +227,12 @@ export class BackupController {
   /**
    * Validates a backup JSON payload without modifying any database records.
    */
-  async validateBackup(
-    req: AuthenticatedRequest,
-    res: Response,
-    next: NextFunction
-  ): Promise<void> {
+  async validateBackup(req, res, next) {
     try {
       const parsed = plannerBackupSchema.parse(req.body);
 
-      const warnings: string[] = [];
-      const actualCounts: BackupRecordCounts = {
+      const warnings = [];
+      const actualCounts = {
         annualPlans: parsed.annualPlans.length,
         monthlyPlans: parsed.monthlyPlans.length,
         weeklyPlans: parsed.weeklyPlans.length,
@@ -277,13 +264,9 @@ export class BackupController {
   /**
    * Restores a validated backup into the user's account using either merge or full replacement.
    */
-  async restoreBackup(
-    req: AuthenticatedRequest,
-    res: Response,
-    next: NextFunction
-  ): Promise<void> {
+  async restoreBackup(req, res, next) {
     try {
-      const userId = req.user!._id;
+      const userId = req.user._id;
       const { mode, confirmReplace, backup } = restoreRequestSchema.parse(req.body);
 
       if (mode === 'replace' && !confirmReplace) {
@@ -310,7 +293,7 @@ export class BackupController {
             ])
           : null;
 
-      const restoredCounts: BackupRecordCounts = {
+      const restoredCounts = {
         annualPlans: 0,
         monthlyPlans: 0,
         weeklyPlans: 0,
@@ -319,8 +302,8 @@ export class BackupController {
         habits: 0,
       };
 
-      const skippedCounts: Partial<BackupRecordCounts> = {};
-      const mergedCounts: Partial<BackupRecordCounts> = {};
+      const skippedCounts = {};
+      const mergedCounts = {};
 
       if (mode === 'replace') {
         try {
@@ -582,7 +565,7 @@ export class BackupController {
         }
       }
 
-      const result: RestoreResult = {
+      const result = {
         success: true,
         mode,
         restoredCounts,
