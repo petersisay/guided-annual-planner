@@ -14,7 +14,7 @@ import {
   getNextDay,
   getDayOfWeekName,
   formatDisplayDate,
-} from './calendar';
+} from './calendar.js';
 
 describe('Calendar and Leap Year Utilities', () => {
   it('correctly calculates leap years across centuries and quadrennials', () => {
@@ -150,4 +150,3 @@ describe('Calendar and Leap Year Utilities', () => {
     expect(formatDisplayDate('2026-10-15')).toBe('Thursday, October 15, 2026');
   });
 });
-
