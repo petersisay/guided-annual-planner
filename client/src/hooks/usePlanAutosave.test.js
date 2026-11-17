@@ -1,15 +1,10 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { renderHook, act } from '@testing-library/react';
-import { usePlanAutosave } from './usePlanAutosave';
-import { editorDirtyTracker } from '../services/editorDirtyTracker';
+import { usePlanAutosave } from './usePlanAutosave.js';
+import { editorDirtyTracker } from '../services/editorDirtyTracker.js';
 
 describe('usePlanAutosave Hook — Dirty Tracking & Pre-Update Flush', () => {
-  interface MockPlan {
-    id: string;
-    note: string;
-  }
-
-  const initialPlan: MockPlan = { id: 'plan-1', note: 'Initial note' };
+  const initialPlan = { id: 'plan-1', note: 'Initial note' };
 
   beforeEach(() => {
     vi.useRealTimers();
@@ -27,8 +22,8 @@ describe('usePlanAutosave Hook — Dirty Tracking & Pre-Update Flush', () => {
   });
 
   it('updates saveStatus to saving and then saved only on confirmed success', async () => {
-    let resolveSave: (val: MockPlan) => void = () => {};
-    const savePromise = new Promise<MockPlan>((resolve) => {
+    let resolveSave = () => {};
+    const savePromise = new Promise((resolve) => {
       resolveSave = resolve;
     });
     const saveFn = vi.fn().mockReturnValue(savePromise);
@@ -84,13 +79,13 @@ describe('usePlanAutosave Hook — Dirty Tracking & Pre-Update Flush', () => {
   });
 
   it('discards older out-of-order responses to prevent overwriting newer edits', async () => {
-    let resolveFirst: (val: MockPlan) => void = () => {};
-    const firstPromise = new Promise<MockPlan>((resolve) => {
+    let resolveFirst = () => {};
+    const firstPromise = new Promise((resolve) => {
       resolveFirst = resolve;
     });
 
-    let resolveSecond: (val: MockPlan) => void = () => {};
-    const secondPromise = new Promise<MockPlan>((resolve) => {
+    let resolveSecond = () => {};
+    const secondPromise = new Promise((resolve) => {
       resolveSecond = resolve;
     });
 

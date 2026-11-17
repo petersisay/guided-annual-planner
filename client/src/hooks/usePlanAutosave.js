@@ -1,48 +1,24 @@
 import { useState, useRef, useCallback, useEffect } from 'react';
-import { EntityType, ConflictPayload } from '@planner/shared';
-import { syncManager } from '../services/syncManager';
-import { saveCachedRecord } from '../utils/offlineDb';
-import { editorDirtyTracker } from '../services/editorDirtyTracker';
+import { syncManager } from '../services/syncManager.js';
+import { saveCachedRecord } from '../utils/offlineDb.js';
+import { editorDirtyTracker } from '../services/editorDirtyTracker.js';
 
-export type SaveStatus =
-  | 'idle'
-  | 'saving'
-  | 'saved'
-  | 'offline_saved'
-  | 'syncing'
-  | 'conflict'
-  | 'error';
+export function usePlanAutosave(initialPlan, options) {
+  const [plan, setPlan] = useState(initialPlan);
+  const [saveStatus, setSaveStatus] = useState('idle');
+  const [saveError, setSaveError] = useState(null);
+  const [activeConflict, setActiveConflict] = useState(null);
 
-export interface UsePlanAutosaveOptions<T> {
-  saveFn: (updates: Partial<T>) => Promise<T>;
-  onSuccess?: (savedPlan: T) => void;
-  onError?: (err: unknown, failedUpdates: Partial<T>) => void;
-  entityType?: EntityType;
-  entityKey?: string;
-  userId?: string;
-  endpoint?: string;
-  method?: 'PUT' | 'POST';
-}
-
-export function usePlanAutosave<T>(
-  initialPlan: T | null,
-  options: UsePlanAutosaveOptions<T>
-) {
-  const [plan, setPlan] = useState<T | null>(initialPlan);
-  const [saveStatus, setSaveStatus] = useState<SaveStatus>('idle');
-  const [saveError, setSaveError] = useState<string | null>(null);
-  const [activeConflict, setActiveConflict] = useState<ConflictPayload | null>(null);
-
-  const saveSeqRef = useRef<number>(0);
-  const lastConfirmedPlanRef = useRef<T | null>(initialPlan);
-  const pendingUpdatesRef = useRef<Partial<T> | null>(null);
-  const debouncedUpdatesRef = useRef<Partial<T> | null>(null);
-  const debounceTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const activeSavePromiseRef = useRef<Promise<boolean> | null>(null);
-  const isDirtyRef = useRef<boolean>(false);
+  const saveSeqRef = useRef(0);
+  const lastConfirmedPlanRef = useRef(initialPlan);
+  const pendingUpdatesRef = useRef(null);
+  const debouncedUpdatesRef = useRef(null);
+  const debounceTimerRef = useRef(null);
+  const activeSavePromiseRef = useRef(null);
+  const isDirtyRef = useRef(false);
 
   // Sync internal ref when initialPlan is loaded or reloaded
-  const setConfirmedPlan = useCallback((newPlan: T | null) => {
+  const setConfirmedPlan = useCallback((newPlan) => {
     lastConfirmedPlanRef.current = newPlan;
     isDirtyRef.current = false;
     setPlan(newPlan);
@@ -57,13 +33,13 @@ export function usePlanAutosave<T>(
         mutation.entityType === options.entityType &&
         mutation.entityKey === options.entityKey
       ) {
-        lastConfirmedPlanRef.current = data as T;
-        setPlan(data as T);
+        lastConfirmedPlanRef.current = data;
+        setPlan(data);
         setSaveStatus('saved');
         setSaveError(null);
         setActiveConflict(null);
         isDirtyRef.current = false;
-        options.onSuccess?.(data as T);
+        options.onSuccess?.(data);
       }
     });
 
@@ -85,7 +61,7 @@ export function usePlanAutosave<T>(
   }, [options.entityType, options.entityKey, options.onSuccess]);
 
   const triggerSaveInternal = useCallback(
-    async (updates: Partial<T>): Promise<boolean> => {
+    async (updates) => {
       if (!plan) return false;
 
       // Apply optimistic update immediately to local state
@@ -96,7 +72,7 @@ export function usePlanAutosave<T>(
       isDirtyRef.current = true;
 
       const currentSeq = ++saveSeqRef.current;
-      const expectedUpdatedAt = (plan as any)?.updatedAt;
+      const expectedUpdatedAt = plan?.updatedAt;
 
       // 1. If currently offline, queue mutation directly to IndexedDB
       if (
@@ -163,11 +139,11 @@ export function usePlanAutosave<T>(
             options.entityType,
             options.entityKey,
             saved,
-            (saved as any)?.updatedAt || new Date().toISOString()
+            saved?.updatedAt || new Date().toISOString()
           ).catch(() => {});
         }
         return true;
-      } catch (err: unknown) {
+      } catch (err) {
         if (currentSeq !== saveSeqRef.current) {
           return false;
         }
@@ -229,7 +205,7 @@ export function usePlanAutosave<T>(
   );
 
   const triggerSave = useCallback(
-    (updates: Partial<T>): Promise<boolean> => {
+    (updates) => {
       if (debounceTimerRef.current) {
         clearTimeout(debounceTimerRef.current);
         debounceTimerRef.current = null;
@@ -248,7 +224,7 @@ export function usePlanAutosave<T>(
   );
 
   const debouncedSave = useCallback(
-    (updates: Partial<T>, delayMs: number = 400) => {
+    (updates, delayMs = 400) => {
       if (!plan) return;
 
       // Optimistically update view immediately
@@ -278,7 +254,7 @@ export function usePlanAutosave<T>(
     [plan, triggerSave]
   );
 
-  const flushSave = useCallback(async (): Promise<boolean> => {
+  const flushSave = useCallback(async () => {
     // 1. If debounced updates are waiting in memory, trigger immediate save
     if (debounceTimerRef.current) {
       clearTimeout(debounceTimerRef.current);
