@@ -1,20 +1,6 @@
-import { Schema, model, Document, Types } from 'mongoose';
-import { DayPlan, PriorityItem, DayTask } from '@planner/shared';
+import { Schema, model } from 'mongoose';
 
-export interface IWeeklyPlanDocument extends Document<Types.ObjectId> {
-  userId: Types.ObjectId;
-  year: number;
-  isoWeek: number;
-  days: DayPlan[];
-  priorities: PriorityItem[];
-  reminder: string;
-  nextWeek: string[];
-  notes: string;
-  createdAt: Date;
-  updatedAt: Date;
-}
-
-const DayTaskSchema = new Schema<DayTask>(
+const DayTaskSchema = new Schema(
   {
     id: { type: String, required: true },
     text: { type: String, default: '', maxlength: 300 },
@@ -23,7 +9,7 @@ const DayTaskSchema = new Schema<DayTask>(
   { _id: false }
 );
 
-const DayPlanSchema = new Schema<DayPlan>(
+const DayPlanSchema = new Schema(
   {
     date: { type: String, required: true },
     tasks: {
@@ -34,7 +20,7 @@ const DayPlanSchema = new Schema<DayPlan>(
   { _id: false }
 );
 
-const PriorityItemSchema = new Schema<PriorityItem>(
+const PriorityItemSchema = new Schema(
   {
     id: { type: String, required: true },
     text: { type: String, default: '', maxlength: 300 },
@@ -43,7 +29,7 @@ const PriorityItemSchema = new Schema<PriorityItem>(
   { _id: false }
 );
 
-const WeeklyPlanSchema = new Schema<IWeeklyPlanDocument>(
+const WeeklyPlanSchema = new Schema(
   {
     userId: {
       type: Schema.Types.ObjectId,
@@ -93,4 +79,4 @@ const WeeklyPlanSchema = new Schema<IWeeklyPlanDocument>(
 
 WeeklyPlanSchema.index({ userId: 1, year: 1, isoWeek: 1 }, { unique: true });
 
-export const WeeklyPlan = model<IWeeklyPlanDocument>('WeeklyPlan', WeeklyPlanSchema);
+export const WeeklyPlan = model('WeeklyPlan', WeeklyPlanSchema);
