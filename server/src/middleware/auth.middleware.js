@@ -1,19 +1,8 @@
-import { Request, Response, NextFunction } from 'express';
-import { env } from '../config/env';
-import { sessionService, SLIDING_WINDOW_MS } from '../services/session.service';
-import { User, IUserDocument } from '../models/User';
-import { ISessionDocument } from '../models/Session';
+import { env } from '../config/env.js';
+import { sessionService, SLIDING_WINDOW_MS } from '../services/session.service.js';
+import { User } from '../models/User.js';
 
-export interface AuthenticatedRequest extends Request {
-  user?: IUserDocument;
-  sessionRecord?: ISessionDocument;
-}
-
-export async function requireAuth(
-  req: AuthenticatedRequest,
-  res: Response,
-  next: NextFunction
-): Promise<void> {
+export async function requireAuth(req, res, next) {
   try {
     const rawToken = req.cookies?.[env.COOKIE_NAME];
 
