@@ -1,16 +1,10 @@
-import { Response, NextFunction } from 'express';
 import { updatePreferencesSchema, completeOnboardingSchema } from '@planner/shared';
-import { User } from '../models/User';
-import { AnnualPlan } from '../models/AnnualPlan';
-import { AuthenticatedRequest } from '../middleware/auth.middleware';
-import { mapUserToProfile } from './auth.controller';
+import { User } from '../models/User.js';
+import { AnnualPlan } from '../models/AnnualPlan.js';
+import { mapUserToProfile, ensureUserPreferences } from './auth.controller.js';
 
 export class UserController {
-  async getPreferences(
-    req: AuthenticatedRequest,
-    res: Response,
-    next: NextFunction
-  ): Promise<void> {
+  async getPreferences(req, res, next) {
     try {
       if (!req.user) {
         res.status(401).json({
@@ -20,9 +14,11 @@ export class UserController {
         return;
       }
 
+      const safePrefs = ensureUserPreferences(req.user.preferences);
+
       res.status(200).json({
         success: true,
-        preferences: req.user.preferences,
+        preferences: safePrefs,
         user: mapUserToProfile(req.user),
       });
     } catch (err) {
@@ -30,11 +26,7 @@ export class UserController {
     }
   }
 
-  async updatePreferences(
-    req: AuthenticatedRequest,
-    res: Response,
-    next: NextFunction
-  ): Promise<void> {
+  async updatePreferences(req, res, next) {
     try {
       if (!req.user) {
         res.status(401).json({
@@ -54,6 +46,8 @@ export class UserController {
         });
         return;
       }
+
+      user.preferences = ensureUserPreferences(user.preferences);
 
       // Merge only supported preference fields
       if (updates.weekStart !== undefined) user.preferences.weekStart = updates.weekStart;
@@ -79,11 +73,7 @@ export class UserController {
     }
   }
 
-  async completeOnboarding(
-    req: AuthenticatedRequest,
-    res: Response,
-    next: NextFunction
-  ): Promise<void> {
+  async completeOnboarding(req, res, next) {
     try {
       if (!req.user) {
         res.status(401).json({
@@ -104,6 +94,7 @@ export class UserController {
         return;
       }
 
+      user.preferences = ensureUserPreferences(user.preferences);
       user.preferences.onboardingStatus = payload.status;
       user.preferences.onboardingStep = payload.status === 'completed' ? 5 : user.preferences.onboardingStep;
 
@@ -133,7 +124,7 @@ export class UserController {
                   themeOrWord: trimmedTheme || '',
                   annualIntentions: trimmedIntention ? [trimmedIntention] : [],
                 });
-              } catch (createErr: any) {
+              } catch (createErr) {
                 if (createErr.code === 11000) {
                   annualPlan = await AnnualPlan.findOne({ userId: user._id, year });
                 } else {
