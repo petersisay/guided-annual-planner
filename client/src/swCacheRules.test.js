@@ -4,7 +4,7 @@ import {
   isProtectedEndpoint,
   CACHE_NAME,
   CACHE_PREFIX,
-} from './utils/swCachePolicy';
+} from './utils/swCachePolicy.js';
 
 describe('Service Worker Security & Caching Policy Evaluation', () => {
   const origin = 'http://localhost:5173';
