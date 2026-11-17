@@ -1,18 +1,6 @@
-import { Schema, model, Document, Types } from 'mongoose';
+import { Schema, model } from 'mongoose';
 
-export interface IMoodEntryDocument extends Document<Types.ObjectId> {
-  userId: Types.ObjectId;
-  date: string; // YYYY-MM-DD
-  year: number;
-  moodKey: string;
-  colorHex: string;
-  label: string;
-  note?: string;
-  createdAt: Date;
-  updatedAt: Date;
-}
-
-const MoodEntrySchema = new Schema<IMoodEntryDocument>(
+const MoodEntrySchema = new Schema(
   {
     userId: {
       type: Schema.Types.ObjectId,
@@ -56,9 +44,7 @@ const MoodEntrySchema = new Schema<IMoodEntryDocument>(
   }
 );
 
-// Unique index: one mood entry per user per calendar day
 MoodEntrySchema.index({ userId: 1, date: 1 }, { unique: true });
-// Fast annual lookup index
 MoodEntrySchema.index({ userId: 1, year: 1 });
 
-export const MoodEntry = model<IMoodEntryDocument>('MoodEntry', MoodEntrySchema);
+export const MoodEntry = model('MoodEntry', MoodEntrySchema);
