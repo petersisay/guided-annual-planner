@@ -1,7 +1,7 @@
 import { Router } from 'express';
-import { dailyController } from '../controllers/daily.controller';
-import { requireAuth } from '../middleware/auth.middleware';
-import { idempotencyMiddleware } from '../middleware/idempotency.middleware';
+import { dailyController } from '../controllers/daily.controller.js';
+import { requireAuth } from '../middleware/auth.middleware.js';
+import { idempotencyMiddleware } from '../middleware/idempotency.middleware.js';
 
 export const dailyRouter = Router();
 
