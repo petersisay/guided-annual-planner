@@ -1,9 +1,7 @@
 import crypto from 'crypto';
-import { Response, NextFunction } from 'express';
-import { AuthenticatedRequest } from './auth.middleware';
-import { ProcessedMutation } from '../models/ProcessedMutation';
+import { ProcessedMutation } from '../models/ProcessedMutation.js';
 
-function computePayloadHash(payload: any): string {
+function computePayloadHash(payload) {
   if (!payload || (typeof payload === 'object' && Object.keys(payload).length === 0)) {
     return '';
   }
@@ -28,11 +26,7 @@ const STALE_LOCK_TIMEOUT_MS = 30000; // 30 seconds
  * 6. On success (2xx), transitions the record to `status: 'completed'` with cached payload.
  * 7. On error (4xx/5xx) or save exception, clears the reservation so the mutation can be retried cleanly.
  */
-export async function idempotencyMiddleware(
-  req: AuthenticatedRequest,
-  res: Response,
-  next: NextFunction
-): Promise<void> {
+export async function idempotencyMiddleware(req, res, next) {
   const mutationId = req.headers['x-mutation-id'];
 
   // Only apply when an explicit mutation ID and authenticated user are present
@@ -114,7 +108,7 @@ export async function idempotencyMiddleware(
         requestHash: currentPayloadHash || undefined,
         status: 'in_progress',
       });
-    } catch (insertErr: any) {
+    } catch (insertErr) {
       if (insertErr?.code === 11000) {
         // Concurrent race won by another connection at this exact millisecond
         existing = await ProcessedMutation.findOne({ userId, mutationId });
@@ -137,7 +131,7 @@ export async function idempotencyMiddleware(
 
     // 6. Intercept response to update mutation state upon controller completion
     const originalJson = res.json.bind(res);
-    res.json = function (body: any): Response {
+    res.json = function (body) {
       res.json = originalJson;
 
       if (res.statusCode >= 200 && res.statusCode < 300) {
