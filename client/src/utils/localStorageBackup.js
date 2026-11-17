@@ -6,28 +6,9 @@
  * any cross-account data leakage or accidental overwriting when switching accounts.
  */
 
-export interface BackupUserMetadata {
-  id: string;
-  name?: string;
-  email?: string;
-}
-
-export interface LocalStorageJournalBackup {
-  version: string;
-  type: 'browser_cache' | 'user_requested_export';
-  savedAt: string;
-  user: BackupUserMetadata;
-  annualPlans: Record<string, unknown>; // year -> plan
-  monthlyPlans: Record<string, unknown>; // "year-month" -> plan
-  weeklyPlans: Record<string, unknown>; // "year-week" -> plan
-  dailyPlans?: Record<string, unknown>; // "YYYY-MM-DD" -> plan
-  habits?: unknown[];
-  moods?: unknown[];
-}
-
 const STORAGE_PREFIX = 'guided_planner_cache_user_';
 
-export function getUserStorageKey(userId: string): string {
+export function getUserStorageKey(userId) {
   return `${STORAGE_PREFIX}${userId}`;
 }
 
@@ -35,7 +16,7 @@ export function getUserStorageKey(userId: string): string {
  * Retrieves the local cache for a specific authenticated user.
  * Returns null if no userId is provided or if no cache exists for this user.
  */
-export function getLocalStorageBackup(userId?: string): LocalStorageJournalBackup | null {
+export function getLocalStorageBackup(userId) {
   if (!userId) {
     return null;
   }
@@ -43,7 +24,7 @@ export function getLocalStorageBackup(userId?: string): LocalStorageJournalBacku
   try {
     const raw = localStorage.getItem(getUserStorageKey(userId));
     if (raw) {
-      const parsed = JSON.parse(raw) as LocalStorageJournalBackup;
+      const parsed = JSON.parse(raw);
       // Guard against corrupted or cross-account data: verify user ID matches
       if (parsed && parsed.user && parsed.user.id === userId) {
         return parsed;
@@ -71,11 +52,7 @@ export function getLocalStorageBackup(userId?: string): LocalStorageJournalBacku
  * Saves an annual plan into the user-isolated cache.
  * If user is undefined or has no id, write is skipped to prevent cross-account pollution.
  */
-export function saveAnnualPlanToLocalStorage(
-  year: number,
-  plan: unknown,
-  user?: BackupUserMetadata
-): void {
+export function saveAnnualPlanToLocalStorage(year, plan, user) {
   if (!user || !user.id) return;
 
   try {
@@ -104,12 +81,7 @@ export function saveAnnualPlanToLocalStorage(
 /**
  * Saves a monthly plan into the user-isolated cache.
  */
-export function saveMonthlyPlanToLocalStorage(
-  year: number,
-  month: number,
-  plan: unknown,
-  user?: BackupUserMetadata
-): void {
+export function saveMonthlyPlanToLocalStorage(year, month, plan, user) {
   if (!user || !user.id) return;
 
   try {
@@ -137,12 +109,7 @@ export function saveMonthlyPlanToLocalStorage(
 /**
  * Saves a weekly plan into the user-isolated cache.
  */
-export function saveWeeklyPlanToLocalStorage(
-  year: number,
-  week: number,
-  plan: unknown,
-  user?: BackupUserMetadata
-): void {
+export function saveWeeklyPlanToLocalStorage(year, week, plan, user) {
   if (!user || !user.id) return;
 
   try {
@@ -170,11 +137,7 @@ export function saveWeeklyPlanToLocalStorage(
 /**
  * Saves a daily plan into the user-isolated cache.
  */
-export function saveDailyPlanToLocalStorage(
-  date: string,
-  plan: unknown,
-  user?: BackupUserMetadata
-): void {
+export function saveDailyPlanToLocalStorage(date, plan, user) {
   if (!user || !user.id) return;
 
   try {
@@ -206,7 +169,7 @@ export function saveDailyPlanToLocalStorage(
 /**
  * Clears the cached journal data for a specific user upon explicit request or account logout.
  */
-export function clearUserLocalStorageBackup(userId: string): void {
+export function clearUserLocalStorageBackup(userId) {
   if (!userId) return;
   try {
     localStorage.removeItem(getUserStorageKey(userId));
@@ -219,10 +182,7 @@ export function clearUserLocalStorageBackup(userId: string): void {
  * Safe logout handler: guarantees in-memory isolation and ensures no unauthenticated
  * session can inspect or read the previous user's data.
  */
-export function handleUserLogout(userId?: string): void {
-  // If needed, specific session tags can be cleared here.
-  // We keep the offline cache in its private key for offline reload by the same user,
-  // but ensure no unauthenticated accessor can read it without authenticating as that user.
+export function handleUserLogout(userId) {
   if (userId) {
     // Optionally remove temporary session keys
   }
@@ -233,14 +193,14 @@ export function handleUserLogout(userId?: string): void {
  * Clearly separates manual user downloads from background browser caching.
  * The exported JSON contains explicit metadata and user attribution.
  */
-export function exportJournalAsJsonFile(user: BackupUserMetadata): void {
+export function exportJournalAsJsonFile(user) {
   if (!user || !user.id) {
     console.warn('Cannot export journal without an authenticated user.');
     return;
   }
 
   const cached = getLocalStorageBackup(user.id);
-  const exportPayload: LocalStorageJournalBackup = {
+  const exportPayload = {
     version: '1.0.0',
     type: 'user_requested_export',
     savedAt: new Date().toISOString(),

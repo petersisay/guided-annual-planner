@@ -7,7 +7,7 @@ import {
   clearUserLocalStorageBackup,
   exportJournalAsJsonFile,
   getUserStorageKey,
-} from './localStorageBackup';
+} from './localStorageBackup.js';
 
 describe('localStorageBackup Utility - User Separation & Security', () => {
   const userA = { id: 'user_123_alice', name: 'Alice', email: 'alice@example.com' };
@@ -69,11 +69,11 @@ describe('localStorageBackup Utility - User Separation & Security', () => {
     saveAnnualPlanToLocalStorage(2026, { theme: 'Flourish' }, userA);
 
     const origCreateElement = document.createElement.bind(document);
-    let createdLink: HTMLAnchorElement | null = null;
-    vi.spyOn(document, 'createElement').mockImplementation((tagName: string) => {
+    let createdLink = null;
+    vi.spyOn(document, 'createElement').mockImplementation((tagName) => {
       const el = origCreateElement(tagName);
       if (tagName === 'a') {
-        createdLink = el as HTMLAnchorElement;
+        createdLink = el;
         el.click = vi.fn();
       }
       return el;
@@ -88,7 +88,7 @@ describe('localStorageBackup Utility - User Separation & Security', () => {
     exportJournalAsJsonFile(userA);
 
     expect(createdLink).not.toBeNull();
-    expect((createdLink as unknown as HTMLAnchorElement).download).toContain('guided-planner-export-alice-');
-    expect((createdLink as unknown as HTMLAnchorElement).download).toMatch(/\.json$/);
+    expect(createdLink.download).toContain('guided-planner-export-alice-');
+    expect(createdLink.download).toMatch(/\.json$/);
   });
 });
