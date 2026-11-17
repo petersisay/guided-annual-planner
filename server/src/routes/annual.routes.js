@@ -1,7 +1,7 @@
 import { Router } from 'express';
-import { annualController } from '../controllers/annual.controller';
-import { requireAuth } from '../middleware/auth.middleware';
-import { idempotencyMiddleware } from '../middleware/idempotency.middleware';
+import { annualController } from '../controllers/annual.controller.js';
+import { requireAuth } from '../middleware/auth.middleware.js';
+import { idempotencyMiddleware } from '../middleware/idempotency.middleware.js';
 
 export const annualRouter = Router();
 
