@@ -1,18 +1,6 @@
-import { Schema, model, Document, Types } from 'mongoose';
-import { UserPreferences } from '@planner/shared';
+import { Schema, model } from 'mongoose';
 
-export interface IUserDocument extends Document<Types.ObjectId> {
-  googleSub: string;
-  email: string;
-  name: string;
-  avatarUrl?: string;
-  preferences: UserPreferences;
-  createdAt: Date;
-  updatedAt: Date;
-  lastLoginAt: Date;
-}
-
-const UserPreferencesSchema = new Schema<UserPreferences>(
+const UserPreferencesSchema = new Schema(
   {
     weekStart: {
       type: String,
@@ -66,7 +54,7 @@ const UserPreferencesSchema = new Schema<UserPreferences>(
   { _id: false }
 );
 
-const UserSchema = new Schema<IUserDocument>(
+const UserSchema = new Schema(
   {
     googleSub: {
       type: String,
@@ -107,4 +95,4 @@ const UserSchema = new Schema<IUserDocument>(
   }
 );
 
-export const User = model<IUserDocument>('User', UserSchema);
+export const User = model('User', UserSchema);
