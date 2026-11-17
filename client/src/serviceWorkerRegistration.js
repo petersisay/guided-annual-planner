@@ -2,12 +2,7 @@
  * Service Worker Registration and Update Controller
  */
 
-export interface SwConfig {
-  onSuccess?: (registration: ServiceWorkerRegistration) => void;
-  onUpdate?: (registration: ServiceWorkerRegistration) => void;
-}
-
-export function register(config?: SwConfig) {
+export function register(config) {
   if (typeof window === 'undefined' || !('serviceWorker' in navigator)) {
     return;
   }
@@ -64,7 +59,7 @@ export function unregister() {
 /**
  * Sends SKIP_WAITING to waiting worker and reloads page once controller changes
  */
-export function applyUpdate(registration: ServiceWorkerRegistration) {
+export function applyUpdate(registration) {
   if (!registration.waiting) {
     if (typeof window !== 'undefined') {
       window.location.reload();
