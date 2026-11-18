@@ -1,13 +1,13 @@
 # Guided Annual Planner — Mindful Growth Edition
 
 [![License: ISC](https://img.shields.io/badge/License-ISC-blue.svg?style=flat-square)](LICENSE)
-[![TypeScript](https://img.shields.io/badge/TypeScript-5.x-3178C6?style=flat-square&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![JavaScript](https://img.shields.io/badge/JavaScript-ESM%2FJSX-F7DF1E?style=flat-square&logo=javascript&logoColor=black)](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
 [![React](https://img.shields.io/badge/React-19-61DAFB?style=flat-square&logo=react&logoColor=black)](https://react.dev/)
 [![Vite](https://img.shields.io/badge/Vite-6.x-646CFF?style=flat-square&logo=vite&logoColor=white)](https://vitejs.dev/)
 [![Node.js](https://img.shields.io/badge/Node.js-18%2B-339933?style=flat-square&logo=nodedotjs&logoColor=white)](https://nodejs.org/)
 [![Express](https://img.shields.io/badge/Express-4.x-000000?style=flat-square&logo=express&logoColor=white)](https://expressjs.com/)
 [![MongoDB](https://img.shields.io/badge/MongoDB-Atlas-47A248?style=flat-square&logo=mongodb&logoColor=white)](https://www.mongodb.com/)
-[![Tests Passing](https://img.shields.io/badge/Tests-202%20Passed-brightgreen?style=flat-square)](https://github.com/petersisay/guided-annual-planner)
+[![Tests Passing](https://img.shields.io/badge/Tests-204%20Passed-brightgreen?style=flat-square)](https://github.com/petersisay/guided-annual-planner)
 [![Live App](https://img.shields.io/badge/Live%20App-Vercel-black?style=flat-square&logo=vercel)](https://guided-annual-planner.vercel.app/)
 [![API Status](https://img.shields.io/badge/API-Render-46E3B7?style=flat-square&logo=render&logoColor=white)](https://guided-annual-planner.onrender.com/health)
 
@@ -153,7 +153,7 @@ The application structures personal growth into a cascading hierarchy:
 ## Technology Stack
 
 ### Frontend Client (`@planner/client`)
-- **Core Framework**: React 19 SPA with TypeScript 5
+- **Core Framework**: React 19 SPA with JavaScript JSX
 - **Build Tooling**: Vite 6 with production chunking and gzip compression
 - **Styling**: Tailwind CSS with paper-texture utilities, dot-grids, and ruled-notebook backgrounds
 - **Animation**: Framer Motion with reduced-motion accessibility compliance (`prefers-reduced-motion`)
@@ -165,11 +165,11 @@ The application structures personal growth into a cascading hierarchy:
 ### Shared Contracts (`@planner/shared`)
 - **Validation**: Zod 3 schemas shared identically between client and server
 - **Date Math**: ISO 8601 calendar calculations, leap-year logic, and timezone-agnostic day helpers
-- **TypeScript Types**: Canonical domain models for Plans, Users, Trackers, and Backups
+- **Format**: Pure JavaScript ESM modules with schema-driven validation
 
 ### Backend API Service (`@planner/server`)
 - **Runtime**: Node.js (v18+) with Express 4
-- **Language**: TypeScript 5 compiled to ES2022
+- **Language**: Pure JavaScript ESM
 - **Data Persistence**: MongoDB Atlas with Mongoose 8 ORM
 - **Authentication**: Google Identity Services OAuth 2.0 with server-side token verification via `google-auth-library`
 - **Session Management**: Database-backed sessions using SHA-256 token hashing and `HttpOnly`, `SameSite=Lax`, `Secure` cookies (stateless JWTs are intentionally avoided to ensure immediate revocation capability)
@@ -265,24 +265,22 @@ flowchart TD
 guided-annual-planner/
 ├── .env.example                  # Safe template environment variables for development
 ├── package.json                  # Root monorepo workspaces (shared, server, client)
-├── tsconfig.json                 # Base TypeScript compiler configuration
 ├── vercel.json                   # Vercel deployment rewrites and proxy definitions
 ├── render.yaml                   # Render Blueprint definition for the backend service
 ├── DEPLOYMENT.md                 # Production deployment runbook and operations guide
 ├── LICENSE                       # ISC open-source license
 ├── reference_images/             # UI reference screenshots of core planner views
 │
-├── shared/                       # Workspace: @planner/shared
+├── shared/                       # Workspace: @planner/shared (Pure JavaScript ESM)
 │   ├── src/
-│   │   ├── types/                # Canonical User, Planner, Habit, Mood, Sync, and Backup types
 │   │   ├── schemas/              # Zod validation schemas (auth, backup, user, planner)
 │   │   ├── utils/                # ISO week calculations, leap year & calendar date math
-│   │   └── index.ts              # Canonical barrel exports
+│   │   └── index.js              # Canonical barrel exports
 │   └── package.json
 │
-├── server/                       # Workspace: @planner/server
+├── server/                       # Workspace: @planner/server (Pure Node.js + Express ESM)
 │   ├── src/
-│   │   ├── config/               # env.ts (Zod-validated environment), db.ts (Mongoose connection)
+│   │   ├── config/               # env.js (Zod-validated environment), db.js (Mongoose connection)
 │   │   ├── models/               # User, Session, AnnualPlan, MonthlyPlan, WeeklyPlan, DailyPlan, ProcessedMutation
 │   │   ├── services/             # googleAuth.service.ts, session.service.ts
 │   │   ├── middleware/           # auth.middleware.ts, csrf.middleware.ts, error.middleware.ts
@@ -414,8 +412,8 @@ npm run dev:client        # Start Vite dev server with HMR
 
 # Production builds
 npm run build             # Build shared, server, and client in topological order
-npm run build:shared      # Compile shared TypeScript definitions
-npm run build:server      # Compile server TypeScript bundle
+npm run build:shared      # Prepare shared package for deployment
+npm run build:server      # Prepare server bundle for deployment
 npm run build:client      # Compile client Vite PWA production bundle
 ```
 
@@ -425,9 +423,9 @@ npm run build:client      # Compile client Vite PWA production bundle
 
 The codebase maintains automated test coverage across the full MERN monorepo stack:
 
-- **Total Automated Tests**: **202 passed** across 33 test files (0 failing, 0 flaky)
+- **Total Automated Tests**: **204 passed** across 35 test files (0 failing, 0 flaky)
   - `@planner/shared`: **20 passed** (Zod validation schemas, ISO week date math, leap year checks)
-  - `@planner/server`: **90 passed** (Controllers, session security, CSRF protection, concurrency handling, backup transactions)
+  - `@planner/server`: **92 passed** (Controllers, session security, CSRF protection, concurrency handling, backup transactions)
   - `@planner/client`: **92 passed** (Page components, offline IndexedDB sync, PWA prompts, accessibility, reduced motion)
 
 ### Running Tests
@@ -441,7 +439,7 @@ npm test
 npm run build
 ```
 Build verification validates:
-- TypeScript type checking with zero compiler errors across all three workspaces.
+- Pure JavaScript ESM and React JSX compilation with zero syntax errors.
 - Production bundle generation with chunk splitting and gzip compression.
 
 ---
