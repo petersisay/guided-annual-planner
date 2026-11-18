@@ -2,7 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { GoogleLogin } from '@react-oauth/google';
 import { BookOpen, Calendar, CheckCircle2, ShieldCheck, AlertCircle } from 'lucide-react';
-import { useAuth } from '../../context/AuthContext.js';
+import { useAuth } from '../../context/AuthContext';
 
 export const JournalLoginCard = () => {
   const { loginWithGoogle, loginDev, loading, error, clearError } = useAuth();
