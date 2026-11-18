@@ -1,11 +1,4 @@
 import {
-  SyncStatus,
-  EntityType,
-  OfflineMutation,
-  ConflictPayload,
-  ConflictResolutionStrategy,
-} from '@planner/shared';
-import {
   enqueueMutation,
   getPendingMutations,
   getPendingMutationsCount,
@@ -13,26 +6,21 @@ import {
   updateMutation,
   deleteMutation,
   saveCachedRecord,
-} from '../utils/offlineDb';
-
-type SyncStatusListener = (status: SyncStatus) => void;
-type ConflictListener = (conflict: { mutation: OfflineMutation; payload: ConflictPayload }) => void;
-type QueueChangeListener = (pendingCount: number) => void;
-type MutationSuccessListener = (mutation: OfflineMutation, data: any) => void;
+} from '../utils/offlineDb.js';
 
 class SyncManager {
-  private activeUserId: string | null = null;
-  private syncStatus: SyncStatus = 'synced';
-  private retryTimer: ReturnType<typeof setTimeout> | null = null;
-  private isSyncing = false;
-  private initialized = false;
+  activeUserId = null;
+  syncStatus = 'synced';
+  retryTimer = null;
+  isSyncing = false;
+  initialized = false;
 
-  private statusListeners: Set<SyncStatusListener> = new Set();
-  private conflictListeners: Set<ConflictListener> = new Set();
-  private queueListeners: Set<QueueChangeListener> = new Set();
-  private successListeners: Set<MutationSuccessListener> = new Set();
+  statusListeners = new Set();
+  conflictListeners = new Set();
+  queueListeners = new Set();
+  successListeners = new Set();
 
-  public initialize(): void {
+  initialize() {
     if (this.initialized || typeof window === 'undefined') return;
     this.initialized = true;
 
@@ -61,7 +49,7 @@ class SyncManager {
     }
   }
 
-  public setActiveUser(userId: string | null): void {
+  setActiveUser(userId) {
     if (this.activeUserId === userId) return;
 
     this.activeUserId = userId;
@@ -84,31 +72,31 @@ class SyncManager {
     }
   }
 
-  public getActiveUserId(): string | null {
+  getActiveUserId() {
     return this.activeUserId;
   }
 
-  public getSyncStatus(): SyncStatus {
+  getSyncStatus() {
     return this.syncStatus;
   }
 
-  private setSyncStatus(status: SyncStatus): void {
+  setSyncStatus(status) {
     this.syncStatus = status;
     this.statusListeners.forEach((l) => l(status));
   }
 
-  public onStatusChange(listener: SyncStatusListener): () => void {
+  onStatusChange(listener) {
     this.statusListeners.add(listener);
     listener(this.syncStatus);
     return () => this.statusListeners.delete(listener);
   }
 
-  public onConflict(listener: ConflictListener): () => void {
+  onConflict(listener) {
     this.conflictListeners.add(listener);
     return () => this.conflictListeners.delete(listener);
   }
 
-  public onQueueChange(listener: QueueChangeListener): () => void {
+  onQueueChange(listener) {
     this.queueListeners.add(listener);
     if (this.activeUserId) {
       getPendingMutationsCount(this.activeUserId).then((c) => listener(c)).catch(() => {});
@@ -118,16 +106,16 @@ class SyncManager {
     return () => this.queueListeners.delete(listener);
   }
 
-  public onMutationSuccess(listener: MutationSuccessListener): () => void {
+  onMutationSuccess(listener) {
     this.successListeners.add(listener);
     return () => this.successListeners.delete(listener);
   }
 
-  private notifyQueueListeners(count: number): void {
+  notifyQueueListeners(count) {
     this.queueListeners.forEach((l) => l(count));
   }
 
-  private async updateQueueCount(): Promise<number> {
+  async updateQueueCount() {
     if (!this.activeUserId) return 0;
     try {
       const count = await getPendingMutationsCount(this.activeUserId);
@@ -141,15 +129,7 @@ class SyncManager {
   /**
    * Enqueue a mutation for the current user and immediately attempt sync if online.
    */
-  public async queueMutation(params: {
-    userId: string;
-    entityType: EntityType;
-    entityKey: string;
-    endpoint: string;
-    method: 'PUT' | 'POST' | 'DELETE';
-    payload: any;
-    expectedUpdatedAt?: string;
-  }): Promise<OfflineMutation> {
+  async queueMutation(params) {
     const mutation = await enqueueMutation({
       userId: params.userId,
       entityType: params.entityType,
@@ -174,7 +154,7 @@ class SyncManager {
   /**
    * Process pending mutations sequentially for the active user.
    */
-  public async syncPending(): Promise<void> {
+  async syncPending() {
     if (this.isSyncing || !this.activeUserId || !navigator.onLine) {
       return;
     }
@@ -225,7 +205,7 @@ class SyncManager {
           if (res.status === 409) {
             // Optimistic concurrency conflict detected
             const errorJson = await res.json().catch(() => ({}));
-            const conflictPayload: ConflictPayload = {
+            const conflictPayload = {
               code: errorJson?.error?.code || 'CONCURRENT_MODIFICATION_CONFLICT',
               message: errorJson?.error?.message || 'Conflict detected',
               conflictReason: errorJson?.error?.conflictReason || 'MODIFIED_ON_SERVER',
@@ -268,7 +248,7 @@ class SyncManager {
           await deleteMutation(mutation.id);
 
           this.successListeners.forEach((l) => l(mutation, savedData));
-        } catch (netErr: any) {
+        } catch (netErr) {
           // Network interruption or transient error
           const retryCount = mutation.retryCount + 1;
           const delay = Math.min(30000, 1000 * Math.pow(2, retryCount)) + Math.random() * 1000;
@@ -304,11 +284,7 @@ class SyncManager {
   /**
    * Resolve an active conflict based on user's choice.
    */
-  public async resolveConflict(
-    mutationId: string,
-    strategy: ConflictResolutionStrategy,
-    mergedPayload?: any
-  ): Promise<void> {
+  async resolveConflict(mutationId, strategy, mergedPayload) {
     if (!this.activeUserId) return;
 
     if (strategy === 'keep_server') {
@@ -346,7 +322,7 @@ class SyncManager {
   /**
    * Get all active conflicted mutations for the current user.
    */
-  public async getConflictedMutations(): Promise<OfflineMutation[]> {
+  async getConflictedMutations() {
     if (!this.activeUserId) return [];
     return await getConflictedMutations(this.activeUserId);
   }
@@ -354,7 +330,7 @@ class SyncManager {
   /**
    * Resolve all active conflicts in batch (e.g. keep all offline changes or drop all offline changes).
    */
-  public async resolveAllConflicts(strategy: ConflictResolutionStrategy): Promise<void> {
+  async resolveAllConflicts(strategy) {
     if (!this.activeUserId) return;
     const conflicted = await getConflictedMutations(this.activeUserId);
     for (const m of conflicted) {
@@ -381,7 +357,7 @@ class SyncManager {
   /**
    * Export unsynced mutations to a downloadable JSON file so no edits are ever lost.
    */
-  public async exportUnsyncedData(userId: string): Promise<void> {
+  async exportUnsyncedData(userId) {
     const pending = await getPendingMutations(userId);
     const exportData = {
       exportType: 'GuidedAnnualPlanner_UnsyncedEdits_Rescue',
