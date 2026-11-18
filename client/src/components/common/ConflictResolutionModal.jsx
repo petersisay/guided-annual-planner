@@ -1,17 +1,7 @@
 import React, { useState } from 'react';
 import { AlertTriangle, Download, Check, RefreshCw } from 'lucide-react';
-import { ConflictPayload, ConflictResolutionStrategy } from '@planner/shared';
 
-interface ConflictResolutionModalProps {
-  isOpen: boolean;
-  conflict: ConflictPayload | null;
-  localData: any;
-  onResolve: (strategy: ConflictResolutionStrategy, mergedData?: any) => Promise<void>;
-  onClose: () => void;
-  onExportRescueBackup?: () => void;
-}
-
-export const ConflictResolutionModal: React.FC<ConflictResolutionModalProps> = ({
+export const ConflictResolutionModal = ({
   isOpen,
   conflict,
   localData,
@@ -19,12 +9,12 @@ export const ConflictResolutionModal: React.FC<ConflictResolutionModalProps> = (
   onClose,
   onExportRescueBackup,
 }) => {
-  const [selectedStrategy, setSelectedStrategy] = useState<ConflictResolutionStrategy>('combine');
+  const [selectedStrategy, setSelectedStrategy] = useState('combine');
   const [isResolving, setIsResolving] = useState(false);
 
   if (!isOpen || !conflict) return null;
 
-  const serverVersion: any = conflict.serverVersion;
+  const serverVersion = conflict.serverVersion;
 
   // Compute merged reflection and tasks if available
   const getMergedData = () => {
