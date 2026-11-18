@@ -1,11 +1,10 @@
 import React from 'react';
 import { describe, it, expect, vi } from 'vitest';
 import { render, screen, fireEvent, act } from '@testing-library/react';
-import { ConflictResolutionModal } from './ConflictResolutionModal';
-import { ConflictPayload } from '@planner/shared';
+import { ConflictResolutionModal } from './ConflictResolutionModal.jsx';
 
 describe('ConflictResolutionModal Component', () => {
-  const mockConflict: ConflictPayload = {
+  const mockConflict = {
     code: 'CONCURRENT_MODIFICATION_CONFLICT',
     message: 'Conflict detected on server',
     conflictReason: 'MODIFIED_ON_SERVER',
