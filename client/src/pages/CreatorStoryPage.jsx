@@ -4,7 +4,7 @@ import { SpiralBinding } from '../components/journal/SpiralBinding';
 import { Compass, Heart } from 'lucide-react';
 import { useLanguage } from '../context/LanguageContext';
 
-export const CreatorStoryPage: React.FC = () => {
+export const CreatorStoryPage = () => {
   const { t } = useLanguage();
 
   return (

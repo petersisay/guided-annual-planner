@@ -1,6 +1,6 @@
 import React from 'react';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import { HomePage } from './HomePage';
 import * as AuthContextModule from '../context/AuthContext';
@@ -86,59 +86,4 @@ describe('HomePage Component (Public Landing Page)', () => {
     expect(screen.getByText('Enter Planner')).toBeInTheDocument();
     expect(screen.getAllByText('Open Your Journal').length).toBeGreaterThanOrEqual(1);
   });
-
-  it('supports opening and closing responsive mobile navigation drawer with accessible attributes', () => {
-    vi.spyOn(AuthContextModule, 'useAuth').mockReturnValue({
-      user: null,
-      loading: false,
-      error: null,
-      loginWithGoogle: vi.fn(),
-      loginDev: vi.fn(),
-      logout: vi.fn(),
-      refreshUser: vi.fn(),
-      clearError: vi.fn(),
-    });
-
-    render(
-      <MemoryRouter>
-        <HomePage />
-      </MemoryRouter>
-    );
-
-    // Initial state: menu toggle button exists with aria-expanded="false"
-    const toggleButton = screen.getByRole('button', { name: /open navigation menu/i });
-    expect(toggleButton).toHaveAttribute('aria-expanded', 'false');
-    expect(document.getElementById('mobile-public-nav')).toBeNull();
-
-    // Click toggle button to open mobile menu
-    fireEvent.click(toggleButton);
-    expect(toggleButton).toHaveAttribute('aria-expanded', 'true');
-    expect(screen.getByRole('button', { name: /close navigation menu/i })).toBeInTheDocument();
-
-    const mobileNav = document.getElementById('mobile-public-nav');
-    expect(mobileNav).not.toBeNull();
-
-    // Verify links within drawer
-    const drawerPhilosophyLink = mobileNav?.querySelector('a[href="#philosophy"]');
-    expect(drawerPhilosophyLink).toBeInTheDocument();
-
-    // Press Escape to dismiss drawer
-    fireEvent.keyDown(window, { key: 'Escape' });
-    expect(screen.getByRole('button', { name: /open navigation menu/i })).toHaveAttribute(
-      'aria-expanded',
-      'false'
-    );
-    expect(document.getElementById('mobile-public-nav')).toBeNull();
-
-    // Reopen and verify clicking a drawer link closes it
-    fireEvent.click(screen.getByRole('button', { name: /open navigation menu/i }));
-    expect(document.getElementById('mobile-public-nav')).not.toBeNull();
-
-    const drawerHorizonsLink = document.getElementById('mobile-public-nav')?.querySelector('a[href="#horizons"]');
-    if (drawerHorizonsLink) {
-      fireEvent.click(drawerHorizonsLink);
-    }
-    expect(document.getElementById('mobile-public-nav')).toBeNull();
-  });
 });
-

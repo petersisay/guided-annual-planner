@@ -15,7 +15,7 @@ import {
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useLanguage } from '../context/LanguageContext';
-import { AnnualPlan, isLeapYear, getISOWeekNumber } from '@planner/shared';
+import { isLeapYear, getISOWeekNumber } from '@planner/shared';
 import { YearCalendarGrid } from '../components/annual/YearCalendarGrid';
 import { MoodTrackerHeatmap } from '../components/annual/MoodTrackerHeatmap';
 import { HabitTrackerHeatmap } from '../components/annual/HabitTrackerHeatmap';
@@ -25,29 +25,26 @@ import { SpiralBinding } from '../components/journal/SpiralBinding';
 import { saveAnnualPlanToLocalStorage } from '../utils/localStorageBackup';
 import { getCachedRecord, saveCachedRecord } from '../utils/offlineDb';
 import { syncManager } from '../services/syncManager';
-import { ConflictResolutionStrategy } from '@planner/shared';
 import { ConflictResolutionModal } from '../components/common/ConflictResolutionModal';
 import { usePlanAutosave } from '../hooks/usePlanAutosave';
 import { SaveStatusBadge } from '../components/common/SaveStatusBadge';
 import { PageLoadingState, PageErrorState } from '../components/common/PageStatusBanner';
 import { LanguageSelector } from '../components/common/LanguageSelector';
 
-type ActiveTab = 'overview' | 'mood' | 'habits';
-
-export const AnnualViewPage: React.FC = () => {
+export const AnnualViewPage = () => {
   const navigate = useNavigate();
   const { user, logout, loading: authLoading } = useAuth();
   const { language } = useLanguage();
-  const [selectedYear, setSelectedYear] = useState<number>(new Date().getFullYear());
-  const [activeTab, setActiveTab] = useState<ActiveTab>('overview');
-  const [loading, setLoading] = useState<boolean>(true);
-  const [fetchError, setFetchError] = useState<string | null>(null);
+  const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
+  const [activeTab, setActiveTab] = useState('overview');
+  const [loading, setLoading] = useState(true);
+  const [fetchError, setFetchError] = useState(null);
   const [showConflictModal, setShowConflictModal] = useState(false);
 
   const yearKey = String(selectedYear);
 
   const saveAnnualUpdates = useCallback(
-    async (updates: Partial<AnnualPlan>): Promise<AnnualPlan> => {
+    async (updates) => {
       const res = await fetch(`/api/v1/planner/year/${selectedYear}`, {
         method: 'PUT',
         headers: {
@@ -85,7 +82,7 @@ export const AnnualViewPage: React.FC = () => {
     activeConflict,
     triggerSave: handleUpdatePlan,
     retryLastSave,
-  } = usePlanAutosave<AnnualPlan>(null, {
+  } = usePlanAutosave(null, {
     saveFn: saveAnnualUpdates,
     entityType: 'annual',
     entityKey: yearKey,
@@ -95,7 +92,7 @@ export const AnnualViewPage: React.FC = () => {
   });
 
   const fetchAnnualPlan = useCallback(
-    async (year: number) => {
+    async (year) => {
       const key = String(year);
       try {
         setLoading(true);
@@ -103,7 +100,7 @@ export const AnnualViewPage: React.FC = () => {
 
         // Offline first check
         if (!navigator.onLine && user) {
-          const cached = await getCachedRecord<AnnualPlan>(user.id, 'annual', key);
+          const cached = await getCachedRecord(user.id, 'annual', key);
           if (cached) {
             setConfirmedPlan(cached.data);
             setLoading(false);
@@ -128,7 +125,7 @@ export const AnnualViewPage: React.FC = () => {
           }
         } else {
           if (user) {
-            const cached = await getCachedRecord<AnnualPlan>(user.id, 'annual', key);
+            const cached = await getCachedRecord(user.id, 'annual', key);
             if (cached) {
               setConfirmedPlan(cached.data);
               return;
@@ -139,7 +136,7 @@ export const AnnualViewPage: React.FC = () => {
       } catch (err) {
         console.error('Failed to load annual plan:', err);
         if (user) {
-          const cached = await getCachedRecord<AnnualPlan>(user.id, 'annual', key);
+          const cached = await getCachedRecord(user.id, 'annual', key);
           if (cached) {
             setConfirmedPlan(cached.data);
             return;
@@ -153,12 +150,9 @@ export const AnnualViewPage: React.FC = () => {
     [setConfirmedPlan, user]
   );
 
-  const handleResolveConflict = async (
-    strategy: ConflictResolutionStrategy,
-    mergedData?: any
-  ) => {
+  const handleResolveConflict = async (strategy, mergedData) => {
     if (strategy === 'keep_server' && activeConflict?.serverVersion) {
-      setConfirmedPlan(activeConflict.serverVersion as AnnualPlan);
+      setConfirmedPlan(activeConflict.serverVersion);
     } else if (strategy === 'combine' && mergedData) {
       await handleUpdatePlan(mergedData);
     } else if (strategy === 'keep_local' && annualPlan) {

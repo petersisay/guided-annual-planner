@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { ChevronLeft, ChevronRight, LayoutDashboard, Calendar, BookOpen, Heart } from 'lucide-react';
-import { MonthlyPlan, getMonthName } from '@planner/shared';
+import { getMonthName } from '@planner/shared';
 import { PlannerLayout } from '../components/layout/PlannerLayout';
 import { MonthlyDashboard } from '../components/monthly/MonthlyDashboard';
 import { MonthlyCalendarGrid } from '../components/monthly/MonthlyCalendarGrid';
@@ -10,33 +10,30 @@ import { HabitTrackerHeatmap } from '../components/annual/HabitTrackerHeatmap';
 import { saveMonthlyPlanToLocalStorage } from '../utils/localStorageBackup';
 import { getCachedRecord, saveCachedRecord } from '../utils/offlineDb';
 import { syncManager } from '../services/syncManager';
-import { ConflictResolutionStrategy } from '@planner/shared';
 import { ConflictResolutionModal } from '../components/common/ConflictResolutionModal';
 import { useAuth } from '../context/AuthContext';
 import { usePlanAutosave } from '../hooks/usePlanAutosave';
 import { SaveStatusBadge } from '../components/common/SaveStatusBadge';
 import { PageLoadingState, PageErrorState, PageEmptyState } from '../components/common/PageStatusBanner';
 
-type ViewMode = 'dashboard' | 'grid' | 'trackers';
-
-export const MonthlyViewPage: React.FC = () => {
-  const { year: paramYear, month: paramMonth } = useParams<{ year: string; month: string }>();
+export const MonthlyViewPage = () => {
+  const { year: paramYear, month: paramMonth } = useParams();
   const navigate = useNavigate();
   const { user } = useAuth();
 
   const currentYear = paramYear ? parseInt(paramYear, 10) : new Date().getFullYear();
   const currentMonth = paramMonth ? parseInt(paramMonth, 10) : new Date().getMonth() + 1;
 
-  const [viewMode, setViewMode] = useState<ViewMode>('dashboard');
+  const [viewMode, setViewMode] = useState('dashboard');
   const [loading, setLoading] = useState(true);
-  const [fetchError, setFetchError] = useState<string | null>(null);
+  const [fetchError, setFetchError] = useState(null);
   const [showConflictModal, setShowConflictModal] = useState(false);
 
   const monthName = getMonthName(currentMonth);
   const monthKey = `${currentYear}-${currentMonth}`;
 
   const saveMonthlyUpdates = useCallback(
-    async (updates: Partial<MonthlyPlan>): Promise<MonthlyPlan> => {
+    async (updates) => {
       const res = await fetch(`/api/v1/planner/monthly/${currentYear}/${currentMonth}`, {
         method: 'PUT',
         headers: {
@@ -74,7 +71,7 @@ export const MonthlyViewPage: React.FC = () => {
     activeConflict,
     triggerSave,
     retryLastSave,
-  } = usePlanAutosave<MonthlyPlan>(null, {
+  } = usePlanAutosave(null, {
     saveFn: saveMonthlyUpdates,
     entityType: 'monthly',
     entityKey: monthKey,
@@ -84,7 +81,7 @@ export const MonthlyViewPage: React.FC = () => {
   });
 
   const fetchMonthlyPlan = useCallback(
-    async (y: number, m: number) => {
+    async (y, m) => {
       const key = `${y}-${m}`;
       try {
         setLoading(true);
@@ -92,7 +89,7 @@ export const MonthlyViewPage: React.FC = () => {
 
         // Offline first check
         if (!navigator.onLine && user) {
-          const cached = await getCachedRecord<MonthlyPlan>(user.id, 'monthly', key);
+          const cached = await getCachedRecord(user.id, 'monthly', key);
           if (cached) {
             setConfirmedPlan(cached.data);
             setLoading(false);
@@ -117,7 +114,7 @@ export const MonthlyViewPage: React.FC = () => {
           }
         } else {
           if (user) {
-            const cached = await getCachedRecord<MonthlyPlan>(user.id, 'monthly', key);
+            const cached = await getCachedRecord(user.id, 'monthly', key);
             if (cached) {
               setConfirmedPlan(cached.data);
               return;
@@ -128,7 +125,7 @@ export const MonthlyViewPage: React.FC = () => {
       } catch (err) {
         console.error('Failed to load monthly plan:', err);
         if (user) {
-          const cached = await getCachedRecord<MonthlyPlan>(user.id, 'monthly', key);
+          const cached = await getCachedRecord(user.id, 'monthly', key);
           if (cached) {
             setConfirmedPlan(cached.data);
             return;
@@ -142,12 +139,9 @@ export const MonthlyViewPage: React.FC = () => {
     [setConfirmedPlan, user]
   );
 
-  const handleResolveConflict = async (
-    strategy: ConflictResolutionStrategy,
-    mergedData?: any
-  ) => {
+  const handleResolveConflict = async (strategy, mergedData) => {
     if (strategy === 'keep_server' && activeConflict?.serverVersion) {
-      setConfirmedPlan(activeConflict.serverVersion as MonthlyPlan);
+      setConfirmedPlan(activeConflict.serverVersion);
     } else if (strategy === 'combine' && mergedData) {
       await triggerSave(mergedData);
     } else if (strategy === 'keep_local' && plan) {

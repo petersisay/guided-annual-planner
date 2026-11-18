@@ -33,7 +33,7 @@ describe('AnnualViewPage Component', () => {
       clearError: vi.fn(),
     });
 
-    global.fetch = vi.fn().mockImplementation((url: string) => {
+    global.fetch = vi.fn().mockImplementation((url) => {
       if (url.includes('/api/v1/planner/year')) {
         return Promise.resolve({
           ok: true,
@@ -69,7 +69,7 @@ describe('AnnualViewPage Component', () => {
         ok: true,
         json: () => Promise.resolve({}),
       });
-    }) as any;
+    });
   });
 
   it('renders annual overview header, user name, and year navigation', async () => {

@@ -18,14 +18,14 @@ import { useLanguage } from '../context/LanguageContext';
 import { LandingAnimatedBackground } from '../components/common/LandingAnimatedBackground';
 import { LanguageSelector } from '../components/common/LanguageSelector';
 
-export const HomePage: React.FC = () => {
+export const HomePage = () => {
   const { user } = useAuth();
   const { t, language } = useLanguage();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   // Close mobile navigation drawer on Escape key press
   useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
+    const handleKeyDown = (e) => {
       if (e.key === 'Escape' && mobileMenuOpen) {
         setMobileMenuOpen(false);
       }

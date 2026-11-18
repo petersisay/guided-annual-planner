@@ -86,10 +86,10 @@ describe('DailyViewPage Component', () => {
       clearError: vi.fn(),
     });
 
-    global.fetch = vi.fn().mockImplementation((url: string, init?: RequestInit) => {
+    global.fetch = vi.fn().mockImplementation((url, init) => {
       if (url.includes('/api/v1/planner/daily/2026-10-15')) {
         if (init?.method === 'PUT') {
-          const body = JSON.parse(init.body as string);
+          const body = JSON.parse(init.body);
           return Promise.resolve({
             ok: true,
             json: () =>

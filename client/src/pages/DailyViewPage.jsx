@@ -2,8 +2,6 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { ChevronLeft, ChevronRight, Compass } from 'lucide-react';
 import {
-  DailyPlan,
-  DailyContext,
   isValidDateStr,
   getPreviousDay,
   getNextDay,
@@ -22,11 +20,10 @@ import { PageLoadingState, PageErrorState } from '../components/common/PageStatu
 import { saveDailyPlanToLocalStorage } from '../utils/localStorageBackup';
 import { getCachedRecord, saveCachedRecord } from '../utils/offlineDb';
 import { syncManager } from '../services/syncManager';
-import { ConflictResolutionStrategy } from '@planner/shared';
 import { useAuth } from '../context/AuthContext';
 import { usePlanAutosave } from '../hooks/usePlanAutosave';
 
-function getTodayIsoString(): string {
+function getTodayIsoString() {
   const now = new Date();
   const year = now.getFullYear();
   const month = String(now.getMonth() + 1).padStart(2, '0');
@@ -34,16 +31,16 @@ function getTodayIsoString(): string {
   return `${year}-${month}-${day}`;
 }
 
-export const DailyViewPage: React.FC = () => {
-  const { date: paramDate } = useParams<{ date?: string }>();
+export const DailyViewPage = () => {
+  const { date: paramDate } = useParams();
   const navigate = useNavigate();
   const { user } = useAuth();
 
   const activeDate = paramDate && isValidDateStr(paramDate) ? paramDate : getTodayIsoString();
 
   const [loading, setLoading] = useState(true);
-  const [fetchError, setFetchError] = useState<string | null>(null);
-  const [context, setContext] = useState<DailyContext>({
+  const [fetchError, setFetchError] = useState(null);
+  const [context, setContext] = useState({
     habits: [],
     monthlyMustDos: [],
   });
@@ -53,7 +50,7 @@ export const DailyViewPage: React.FC = () => {
   const [showConflictModal, setShowConflictModal] = useState(false);
 
   const saveDailyUpdates = useCallback(
-    async (updates: Partial<DailyPlan>): Promise<DailyPlan> => {
+    async (updates) => {
       const res = await fetch(`/api/v1/planner/daily/${activeDate}`, {
         method: 'PUT',
         headers: {
@@ -91,7 +88,7 @@ export const DailyViewPage: React.FC = () => {
     activeConflict,
     triggerSave,
     retryLastSave,
-  } = usePlanAutosave<DailyPlan>(null, {
+  } = usePlanAutosave(null, {
     saveFn: saveDailyUpdates,
     entityType: 'daily',
     entityKey: activeDate,
@@ -101,14 +98,14 @@ export const DailyViewPage: React.FC = () => {
   });
 
   const fetchDailyPlan = useCallback(
-    async (dateStr: string) => {
+    async (dateStr) => {
       try {
         setLoading(true);
         setFetchError(null);
 
         // Check offline cache first if offline
         if (!navigator.onLine && user) {
-          const cached = await getCachedRecord<DailyPlan>(user.id, 'daily', dateStr);
+          const cached = await getCachedRecord(user.id, 'daily', dateStr);
           if (cached) {
             setConfirmedPlan(cached.data);
             setLoading(false);
@@ -138,7 +135,7 @@ export const DailyViewPage: React.FC = () => {
         } else {
           // Check cached record fallback
           if (user) {
-            const cached = await getCachedRecord<DailyPlan>(user.id, 'daily', dateStr);
+            const cached = await getCachedRecord(user.id, 'daily', dateStr);
             if (cached) {
               setConfirmedPlan(cached.data);
               return;
@@ -149,7 +146,7 @@ export const DailyViewPage: React.FC = () => {
       } catch (err) {
         console.error('Failed to load daily plan:', err);
         if (user) {
-          const cached = await getCachedRecord<DailyPlan>(user.id, 'daily', dateStr);
+          const cached = await getCachedRecord(user.id, 'daily', dateStr);
           if (cached) {
             setConfirmedPlan(cached.data);
             return;
@@ -163,12 +160,9 @@ export const DailyViewPage: React.FC = () => {
     [setConfirmedPlan, user]
   );
 
-  const handleResolveConflict = async (
-    strategy: ConflictResolutionStrategy,
-    mergedData?: any
-  ) => {
+  const handleResolveConflict = async (strategy, mergedData) => {
     if (strategy === 'keep_server' && activeConflict?.serverVersion) {
-      setConfirmedPlan(activeConflict.serverVersion as DailyPlan);
+      setConfirmedPlan(activeConflict.serverVersion);
     } else if (strategy === 'combine' && mergedData) {
       await triggerSave(mergedData);
     } else if (strategy === 'keep_local' && plan) {
@@ -191,7 +185,7 @@ export const DailyViewPage: React.FC = () => {
     navigate(`/daily/${next}`);
   };
 
-  const handleDatePickerChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleDatePickerChange = (e) => {
     const selected = e.target.value;
     if (isValidDateStr(selected)) {
       navigate(`/daily/${selected}`);
@@ -296,7 +290,7 @@ export const DailyViewPage: React.FC = () => {
                   primaryPriorities={plan.primaryPriorities || []}
                   additionalTasks={plan.additionalTasks || []}
                   onUpdatePriorities={(primaryPriorities) =>
-                    triggerSave({ primaryPriorities: primaryPriorities as [any, any, any] })
+                    triggerSave({ primaryPriorities })
                   }
                   onUpdateAdditionalTasks={(additionalTasks) =>
                     triggerSave({ additionalTasks })

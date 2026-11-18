@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { JournalLoginCard } from '../components/auth/JournalLoginCard';
 import { useAuth } from '../context/AuthContext';
 
-export const LoginPage: React.FC = () => {
+export const LoginPage = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
 
