@@ -1,13 +1,5 @@
 import { useState, useEffect } from 'react';
-import type { FC, KeyboardEvent, MouseEvent } from 'react';
-import { BookEntry } from '@planner/shared';
 import { Check, X, BookmarkCheck } from 'lucide-react';
-
-interface BookshelfProps {
-  books: BookEntry[];
-  onChange: (books: BookEntry[]) => void;
-  maxBooks?: number;
-}
 
 const PALETTE = [
   { name: 'Sage Green', hex: '#7A9A48' },
@@ -17,19 +9,19 @@ const PALETTE = [
   { name: 'Warm Ochre', hex: '#D4A373' },
 ];
 
-export const Bookshelf: FC<BookshelfProps> = ({
-  books,
+export const Bookshelf = ({
+  books = [],
   onChange,
   maxBooks = 5,
 }) => {
-  const [editingIndex, setEditingIndex] = useState<number | null>(null);
+  const [editingIndex, setEditingIndex] = useState(null);
   const [editTitle, setEditTitle] = useState('');
   const [editAuthor, setEditAuthor] = useState('');
   const [editColor, setEditColor] = useState(PALETTE[0].hex);
 
   // Close modal on Escape key
   useEffect(() => {
-    const handleKeyDown = (e: globalThis.KeyboardEvent) => {
+    const handleKeyDown = (e) => {
       if (e.key === 'Escape' && editingIndex !== null) {
         setEditingIndex(null);
       }
@@ -39,11 +31,11 @@ export const Bookshelf: FC<BookshelfProps> = ({
   }, [editingIndex]);
 
   // Ensure 5 slots
-  const slots: (BookEntry | null)[] = Array.from({ length: maxBooks }).map(
+  const slots = Array.from({ length: maxBooks }).map(
     (_, i) => books[i] || null
   );
 
-  const startEdit = (index: number) => {
+  const startEdit = (index) => {
     const existing = slots[index];
     setEditingIndex(index);
     setEditTitle(existing ? existing.title : '');
@@ -61,7 +53,7 @@ export const Bookshelf: FC<BookshelfProps> = ({
       return;
     }
 
-    const updatedBook: BookEntry = {
+    const updatedBook = {
       id: existing ? existing.id : crypto.randomUUID(),
       title: editTitle.trim() || 'Untitled Book',
       author: editAuthor.trim() || undefined,
@@ -79,7 +71,7 @@ export const Bookshelf: FC<BookshelfProps> = ({
     setEditingIndex(null);
   };
 
-  const toggleRead = (index: number, e?: MouseEvent | KeyboardEvent) => {
+  const toggleRead = (index, e) => {
     if (e) e.stopPropagation();
     if (!slots[index]) return;
     const newBooks = [...books];
@@ -90,14 +82,14 @@ export const Bookshelf: FC<BookshelfProps> = ({
     onChange(newBooks);
   };
 
-  const removeBook = (index: number, e?: MouseEvent | KeyboardEvent) => {
+  const removeBook = (index, e) => {
     if (e) e.stopPropagation();
     const newBooks = books.filter((_, i) => i !== index);
     onChange(newBooks);
     setEditingIndex(null);
   };
 
-  const handleSlotKeyDown = (index: number, e: KeyboardEvent) => {
+  const handleSlotKeyDown = (index, e) => {
     if (e.key === 'Enter' || e.key === ' ') {
       e.preventDefault();
       startEdit(index);

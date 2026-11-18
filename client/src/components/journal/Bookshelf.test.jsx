@@ -1,10 +1,10 @@
+import React from 'react';
 import { describe, it, expect, vi } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { Bookshelf } from './Bookshelf';
-import { BookEntry } from '@planner/shared';
 
 describe('Bookshelf Component - Accessibility and Interaction', () => {
-  const sampleBooks: BookEntry[] = [
+  const sampleBooks = [
     {
       id: 'book-1',
       title: 'Atomic Habits',

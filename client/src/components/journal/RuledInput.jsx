@@ -1,15 +1,6 @@
 import React from 'react';
 
-interface RuledInputProps {
-  value: string;
-  onChange: (value: string) => void;
-  placeholder?: string;
-  className?: string;
-  disabled?: boolean;
-  onKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
-}
-
-export const RuledInput: React.FC<RuledInputProps> = ({
+export const RuledInput = ({
   value,
   onChange,
   placeholder = '',
@@ -32,15 +23,7 @@ export const RuledInput: React.FC<RuledInputProps> = ({
   );
 };
 
-interface RuledLinesAreaProps {
-  value: string;
-  onChange: (value: string) => void;
-  lines?: number;
-  placeholder?: string;
-  className?: string;
-}
-
-export const RuledLinesArea: React.FC<RuledLinesAreaProps> = ({
+export const RuledLinesArea = ({
   value,
   onChange,
   lines = 4,

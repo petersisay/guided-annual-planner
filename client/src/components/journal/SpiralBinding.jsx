@@ -1,12 +1,6 @@
 import React from 'react';
 
-interface SpiralBindingProps {
-  position?: 'left' | 'right' | 'top';
-  className?: string;
-  count?: number;
-}
-
-export const SpiralBinding: React.FC<SpiralBindingProps> = ({
+export const SpiralBinding = ({
   position = 'left',
   className = '',
   count = 24,

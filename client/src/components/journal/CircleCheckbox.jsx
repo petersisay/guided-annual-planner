@@ -1,16 +1,6 @@
 import React from 'react';
 
-interface CircleCheckboxProps {
-  checked: boolean;
-  onChange: (checked: boolean) => void;
-  size?: 'sm' | 'md' | 'lg';
-  color?: 'sage' | 'ink';
-  className?: string;
-  disabled?: boolean;
-  'aria-label'?: string;
-}
-
-export const CircleCheckbox: React.FC<CircleCheckboxProps> = ({
+export const CircleCheckbox = ({
   checked,
   onChange,
   size = 'md',
