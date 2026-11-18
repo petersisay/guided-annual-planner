@@ -4,26 +4,19 @@ import { generateMonthGrid, getMonthName } from '@planner/shared';
 import { SpiralBinding } from '../journal/SpiralBinding';
 import { useLanguage } from '../../context/LanguageContext';
 
-interface MonthlyCalendarGridProps {
-  year: number;
-  month: number;
-  calendarNotes: Record<string, string>;
-  onUpdateNotes: (notes: Record<string, string>) => void;
-}
-
-export const MonthlyCalendarGrid: React.FC<MonthlyCalendarGridProps> = ({
+export const MonthlyCalendarGrid = ({
   year,
   month,
   calendarNotes,
   onUpdateNotes,
 }) => {
   const { t, language } = useLanguage();
-  const [selectedDate, setSelectedDate] = useState<string | null>(null);
+  const [selectedDate, setSelectedDate] = useState(null);
   const [editingText, setEditingText] = useState('');
 
   // Close modal on Escape
   useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
+    const handleKeyDown = (e) => {
       if (e.key === 'Escape' && selectedDate !== null) {
         setSelectedDate(null);
       }
@@ -47,12 +40,12 @@ export const MonthlyCalendarGrid: React.FC<MonthlyCalendarGridProps> = ({
           'SUNDAY',
         ];
 
-  const handleCellClick = (dateStr: string) => {
+  const handleCellClick = (dateStr) => {
     setSelectedDate(dateStr);
     setEditingText(calendarNotes[dateStr] || '');
   };
 
-  const handleCellKeyDown = (dateStr: string, e: React.KeyboardEvent) => {
+  const handleCellKeyDown = (dateStr, e) => {
     if (e.key === 'Enter' || e.key === ' ') {
       e.preventDefault();
       handleCellClick(dateStr);

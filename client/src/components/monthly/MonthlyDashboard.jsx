@@ -1,75 +1,67 @@
 import React from 'react';
-import { MonthlyPlan, ChecklistItem, BookEntry } from '@planner/shared';
 import { CircleCheckbox } from '../journal/CircleCheckbox';
 import { RuledInput, RuledLinesArea } from '../journal/RuledInput';
 import { Bookshelf } from '../journal/Bookshelf';
 import { SpiralBinding } from '../journal/SpiralBinding';
 
-interface MonthlyDashboardProps {
-  plan: MonthlyPlan;
-  onUpdate: (updates: Partial<MonthlyPlan>) => void;
-  monthName: string;
-  year: number;
-}
-
-export const MonthlyDashboard: React.FC<MonthlyDashboardProps> = ({
+export const MonthlyDashboard = ({
   plan,
   onUpdate,
   monthName,
   year,
 }) => {
   // MUST DO'S (6 items)
-  const mustDos: ChecklistItem[] = Array.from({ length: 6 }).map((_, i) => {
+  const mustDos = Array.from({ length: 6 }).map((_, i) => {
     return plan.mustDos?.[i] || { id: crypto.randomUUID(), text: '', checked: false };
   });
 
-  const handleMustDoText = (index: number, text: string) => {
+  const handleMustDoText = (index, text) => {
     const updated = [...mustDos];
     updated[index] = { ...updated[index], text };
     onUpdate({ mustDos: updated });
   };
 
-  const handleMustDoCheck = (index: number, checked: boolean) => {
+  const handleMustDoCheck = (index, checked) => {
     const updated = [...mustDos];
     updated[index] = { ...updated[index], checked };
     onUpdate({ mustDos: updated });
   };
 
   // NEW HABITS (5 items)
-  const newHabits: string[] = Array.from({ length: 5 }).map((_, i) => {
+  const newHabits = Array.from({ length: 5 }).map((_, i) => {
     return plan.newHabits?.[i] || '';
   });
 
-  const handleHabitText = (index: number, text: string) => {
+  const handleHabitText = (index, text) => {
     const updated = [...newHabits];
     updated[index] = text;
     onUpdate({ newHabits: updated });
   };
 
   // TO-BUY (5 items in sage green card)
-  const toBuy: ChecklistItem[] = Array.from({ length: 5 }).map((_, i) => {
+  const toBuy = Array.from({ length: 5 }).map((_, i) => {
     return plan.toBuy?.[i] || { id: crypto.randomUUID(), text: '', checked: false };
   });
 
-  const handleToBuyText = (index: number, text: string) => {
+  const handleToBuyText = (index, text) => {
     const updated = [...toBuy];
     updated[index] = { ...updated[index], text };
     onUpdate({ toBuy: updated });
   };
 
-  const handleToBuyCheck = (index: number, checked: boolean) => {
+  const handleToBuyCheck = (index, checked) => {
     const updated = [...toBuy];
     updated[index] = { ...updated[index], checked };
     onUpdate({ toBuy: updated });
   };
 
   // BOOKS TO READ
-  const handleBooksChange = (books: BookEntry[]) => {
+  const handleBooksChange = (books) => {
     onUpdate({ books });
   };
 
   // SELF CHANGE REFLECTION
-  const handleSelfChange = (text: string) => {
+  const handleSelfChange = (text) => {
     onUpdate({ selfChangeReflection: text });
   };
 

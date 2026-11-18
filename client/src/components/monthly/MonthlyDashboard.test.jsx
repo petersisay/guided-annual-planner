@@ -2,10 +2,9 @@ import React from 'react';
 import { describe, it, expect, vi } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { MonthlyDashboard } from './MonthlyDashboard';
-import { MonthlyPlan } from '@planner/shared';
 
 describe('MonthlyDashboard Component', () => {
-  const mockPlan: MonthlyPlan = {
+  const mockPlan = {
     id: 'monthly_1',
     userId: 'user_1',
     year: 2026,
