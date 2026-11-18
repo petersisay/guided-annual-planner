@@ -20,28 +20,22 @@ import {
 import { PlannerLayout } from '../components/layout/PlannerLayout';
 import { useAuth } from '../context/AuthContext';
 import { useLanguage } from '../context/LanguageContext';
-import {
-  WeekStartPreference,
-  RestoreMode,
-  RestorePreview,
-  RestoreResult,
-} from '@planner/shared';
 import { exportJournalAsJsonFile } from '../utils/localStorageBackup';
 import { syncManager } from '../services/syncManager';
 
-export const SettingsPage: React.FC = () => {
+export const SettingsPage = () => {
   const { user, logout, refreshUser, updateUser, pendingSyncCount } = useAuth();
   const { language, setLanguage, t } = useLanguage();
   const navigate = useNavigate();
-  const fileInputRef = useRef<HTMLInputElement>(null);
-  const avatarInputRef = useRef<HTMLInputElement>(null);
+  const fileInputRef = useRef(null);
+  const avatarInputRef = useRef(null);
 
   // Avatar upload states
   const [avatarUploading, setAvatarUploading] = useState(false);
   const [avatarSuccess, setAvatarSuccess] = useState(false);
-  const [avatarError, setAvatarError] = useState<string | null>(null);
+  const [avatarError, setAvatarError] = useState(null);
 
-  const handleAvatarUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleAvatarUpload = async (e) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
@@ -54,7 +48,7 @@ export const SettingsPage: React.FC = () => {
     setAvatarError(null);
 
     try {
-      const dataUrl = await new Promise<string>((resolve, reject) => {
+      const dataUrl = await new Promise((resolve, reject) => {
         const reader = new FileReader();
         reader.onload = (event) => {
           const img = document.createElement('img');
@@ -80,14 +74,14 @@ export const SettingsPage: React.FC = () => {
             canvas.height = height;
             const ctx = canvas.getContext('2d');
             if (!ctx) {
-              resolve(event.target?.result as string);
+              resolve(event.target?.result);
               return;
             }
             ctx.drawImage(img, 0, 0, width, height);
             resolve(canvas.toDataURL('image/jpeg', 0.88));
           };
           img.onerror = reject;
-          img.src = event.target?.result as string;
+          img.src = event.target?.result;
         };
         reader.onerror = reject;
         reader.readAsDataURL(file);
@@ -138,31 +132,31 @@ export const SettingsPage: React.FC = () => {
   };
 
   // Preference states
-  const [weekStart, setWeekStart] = useState<WeekStartPreference>(
+  const [weekStart, setWeekStart] = useState(
     user?.preferences?.weekStart || 'monday'
   );
-  const [theme, setTheme] = useState<'paper-warm' | 'paper-editorial'>(
+  const [theme, setTheme] = useState(
     user?.preferences?.theme || 'paper-warm'
   );
-  const [prefersReducedMotion, setPrefersReducedMotion] = useState<boolean>(
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(
     user?.preferences?.prefersReducedMotion || false
   );
   const [saving, setSaving] = useState(false);
   const [savedSuccess, setSavedSuccess] = useState(false);
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [errorMessage, setErrorMessage] = useState(null);
 
   // Phase 6 Server Backup & Restore states
   const [exportingServerBackup, setExportingServerBackup] = useState(false);
   const [serverExportSuccess, setServerExportSuccess] = useState(false);
   const [isValidatingBackup, setIsValidatingBackup] = useState(false);
-  const [validationPreview, setValidationPreview] = useState<RestorePreview | null>(null);
-  const [rawParsedBackup, setRawParsedBackup] = useState<any | null>(null);
-  const [uploadedFileName, setUploadedFileName] = useState<string | null>(null);
-  const [restoreMode, setRestoreMode] = useState<RestoreMode>('merge');
+  const [validationPreview, setValidationPreview] = useState(null);
+  const [rawParsedBackup, setRawParsedBackup] = useState(null);
+  const [uploadedFileName, setUploadedFileName] = useState(null);
+  const [restoreMode, setRestoreMode] = useState('merge');
   const [confirmReplace, setConfirmReplace] = useState(false);
   const [isRestoring, setIsRestoring] = useState(false);
-  const [restoreResult, setRestoreResult] = useState<RestoreResult | null>(null);
-  const [restoreError, setRestoreError] = useState<string | null>(null);
+  const [restoreResult, setRestoreResult] = useState(null);
+  const [restoreError, setRestoreError] = useState(null);
 
   const handleSavePreferences = async () => {
     try {
@@ -192,7 +186,7 @@ export const SettingsPage: React.FC = () => {
       await refreshUser();
       setSavedSuccess(true);
       setTimeout(() => setSavedSuccess(false), 3000);
-    } catch (err: unknown) {
+    } catch (err) {
       console.error('Failed to save preferences:', err);
       setErrorMessage(err instanceof Error ? err.message : 'Error updating preferences');
     } finally {
@@ -242,7 +236,7 @@ export const SettingsPage: React.FC = () => {
 
       setServerExportSuccess(true);
       setTimeout(() => setServerExportSuccess(false), 4000);
-    } catch (err: unknown) {
+    } catch (err) {
       console.error('Failed to export server backup:', err);
       setErrorMessage(err instanceof Error ? err.message : 'Failed to export server backup');
     } finally {
@@ -262,7 +256,7 @@ export const SettingsPage: React.FC = () => {
   };
 
   // Phase 6: File selection & Validation
-  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = async (e) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
@@ -280,7 +274,7 @@ export const SettingsPage: React.FC = () => {
     try {
       setIsValidatingBackup(true);
       const fileText = await file.text();
-      let parsedJson: any;
+      let parsedJson;
       try {
         parsedJson = JSON.parse(fileText);
       } catch {
@@ -311,7 +305,7 @@ export const SettingsPage: React.FC = () => {
       }
 
       setValidationPreview(validateData);
-    } catch (err: unknown) {
+    } catch (err) {
       console.error('Validation error:', err);
       setRestoreError(err instanceof Error ? err.message : 'Validation failed');
       setValidationPreview(null);
@@ -375,7 +369,7 @@ export const SettingsPage: React.FC = () => {
       setRawParsedBackup(null);
       setUploadedFileName(null);
       setConfirmReplace(false);
-    } catch (err: unknown) {
+    } catch (err) {
       console.error('Restore failed:', err);
       setRestoreError(err instanceof Error ? err.message : 'Restore failed');
     } finally {

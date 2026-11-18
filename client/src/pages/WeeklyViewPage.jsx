@@ -1,22 +1,21 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
-import { WeeklyPlan, getISOWeeksInYear, getISOWeekNumber } from '@planner/shared';
+import { getISOWeeksInYear, getISOWeekNumber } from '@planner/shared';
 import { PlannerLayout } from '../components/layout/PlannerLayout';
 import { WeeklyTaskList } from '../components/weekly/WeeklyTaskList';
 import { WeeklyNotes } from '../components/weekly/WeeklyNotes';
 import { saveWeeklyPlanToLocalStorage } from '../utils/localStorageBackup';
 import { getCachedRecord, saveCachedRecord } from '../utils/offlineDb';
 import { syncManager } from '../services/syncManager';
-import { ConflictResolutionStrategy } from '@planner/shared';
 import { ConflictResolutionModal } from '../components/common/ConflictResolutionModal';
 import { useAuth } from '../context/AuthContext';
 import { usePlanAutosave } from '../hooks/usePlanAutosave';
 import { SaveStatusBadge } from '../components/common/SaveStatusBadge';
 import { PageLoadingState, PageErrorState, PageEmptyState } from '../components/common/PageStatusBanner';
 
-export const WeeklyViewPage: React.FC = () => {
-  const { year: paramYear, week: paramWeek } = useParams<{ year: string; week: string }>();
+export const WeeklyViewPage = () => {
+  const { year: paramYear, week: paramWeek } = useParams();
   const navigate = useNavigate();
   const { user } = useAuth();
 
@@ -25,14 +24,14 @@ export const WeeklyViewPage: React.FC = () => {
   const currentWeek = paramWeek ? parseInt(paramWeek, 10) : getISOWeekNumber(now);
 
   const [loading, setLoading] = useState(true);
-  const [fetchError, setFetchError] = useState<string | null>(null);
+  const [fetchError, setFetchError] = useState(null);
   const [showConflictModal, setShowConflictModal] = useState(false);
 
   const maxWeeks = getISOWeeksInYear(currentYear);
   const weekKey = `${currentYear}-${currentWeek}`;
 
   const saveWeeklyUpdates = useCallback(
-    async (updates: Partial<WeeklyPlan>): Promise<WeeklyPlan> => {
+    async (updates) => {
       const res = await fetch(`/api/v1/planner/weekly/${currentYear}/${currentWeek}`, {
         method: 'PUT',
         headers: {
@@ -70,7 +69,7 @@ export const WeeklyViewPage: React.FC = () => {
     activeConflict,
     triggerSave,
     retryLastSave,
-  } = usePlanAutosave<WeeklyPlan>(null, {
+  } = usePlanAutosave(null, {
     saveFn: saveWeeklyUpdates,
     entityType: 'weekly',
     entityKey: weekKey,
@@ -80,7 +79,7 @@ export const WeeklyViewPage: React.FC = () => {
   });
 
   const fetchWeeklyPlan = useCallback(
-    async (y: number, w: number) => {
+    async (y, w) => {
       const key = `${y}-${w}`;
       try {
         setLoading(true);
@@ -88,7 +87,7 @@ export const WeeklyViewPage: React.FC = () => {
 
         // Offline first check
         if (!navigator.onLine && user) {
-          const cached = await getCachedRecord<WeeklyPlan>(user.id, 'weekly', key);
+          const cached = await getCachedRecord(user.id, 'weekly', key);
           if (cached) {
             setConfirmedPlan(cached.data);
             setLoading(false);
@@ -113,7 +112,7 @@ export const WeeklyViewPage: React.FC = () => {
           }
         } else {
           if (user) {
-            const cached = await getCachedRecord<WeeklyPlan>(user.id, 'weekly', key);
+            const cached = await getCachedRecord(user.id, 'weekly', key);
             if (cached) {
               setConfirmedPlan(cached.data);
               return;
@@ -124,7 +123,7 @@ export const WeeklyViewPage: React.FC = () => {
       } catch (err) {
         console.error('Failed to load weekly plan:', err);
         if (user) {
-          const cached = await getCachedRecord<WeeklyPlan>(user.id, 'weekly', key);
+          const cached = await getCachedRecord(user.id, 'weekly', key);
           if (cached) {
             setConfirmedPlan(cached.data);
             return;
@@ -138,12 +137,9 @@ export const WeeklyViewPage: React.FC = () => {
     [setConfirmedPlan, user]
   );
 
-  const handleResolveConflict = async (
-    strategy: ConflictResolutionStrategy,
-    mergedData?: any
-  ) => {
+  const handleResolveConflict = async (strategy, mergedData) => {
     if (strategy === 'keep_server' && activeConflict?.serverVersion) {
-      setConfirmedPlan(activeConflict.serverVersion as WeeklyPlan);
+      setConfirmedPlan(activeConflict.serverVersion);
     } else if (strategy === 'combine' && mergedData) {
       await triggerSave(mergedData);
     } else if (strategy === 'keep_local' && plan) {

@@ -11,32 +11,31 @@ import {
   X,
 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
-import { WeekStartPreference } from '@planner/shared';
 
-export const OnboardingPage: React.FC = () => {
+export const OnboardingPage = () => {
   const { user, refreshUser } = useAuth();
   const navigate = useNavigate();
 
-  const [step, setStep] = useState<number>(1);
+  const [step, setStep] = useState(1);
   const [submitting, setSubmitting] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState(null);
 
   // Form states for onboarding
   const [themeOrWord, setThemeOrWord] = useState('');
   const [intentionText, setIntentionText] = useState('');
-  const [weekStart, setWeekStart] = useState<WeekStartPreference>(
+  const [weekStart, setWeekStart] = useState(
     user?.preferences?.weekStart || 'monday'
   );
-  const [theme, setTheme] = useState<'paper-warm' | 'paper-editorial'>(
+  const [theme, setTheme] = useState(
     user?.preferences?.theme || 'paper-warm'
   );
-  const [prefersReducedMotion, setPrefersReducedMotion] = useState<boolean>(
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(
     user?.preferences?.prefersReducedMotion || false
   );
 
   const currentYear = new Date().getFullYear();
 
-  const saveOnboarding = async (status: 'completed' | 'skipped') => {
+  const saveOnboarding = async (status) => {
     try {
       setSubmitting(true);
       setError(null);
@@ -74,7 +73,7 @@ export const OnboardingPage: React.FC = () => {
 
       await refreshUser();
       navigate('/annual');
-    } catch (err: unknown) {
+    } catch (err) {
       console.error('Onboarding save error:', err);
       setError(err instanceof Error ? err.message : 'Connection error while saving onboarding');
     } finally {
