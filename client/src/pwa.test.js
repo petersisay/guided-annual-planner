@@ -1,6 +1,10 @@
 import { describe, it, expect } from 'vitest';
 import fs from 'fs';
 import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 describe('PWA Manifest & Icon Assets Verification', () => {
   const publicDir = path.resolve(__dirname, '../public');
