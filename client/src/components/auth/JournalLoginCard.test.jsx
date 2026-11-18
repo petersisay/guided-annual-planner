@@ -1,12 +1,13 @@
+import React from 'react';
 import { describe, it, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
-import { JournalLoginCard } from './JournalLoginCard';
+import { JournalLoginCard } from './JournalLoginCard.jsx';
 import * as AuthContextModule from '../../context/AuthContext';
 import { GoogleOAuthProvider } from '@react-oauth/google';
 
 // Mock GoogleLogin button from @react-oauth/google
 vi.mock('@react-oauth/google', async () => {
-  const actual = await vi.importActual<any>('@react-oauth/google');
+  const actual = await vi.importActual('@react-oauth/google');
   return {
     ...actual,
     GoogleLogin: () => <button data-testid="mock-google-login">Sign in with Google</button>,
