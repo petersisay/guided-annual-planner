@@ -1,16 +1,9 @@
 import React, { useEffect, useState, useCallback } from 'react';
 
-interface ClickRipple {
-  id: number;
-  x: number;
-  y: number;
-  color: string;
-}
+export const GlobalClickAnimation = () => {
+  const [ripples, setRipples] = useState([]);
 
-export const GlobalClickAnimation: React.FC = () => {
-  const [ripples, setRipples] = useState<ClickRipple[]>([]);
-
-  const handleClick = useCallback((e: MouseEvent) => {
+  const handleClick = useCallback((e) => {
     // Respect user preference for reduced motion
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
       return;
@@ -25,7 +18,7 @@ export const GlobalClickAnimation: React.FC = () => {
     ];
     const randomColor = colors[Math.floor(Math.random() * colors.length)];
 
-    const newRipple: ClickRipple = {
+    const newRipple = {
       id: Date.now() + Math.random(),
       x: e.clientX,
       y: e.clientY,
