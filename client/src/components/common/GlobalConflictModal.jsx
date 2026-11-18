@@ -1,22 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { AlertTriangle, Download, Check, RefreshCw, X, ShieldCheck } from 'lucide-react';
-import { syncManager } from '../../services/syncManager';
-import { OfflineMutation } from '@planner/shared';
+import { syncManager } from '../../services/syncManager.js';
 
-interface GlobalConflictModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  userId?: string;
-}
-
-export const GlobalConflictModal: React.FC<GlobalConflictModalProps> = ({
+export const GlobalConflictModal = ({
   isOpen,
   onClose,
   userId,
 }) => {
-  const [conflictedMutations, setConflictedMutations] = useState<OfflineMutation[]>([]);
+  const [conflictedMutations, setConflictedMutations] = useState([]);
   const [isResolving, setIsResolving] = useState(false);
-  const [resolutionChoice, setResolutionChoice] = useState<'keep_local' | 'keep_server'>('keep_local');
+  const [resolutionChoice, setResolutionChoice] = useState('keep_local');
 
   useEffect(() => {
     if (isOpen) {
