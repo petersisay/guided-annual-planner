@@ -1,7 +1,7 @@
 import React from 'react';
 import { AlertTriangle, KeyRound } from 'lucide-react';
 
-export const MissingGoogleConfigCard: React.FC = () => {
+export const MissingGoogleConfigCard = () => {
   return (
     <div className="min-h-screen bg-paper flex items-center justify-center p-4">
       <div className="w-full max-w-lg bg-paper-alt border border-border-strong rounded-2xl p-8 shadow-paper-lg">
