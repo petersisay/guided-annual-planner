@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 
-export const LandingAnimatedBackground: React.FC = () => {
+export const LandingAnimatedBackground = () => {
   return (
     <div
       aria-hidden="true"

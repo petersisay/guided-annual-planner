@@ -1,10 +1,6 @@
 import React from 'react';
 
-interface PaperPageSpinnerProps {
-  label?: string;
-}
-
-export const PaperPageSpinner: React.FC<PaperPageSpinnerProps> = ({
+export const PaperPageSpinner = ({
   label = 'Opening your journal spread...',
 }) => {
   return (

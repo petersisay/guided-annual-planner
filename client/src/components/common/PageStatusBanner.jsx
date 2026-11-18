@@ -1,11 +1,7 @@
-import type { FC } from 'react';
+import React from 'react';
 import { AlertTriangle, RefreshCw, BookOpen } from 'lucide-react';
 
-interface PageLoadingProps {
-  message?: string;
-}
-
-export const PageLoadingState: FC<PageLoadingProps> = ({
+export const PageLoadingState = ({
   message = 'Opening your journal pages...',
 }) => (
   <div
@@ -18,13 +14,7 @@ export const PageLoadingState: FC<PageLoadingProps> = ({
   </div>
 );
 
-interface PageErrorProps {
-  title?: string;
-  message?: string;
-  onRetry?: () => void;
-}
-
-export const PageErrorState: FC<PageErrorProps> = ({
+export const PageErrorState = ({
   title = 'Unable to Load Journal Page',
   message = 'We encountered an unexpected connection issue while retrieving your planner data.',
   onRetry,
@@ -53,12 +43,7 @@ export const PageErrorState: FC<PageErrorProps> = ({
   </div>
 );
 
-interface PageEmptyProps {
-  title?: string;
-  message?: string;
-}
-
-export const PageEmptyState: FC<PageEmptyProps> = ({
+export const PageEmptyState = ({
   title = 'No Entries Yet',
   message = 'Begin by typing your reflections, tasks, or habits into your journal.',
 }) => (

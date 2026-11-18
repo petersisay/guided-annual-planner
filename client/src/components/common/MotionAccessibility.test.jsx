@@ -1,3 +1,4 @@
+import React from 'react';
 import { render, fireEvent } from '@testing-library/react';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { GlobalClickAnimation } from './GlobalClickAnimation';
@@ -15,7 +16,7 @@ describe('Motion Accessibility Preferences', () => {
   });
 
   it('does not spawn ripples on click when prefers-reduced-motion is true', () => {
-    window.matchMedia = vi.fn().mockImplementation((query: string) => ({
+    window.matchMedia = vi.fn().mockImplementation((query) => ({
       matches: query.includes('prefers-reduced-motion: reduce'),
       media: query,
       onchange: null,
@@ -34,7 +35,7 @@ describe('Motion Accessibility Preferences', () => {
   });
 
   it('spawns ripples on click when prefers-reduced-motion is false', () => {
-    window.matchMedia = vi.fn().mockImplementation((query: string) => ({
+    window.matchMedia = vi.fn().mockImplementation((query) => ({
       matches: false,
       media: query,
       onchange: null,
@@ -55,7 +56,7 @@ describe('Motion Accessibility Preferences', () => {
   it('does not attach mouse listeners if prefers-reduced-motion is true', () => {
     const addEventSpy = vi.spyOn(window, 'addEventListener');
 
-    window.matchMedia = vi.fn().mockImplementation((query: string) => ({
+    window.matchMedia = vi.fn().mockImplementation((query) => ({
       matches: query.includes('prefers-reduced-motion: reduce'),
       media: query,
       onchange: null,

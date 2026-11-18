@@ -2,12 +2,7 @@ import React from 'react';
 import { X, Calendar, CalendarDays, LayoutGrid, Sun, CheckCircle2, ShieldCheck, Heart, BookOpen } from 'lucide-react';
 import { useLanguage } from '../../context/LanguageContext';
 
-interface HowItWorksModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-}
-
-export const HowItWorksModal: React.FC<HowItWorksModalProps> = ({ isOpen, onClose }) => {
+export const HowItWorksModal = ({ isOpen, onClose }) => {
   const { t } = useLanguage();
 
   if (!isOpen) return null;

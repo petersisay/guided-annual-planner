@@ -1,16 +1,7 @@
-import type { FC } from 'react';
+import React from 'react';
 import { RefreshCw, CheckCircle2, AlertCircle, CloudOff, AlertTriangle } from 'lucide-react';
-import { SaveStatus } from '../../hooks/usePlanAutosave';
 
-interface SaveStatusBadgeProps {
-  status: SaveStatus;
-  errorMessage?: string | null;
-  onRetry?: () => void;
-  onReviewConflict?: () => void;
-  className?: string;
-}
-
-export const SaveStatusBadge: FC<SaveStatusBadgeProps> = ({
+export const SaveStatusBadge = ({
   status,
   errorMessage,
   onRetry,

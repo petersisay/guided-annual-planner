@@ -5,19 +5,14 @@ import { syncManager } from '../../services/syncManager';
 import { getPendingMutationsCount } from '../../utils/offlineDb';
 import { editorDirtyTracker } from '../../services/editorDirtyTracker';
 
-interface PwaUpdatePromptProps {
-  registration: ServiceWorkerRegistration | null;
-  onDismiss?: () => void;
-}
-
-export const PwaUpdatePrompt: React.FC<PwaUpdatePromptProps> = ({
+export const PwaUpdatePrompt = ({
   registration,
   onDismiss,
 }) => {
   const [isVisible, setIsVisible] = useState(false);
   const [isUpdating, setIsUpdating] = useState(false);
-  const [pendingCount, setPendingCount] = useState<number>(0);
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [pendingCount, setPendingCount] = useState(0);
+  const [errorMessage, setErrorMessage] = useState(null);
 
   useEffect(() => {
     if (!registration) {
