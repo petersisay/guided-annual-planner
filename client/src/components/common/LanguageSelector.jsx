@@ -1,19 +1,14 @@
 import React from 'react';
 import { Globe } from 'lucide-react';
 import { useLanguage } from '../../context/LanguageContext';
-import { SupportedLanguage } from '../../i18n/translations';
 
-interface LanguageSelectorProps {
-  className?: string;
-}
-
-export const LanguageSelector: React.FC<LanguageSelectorProps> = ({
+export const LanguageSelector = ({
   className = '',
 }) => {
   const { language, setLanguage } = useLanguage();
 
   const handleToggle = () => {
-    const nextLang: SupportedLanguage = language === 'en' ? 'am' : 'en';
+    const nextLang = language === 'en' ? 'am' : 'en';
     setLanguage(nextLang);
   };
 
