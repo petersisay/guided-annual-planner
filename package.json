@@ -24,8 +24,10 @@
     "planner",
     "guided-planner",
     "mern",
-    "typescript",
-    "framer-motion"
+    "javascript",
+    "express",
+    "react",
+    "mongodb"
   ],
   "author": "Peter Sisay",
   "license": "ISC"
