@@ -19,24 +19,19 @@ import { useAuth } from '../../context/AuthContext';
 import { useLanguage } from '../../context/LanguageContext';
 import { LanguageSelector } from '../common/LanguageSelector';
 import { SpiralBinding } from '../journal/SpiralBinding';
-import { getISOWeekNumber, SyncStatus } from '@planner/shared';
+import { getISOWeekNumber } from '@planner/shared';
 import { syncManager } from '../../services/syncManager';
 import { HowItWorksModal } from '../common/HowItWorksModal';
 import { GlobalConflictModal } from '../common/GlobalConflictModal';
 
-interface PlannerLayoutProps {
-  children: React.ReactNode;
-  currentYear?: number;
-}
-
-export const PlannerLayout: React.FC<PlannerLayoutProps> = ({
+export const PlannerLayout = ({
   children,
   currentYear: propYear,
 }) => {
   const { user, logout, loading, pendingSyncCount } = useAuth();
   const { language, t } = useLanguage();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [syncStatus, setSyncStatus] = useState<SyncStatus>('synced');
+  const [syncStatus, setSyncStatus] = useState('synced');
   const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
   const [showHowItWorks, setShowHowItWorks] = useState(false);
   const [showConflictModal, setShowConflictModal] = useState(false);
