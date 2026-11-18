@@ -1,23 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { BookOpen, Award, ShieldAlert, Lightbulb, Check } from 'lucide-react';
-import { AnnualPlan, AnnualReviewData } from '@planner/shared';
 
-interface AnnualReviewSectionProps {
-  year: number;
-  plan: AnnualPlan | null;
-  onUpdatePlan: (updated: Partial<AnnualPlan>) => Promise<boolean | void>;
-}
-
-export const AnnualReviewSection: React.FC<AnnualReviewSectionProps> = ({
+export const AnnualReviewSection = ({
   year,
   plan,
   onUpdatePlan,
 }) => {
-  const [celebrations, setCelebrations] = useState<string>('');
-  const [obstacles, setObstacles] = useState<string>('');
-  const [lessons, setLessons] = useState<string>('');
-  const [saving, setSaving] = useState<boolean>(false);
-  const [saveSuccess, setSaveSuccess] = useState<boolean>(false);
+  const [celebrations, setCelebrations] = useState('');
+  const [obstacles, setObstacles] = useState('');
+  const [lessons, setLessons] = useState('');
+  const [saving, setSaving] = useState(false);
+  const [saveSuccess, setSaveSuccess] = useState(false);
 
   useEffect(() => {
     if (plan?.annualReview) {
@@ -30,7 +23,7 @@ export const AnnualReviewSection: React.FC<AnnualReviewSectionProps> = ({
   const handleSaveReview = async () => {
     setSaving(true);
     try {
-      const reviewData: AnnualReviewData = {
+      const reviewData = {
         celebrations: celebrations.trim() || undefined,
         obstaclesEncountered: obstacles.trim() || undefined,
         keyLessonsLearned: lessons.trim() || undefined,

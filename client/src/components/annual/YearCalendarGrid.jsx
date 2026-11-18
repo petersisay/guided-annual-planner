@@ -1,15 +1,8 @@
-import type { FC, KeyboardEvent } from 'react';
+import React from 'react';
 import { generateMonthGrid, getMonthName, isLeapYear } from '@planner/shared';
 import { useLanguage } from '../../context/LanguageContext';
 
-interface YearCalendarGridProps {
-  year: number;
-  weekStart?: 'monday' | 'sunday';
-  onDateClick?: (dateStr: string) => void;
-  onMonthClick?: (month: number) => void;
-}
-
-export const YearCalendarGrid: FC<YearCalendarGridProps> = ({
+export const YearCalendarGrid = ({
   year,
   weekStart = 'sunday',
   onDateClick,
@@ -26,13 +19,13 @@ export const YearCalendarGrid: FC<YearCalendarGridProps> = ({
         ? ['MO', 'TU', 'WE', 'TH', 'FR', 'SA', 'SU']
         : ['SU', 'MO', 'TU', 'WE', 'TH', 'FR', 'SA'];
 
-  const getCardMonthName = (m: number) => {
+  const getCardMonthName = (m) => {
     return language === 'am' && t.months?.[m - 1] ? t.months[m - 1] : getMonthName(m);
   };
 
   const todayStr = new Date().toISOString().split('T')[0];
 
-  const handleMonthKeyDown = (month: number, e: KeyboardEvent) => {
+  const handleMonthKeyDown = (month, e) => {
     if (e.key === 'Enter' || e.key === ' ') {
       e.preventDefault();
       onMonthClick?.(month);

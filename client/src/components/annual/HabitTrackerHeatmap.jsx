@@ -1,13 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Check, Plus, Trash2, Edit2, X, Flame } from 'lucide-react';
-import { Habit, getMonthName, getDaysInMonth, formatDateStr, isLeapYear } from '@planner/shared';
+import { getMonthName, getDaysInMonth, formatDateStr, isLeapYear } from '@planner/shared';
 import { useAuth } from '../../context/AuthContext';
 import { syncManager } from '../../services/syncManager';
-
-interface HabitTrackerHeatmapProps {
-  year: number;
-}
 
 const HABIT_COLOR_SWATCHES = [
   { name: 'Sage', hex: '#7A9A48' },
@@ -19,16 +15,16 @@ const HABIT_COLOR_SWATCHES = [
   { name: 'Teal', hex: '#3B7A77' },
 ];
 
-export const HabitTrackerHeatmap: React.FC<HabitTrackerHeatmapProps> = ({ year }) => {
+export const HabitTrackerHeatmap = ({ year }) => {
   const { user } = useAuth();
-  const [habits, setHabits] = useState<Habit[]>([]);
-  const [selectedHabitId, setSelectedHabitId] = useState<string | null>(null);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [isAddingHabit, setIsAddingHabit] = useState<boolean>(false);
-  const [newTitle, setNewTitle] = useState<string>('');
-  const [newColor, setNewColor] = useState<string>(HABIT_COLOR_SWATCHES[0].hex);
-  const [editingHabit, setEditingHabit] = useState<Habit | null>(null);
-  const [saving, setSaving] = useState<boolean>(false);
+  const [habits, setHabits] = useState([]);
+  const [selectedHabitId, setSelectedHabitId] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [isAddingHabit, setIsAddingHabit] = useState(false);
+  const [newTitle, setNewTitle] = useState('');
+  const [newColor, setNewColor] = useState(HABIT_COLOR_SWATCHES[0].hex);
+  const [editingHabit, setEditingHabit] = useState(null);
+  const [saving, setSaving] = useState(false);
 
   const fetchHabits = async () => {
     setLoading(true);
@@ -39,7 +35,7 @@ export const HabitTrackerHeatmap: React.FC<HabitTrackerHeatmapProps> = ({ year }
       });
       if (res.ok) {
         const data = await res.json();
-        const habitList: Habit[] = data.habits || [];
+        const habitList = data.habits || [];
         setHabits(habitList);
         if (habitList.length > 0 && (!selectedHabitId || !habitList.some((h) => h.id === selectedHabitId))) {
           setSelectedHabitId(habitList[0].id);
@@ -58,7 +54,7 @@ export const HabitTrackerHeatmap: React.FC<HabitTrackerHeatmapProps> = ({ year }
 
   const activeHabit = habits.find((h) => h.id === selectedHabitId) || habits[0] || null;
 
-  const handleCreateHabit = async (e: React.FormEvent) => {
+  const handleCreateHabit = async (e) => {
     e.preventDefault();
     if (!newTitle.trim()) return;
     setSaving(true);
@@ -92,7 +88,7 @@ export const HabitTrackerHeatmap: React.FC<HabitTrackerHeatmapProps> = ({ year }
     }
   };
 
-  const handleToggleDate = async (dateStr: string) => {
+  const handleToggleDate = async (dateStr) => {
     if (!activeHabit) return;
     const currentCompleted = !!activeHabit.completionDates[dateStr];
     const newCompleted = !currentCompleted;
@@ -170,7 +166,7 @@ export const HabitTrackerHeatmap: React.FC<HabitTrackerHeatmapProps> = ({ year }
     }
   };
 
-  const handleUpdateHabit = async (e: React.FormEvent) => {
+  const handleUpdateHabit = async (e) => {
     e.preventDefault();
     if (!editingHabit || !editingHabit.title.trim()) return;
     setSaving(true);
@@ -201,7 +197,7 @@ export const HabitTrackerHeatmap: React.FC<HabitTrackerHeatmapProps> = ({ year }
     }
   };
 
-  const handleDeleteHabit = async (habitId: string) => {
+  const handleDeleteHabit = async (habitId) => {
     if (!confirm('Are you sure you want to remove this habit tracker?')) return;
 
     try {
@@ -231,7 +227,7 @@ export const HabitTrackerHeatmap: React.FC<HabitTrackerHeatmapProps> = ({ year }
   const completionPercentage = Math.round((completedCount / totalDaysInYear) * 100);
 
   // Calculate current streak
-  const calculateStreak = (): number => {
+  const calculateStreak = () => {
     if (!activeHabit) return 0;
     let streak = 0;
     // Check backwards from today

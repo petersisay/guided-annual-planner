@@ -1,23 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { Compass, Plus, Trash2, Check } from 'lucide-react';
-import { AnnualPlan } from '@planner/shared';
 
-interface AnnualIntentionCardProps {
-  year: number;
-  plan: AnnualPlan | null;
-  onUpdatePlan: (updated: Partial<AnnualPlan>) => Promise<boolean | void>;
-}
-
-export const AnnualIntentionCard: React.FC<AnnualIntentionCardProps> = ({
+export const AnnualIntentionCard = ({
   year,
   plan,
   onUpdatePlan,
 }) => {
-  const [theme, setTheme] = useState<string>('');
-  const [intentions, setIntentions] = useState<string[]>([]);
-  const [newIntention, setNewIntention] = useState<string>('');
-  const [saving, setSaving] = useState<boolean>(false);
-  const [saveSuccess, setSaveSuccess] = useState<boolean>(false);
+  const [theme, setTheme] = useState('');
+  const [intentions, setIntentions] = useState([]);
+  const [newIntention, setNewIntention] = useState('');
+  const [saving, setSaving] = useState(false);
+  const [saveSuccess, setSaveSuccess] = useState(false);
 
   useEffect(() => {
     if (plan) {
@@ -37,7 +30,7 @@ export const AnnualIntentionCard: React.FC<AnnualIntentionCardProps> = ({
     }
   };
 
-  const handleAddIntention = async (e: React.FormEvent) => {
+  const handleAddIntention = async (e) => {
     e.preventDefault();
     if (!newIntention.trim()) return;
     const updated = [...intentions, newIntention.trim()];
@@ -51,7 +44,7 @@ export const AnnualIntentionCard: React.FC<AnnualIntentionCardProps> = ({
     }
   };
 
-  const handleRemoveIntention = async (index: number) => {
+  const handleRemoveIntention = async (index) => {
     const updated = intentions.filter((_, i) => i !== index);
     setIntentions(updated);
     setSaving(true);

@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Heart, Trash2 } from 'lucide-react';
 import {
-  MoodEntry,
   DEFAULT_MOOD_PALETTE,
   getAllYearDates,
   getMonthName,
@@ -12,18 +11,14 @@ import {
 import { useAuth } from '../../context/AuthContext';
 import { syncManager } from '../../services/syncManager';
 
-interface MoodTrackerHeatmapProps {
-  year: number;
-}
-
-export const MoodTrackerHeatmap: React.FC<MoodTrackerHeatmapProps> = ({ year }) => {
+export const MoodTrackerHeatmap = ({ year }) => {
   const { user } = useAuth();
-  const [moods, setMoods] = useState<Record<string, MoodEntry>>({});
-  const [loading, setLoading] = useState<boolean>(true);
-  const [selectedDate, setSelectedDate] = useState<string | null>(null);
-  const [activeMoodKey, setActiveMoodKey] = useState<string>('great');
-  const [note, setNote] = useState<string>('');
-  const [saving, setSaving] = useState<boolean>(false);
+  const [moods, setMoods] = useState({});
+  const [loading, setLoading] = useState(true);
+  const [selectedDate, setSelectedDate] = useState(null);
+  const [activeMoodKey, setActiveMoodKey] = useState('great');
+  const [note, setNote] = useState('');
+  const [saving, setSaving] = useState(false);
 
   const fetchMoods = async () => {
     setLoading(true);
@@ -34,7 +29,7 @@ export const MoodTrackerHeatmap: React.FC<MoodTrackerHeatmapProps> = ({ year }) 
       });
       if (res.ok) {
         const data = await res.json();
-        const moodMap: Record<string, MoodEntry> = {};
+        const moodMap = {};
         for (const m of data.moods || []) {
           moodMap[m.date] = m;
         }
@@ -51,7 +46,7 @@ export const MoodTrackerHeatmap: React.FC<MoodTrackerHeatmapProps> = ({ year }) 
     fetchMoods();
   }, [year]);
 
-  const handleTileClick = (dateStr: string) => {
+  const handleTileClick = (dateStr) => {
     setSelectedDate(dateStr);
     const existing = moods[dateStr];
     if (existing) {
@@ -75,7 +70,7 @@ export const MoodTrackerHeatmap: React.FC<MoodTrackerHeatmapProps> = ({ year }) 
       note: note.trim() || undefined,
     };
 
-    const optimisticMood: MoodEntry = {
+    const optimisticMood = {
       id: moods[selectedDate]?.id || `temp-mood-${Date.now()}`,
       userId: user?.id || '',
       date: selectedDate,
