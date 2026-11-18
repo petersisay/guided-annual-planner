@@ -2,7 +2,7 @@ import React from 'react';
 import { describe, it, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { JournalLoginCard } from './JournalLoginCard.jsx';
-import * as AuthContextModule from '../../context/AuthContext.js';
+import * as AuthContextModule from '../../context/AuthContext';
 import { GoogleOAuthProvider } from '@react-oauth/google';
 
 // Mock GoogleLogin button from @react-oauth/google
