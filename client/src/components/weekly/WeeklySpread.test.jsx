@@ -1,13 +1,12 @@
 import React from 'react';
 import { describe, it, expect, vi } from 'vitest';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import { WeeklyTaskList } from './WeeklyTaskList';
 import { WeeklyNotes } from './WeeklyNotes';
-import { DayPlan } from '@planner/shared';
 
 describe('Weekly Spread Components', () => {
-  const mockDays: DayPlan[] = [
+  const mockDays = [
     {
       date: '2026-01-05',
       tasks: [

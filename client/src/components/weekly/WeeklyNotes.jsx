@@ -1,23 +1,9 @@
 import React from 'react';
-import { PriorityItem } from '@planner/shared';
 import { CircleCheckbox } from '../journal/CircleCheckbox';
 import { RuledInput } from '../journal/RuledInput';
 import { SpiralBinding } from '../journal/SpiralBinding';
 
-interface WeeklyNotesProps {
-  priorities: PriorityItem[];
-  reminder: string;
-  nextWeek: string[];
-  notes: string;
-  onUpdate: (updates: {
-    priorities?: PriorityItem[];
-    reminder?: string;
-    nextWeek?: string[];
-    notes?: string;
-  }) => void;
-}
-
-export const WeeklyNotes: React.FC<WeeklyNotesProps> = ({
+export const WeeklyNotes = ({
   priorities: propPriorities,
   reminder,
   nextWeek: propNextWeek,
@@ -25,7 +11,7 @@ export const WeeklyNotes: React.FC<WeeklyNotesProps> = ({
   onUpdate,
 }) => {
   // Ensure 5 priorities
-  const priorities: PriorityItem[] = Array.from({ length: 5 }).map((_, i) => {
+  const priorities = Array.from({ length: 5 }).map((_, i) => {
     return (
       propPriorities?.[i] || {
         id: crypto.randomUUID(),
@@ -35,24 +21,24 @@ export const WeeklyNotes: React.FC<WeeklyNotesProps> = ({
     );
   });
 
-  const handlePriorityText = (index: number, text: string) => {
+  const handlePriorityText = (index, text) => {
     const updated = [...priorities];
     updated[index] = { ...updated[index], text };
     onUpdate({ priorities: updated });
   };
 
-  const handlePriorityCheck = (index: number, done: boolean) => {
+  const handlePriorityCheck = (index, done) => {
     const updated = [...priorities];
     updated[index] = { ...updated[index], done };
     onUpdate({ priorities: updated });
   };
 
   // Ensure 3 next week lines
-  const nextWeek: string[] = Array.from({ length: 3 }).map((_, i) => {
+  const nextWeek = Array.from({ length: 3 }).map((_, i) => {
     return propNextWeek?.[i] || '';
   });
 
-  const handleNextWeekText = (index: number, text: string) => {
+  const handleNextWeekText = (index, text) => {
     const updated = [...nextWeek];
     updated[index] = text;
     onUpdate({ nextWeek: updated });

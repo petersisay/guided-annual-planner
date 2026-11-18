@@ -1,16 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { DayPlan, DayTask } from '@planner/shared';
 import { CircleCheckbox } from '../journal/CircleCheckbox';
 import { RuledInput } from '../journal/RuledInput';
 import { SpiralBinding } from '../journal/SpiralBinding';
-
-interface WeeklyTaskListProps {
-  days: DayPlan[];
-  onUpdateDays: (days: DayPlan[]) => void;
-  isoWeek: number;
-  year: number;
-}
 
 const DAY_LABELS = [
   'MONDAY',
@@ -22,27 +14,27 @@ const DAY_LABELS = [
   'SUNDAY',
 ];
 
-export const WeeklyTaskList: React.FC<WeeklyTaskListProps> = ({
+export const WeeklyTaskList = ({
   days,
   onUpdateDays,
   isoWeek,
   year,
 }) => {
-  const handleTaskText = (dayIndex: number, taskIndex: number, text: string) => {
+  const handleTaskText = (dayIndex, taskIndex, text) => {
     const updated = [...days];
     const day = updated[dayIndex];
     if (!day) return;
-    const tasks = [...day.tasks] as [DayTask, DayTask, DayTask];
+    const tasks = [...day.tasks];
     tasks[taskIndex] = { ...tasks[taskIndex], text };
     updated[dayIndex] = { ...day, tasks };
     onUpdateDays(updated);
   };
 
-  const handleTaskCheck = (dayIndex: number, taskIndex: number, done: boolean) => {
+  const handleTaskCheck = (dayIndex, taskIndex, done) => {
     const updated = [...days];
     const day = updated[dayIndex];
     if (!day) return;
-    const tasks = [...day.tasks] as [DayTask, DayTask, DayTask];
+    const tasks = [...day.tasks];
     tasks[taskIndex] = { ...tasks[taskIndex], done };
     updated[dayIndex] = { ...day, tasks };
     onUpdateDays(updated);
