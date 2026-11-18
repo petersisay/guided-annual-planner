@@ -7,7 +7,7 @@ import { syncManager } from '../../services/syncManager';
 import { editorDirtyTracker } from '../../services/editorDirtyTracker';
 
 describe('PwaUpdatePrompt Component — Unsaved-Edit & Concurrency Protection', () => {
-  let unregisterCallbacks: Array<() => void> = [];
+  let unregisterCallbacks = [];
 
   beforeEach(() => {
     vi.restoreAllMocks();
@@ -27,11 +27,11 @@ describe('PwaUpdatePrompt Component — Unsaved-Edit & Concurrency Protection', 
   it('renders update prompt with accessible labels when a waiting service worker is provided', () => {
     const mockWaitingWorker = {
       postMessage: vi.fn(),
-    } as unknown as ServiceWorker;
+    };
 
     const mockRegistration = {
       waiting: mockWaitingWorker,
-    } as unknown as ServiceWorkerRegistration;
+    };
 
     render(<PwaUpdatePrompt registration={mockRegistration} />);
 
@@ -45,7 +45,7 @@ describe('PwaUpdatePrompt Component — Unsaved-Edit & Concurrency Protection', 
     const onDismiss = vi.fn();
     const mockRegistration = {
       waiting: { postMessage: vi.fn() },
-    } as unknown as ServiceWorkerRegistration;
+    };
 
     render(<PwaUpdatePrompt registration={mockRegistration} onDismiss={onDismiss} />);
 
@@ -60,7 +60,7 @@ describe('PwaUpdatePrompt Component — Unsaved-Edit & Concurrency Protection', 
     const postMessage = vi.fn();
     const mockRegistration = {
       waiting: { postMessage },
-    } as unknown as ServiceWorkerRegistration;
+    };
 
     render(<PwaUpdatePrompt registration={mockRegistration} />);
 
@@ -72,7 +72,7 @@ describe('PwaUpdatePrompt Component — Unsaved-Edit & Concurrency Protection', 
     const postMessage = vi.fn();
     const mockRegistration = {
       waiting: { postMessage },
-    } as unknown as ServiceWorkerRegistration;
+    };
 
     // Simulate an active editor with an unresolved conflict modal
     const unregister = editorDirtyTracker.register({
@@ -102,7 +102,7 @@ describe('PwaUpdatePrompt Component — Unsaved-Edit & Concurrency Protection', 
     const postMessage = vi.fn();
     const mockRegistration = {
       waiting: { postMessage },
-    } as unknown as ServiceWorkerRegistration;
+    };
 
     const flushMock = vi.fn().mockResolvedValue(true);
 
@@ -130,7 +130,7 @@ describe('PwaUpdatePrompt Component — Unsaved-Edit & Concurrency Protection', 
     const postMessage = vi.fn();
     const mockRegistration = {
       waiting: { postMessage },
-    } as unknown as ServiceWorkerRegistration;
+    };
 
     const flushMock = vi.fn().mockResolvedValue(false);
 
@@ -160,7 +160,7 @@ describe('PwaUpdatePrompt Component — Unsaved-Edit & Concurrency Protection', 
     const postMessage = vi.fn();
     const mockRegistration = {
       waiting: { postMessage },
-    } as unknown as ServiceWorkerRegistration;
+    };
 
     // Simulate offline save where flush successfully queued to IndexedDB
     const flushMock = vi.fn().mockResolvedValue(true);
@@ -188,7 +188,7 @@ describe('PwaUpdatePrompt Component — Unsaved-Edit & Concurrency Protection', 
     const postMessage = vi.fn();
     const mockRegistration = {
       waiting: { postMessage },
-    } as unknown as ServiceWorkerRegistration;
+    };
 
     render(<PwaUpdatePrompt registration={mockRegistration} />);
 
