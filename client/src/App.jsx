@@ -33,7 +33,7 @@ const DailyViewPage = lazy(() =>
   import('./pages/DailyViewPage').then((m) => ({ default: m.DailyViewPage }))
 );
 
-const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+const ProtectedRoute = ({ children }) => {
   const { user, loading } = useAuth();
 
   if (loading) {
@@ -54,13 +54,11 @@ const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) =
     return <Navigate to="/login" replace />;
   }
 
-  return <>{children}</>;
+  return children;
 };
 
-export const AppContent: React.FC = () => {
-  const [waitingRegistration, setWaitingRegistration] = useState<ServiceWorkerRegistration | null>(
-    null
-  );
+export const AppContent = () => {
+  const [waitingRegistration, setWaitingRegistration] = useState(null);
 
   useEffect(() => {
     register({
@@ -140,7 +138,7 @@ export const AppContent: React.FC = () => {
   );
 };
 
-export const App: React.FC = () => {
+export const App = () => {
   const googleClientId = import.meta.env.VITE_GOOGLE_CLIENT_ID?.trim();
 
   // If no Google Client ID is configured, show the clean configuration notice without crashing
