@@ -1,43 +1,35 @@
 import React from 'react';
 import { Plus, Trash2, CheckCircle2 } from 'lucide-react';
-import { DayTask } from '@planner/shared';
 import { CircleCheckbox } from '../journal/CircleCheckbox';
 import { RuledInput } from '../journal/RuledInput';
 
-interface DailyPrioritiesAndTasksProps {
-  primaryPriorities: DayTask[];
-  additionalTasks: DayTask[];
-  onUpdatePriorities: (priorities: DayTask[]) => void;
-  onUpdateAdditionalTasks: (tasks: DayTask[]) => void;
-}
-
-export const DailyPrioritiesAndTasks: React.FC<DailyPrioritiesAndTasksProps> = ({
-  primaryPriorities,
-  additionalTasks,
+export const DailyPrioritiesAndTasks = ({
+  primaryPriorities = [],
+  additionalTasks = [],
   onUpdatePriorities,
   onUpdateAdditionalTasks,
 }) => {
   // Ensure we always have exactly 3 priority slots
-  const priorities: DayTask[] = [
+  const priorities = [
     primaryPriorities[0] || { id: 'p1', text: '', done: false },
     primaryPriorities[1] || { id: 'p2', text: '', done: false },
     primaryPriorities[2] || { id: 'p3', text: '', done: false },
   ];
 
-  const handlePriorityTextChange = (index: number, text: string) => {
+  const handlePriorityTextChange = (index, text) => {
     const updated = [...priorities];
     updated[index] = { ...updated[index], text };
     onUpdatePriorities(updated);
   };
 
-  const handlePriorityToggle = (index: number, done: boolean) => {
+  const handlePriorityToggle = (index, done) => {
     const updated = [...priorities];
     updated[index] = { ...updated[index], done };
     onUpdatePriorities(updated);
   };
 
   const handleAddTask = () => {
-    const newTask: DayTask = {
+    const newTask = {
       id: crypto.randomUUID(),
       text: '',
       done: false,
@@ -45,19 +37,19 @@ export const DailyPrioritiesAndTasks: React.FC<DailyPrioritiesAndTasksProps> = (
     onUpdateAdditionalTasks([...additionalTasks, newTask]);
   };
 
-  const handleTaskTextChange = (index: number, text: string) => {
+  const handleTaskTextChange = (index, text) => {
     const updated = [...additionalTasks];
     updated[index] = { ...updated[index], text };
     onUpdateAdditionalTasks(updated);
   };
 
-  const handleTaskToggle = (index: number, done: boolean) => {
+  const handleTaskToggle = (index, done) => {
     const updated = [...additionalTasks];
     updated[index] = { ...updated[index], done };
     onUpdateAdditionalTasks(updated);
   };
 
-  const handleRemoveTask = (index: number) => {
+  const handleRemoveTask = (index) => {
     const updated = additionalTasks.filter((_, i) => i !== index);
     onUpdateAdditionalTasks(updated);
   };

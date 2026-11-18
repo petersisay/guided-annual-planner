@@ -1,37 +1,31 @@
 import React from 'react';
 import { Plus, Trash2, Clock } from 'lucide-react';
-import { ScheduleBlock } from '@planner/shared';
 import { CircleCheckbox } from '../journal/CircleCheckbox';
 
-interface DailyScheduleBlocksProps {
-  schedule: ScheduleBlock[];
-  onUpdateSchedule: (schedule: ScheduleBlock[]) => void;
-}
-
-export const DailyScheduleBlocks: React.FC<DailyScheduleBlocksProps> = ({
-  schedule,
+export const DailyScheduleBlocks = ({
+  schedule = [],
   onUpdateSchedule,
 }) => {
-  const handleSlotChange = (index: number, timeSlot: string) => {
+  const handleSlotChange = (index, timeSlot) => {
     const updated = [...schedule];
     updated[index] = { ...updated[index], timeSlot };
     onUpdateSchedule(updated);
   };
 
-  const handleActivityChange = (index: number, activity: string) => {
+  const handleActivityChange = (index, activity) => {
     const updated = [...schedule];
     updated[index] = { ...updated[index], activity };
     onUpdateSchedule(updated);
   };
 
-  const handleToggleDone = (index: number, done: boolean) => {
+  const handleToggleDone = (index, done) => {
     const updated = [...schedule];
     updated[index] = { ...updated[index], done };
     onUpdateSchedule(updated);
   };
 
   const handleAddSlot = () => {
-    const newBlock: ScheduleBlock = {
+    const newBlock = {
       id: crypto.randomUUID(),
       timeSlot: '08:00 AM',
       activity: '',
@@ -40,7 +34,7 @@ export const DailyScheduleBlocks: React.FC<DailyScheduleBlocksProps> = ({
     onUpdateSchedule([...schedule, newBlock]);
   };
 
-  const handleRemoveSlot = (index: number) => {
+  const handleRemoveSlot = (index) => {
     const updated = schedule.filter((_, i) => i !== index);
     onUpdateSchedule(updated);
   };

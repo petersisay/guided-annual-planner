@@ -1,16 +1,8 @@
 import React from 'react';
 import { Heart, Trophy, BookOpen, Feather } from 'lucide-react';
-import { DailyJournal } from '@planner/shared';
 import { RuledInput, RuledLinesArea } from '../journal/RuledInput';
 
-interface DailyJournalSectionProps {
-  journal: DailyJournal;
-  reflection: string;
-  onUpdateJournal: (journal: DailyJournal) => void;
-  onUpdateReflection: (reflection: string) => void;
-}
-
-export const DailyJournalSection: React.FC<DailyJournalSectionProps> = ({
+export const DailyJournalSection = ({
   journal,
   reflection,
   onUpdateJournal,
@@ -22,7 +14,7 @@ export const DailyJournalSection: React.FC<DailyJournalSectionProps> = ({
     journal?.gratitude?.[2] || '',
   ];
 
-  const handleGratitudeChange = (index: number, val: string) => {
+  const handleGratitudeChange = (index, val) => {
     const updated = [...gratitudeEntries];
     updated[index] = val;
     onUpdateJournal({

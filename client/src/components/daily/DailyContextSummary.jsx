@@ -1,15 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Smile, CheckSquare, Target, Compass, ExternalLink } from 'lucide-react';
-import { DailyContext } from '@planner/shared';
 
-interface DailyContextSummaryProps {
-  context: DailyContext;
-  year: number;
-  month: number;
-}
-
-export const DailyContextSummary: React.FC<DailyContextSummaryProps> = ({
+export const DailyContextSummary = ({
   context,
   year,
   month,
