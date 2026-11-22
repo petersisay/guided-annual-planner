@@ -509,4 +509,4 @@ Guided Annual Planner employs an offline-first architecture via IndexedDB and Se
 
 - **Author**: Peter Sisay ([@petersisay](https://github.com/petersisay))
 - **Live Application**: [https://guided-annual-planner.vercel.app/](https://guided-annual-planner.vercel.app/)
-- **License**: Licensed under the [ISC License](LICENSE). Copyright &copy; 2026 Peter Sisay.
+- **License**: Copyright &copy; 2026 Peter Sisay.
