@@ -19,6 +19,7 @@ shared/dist/
 .env.test.local
 .env.production.local
 !.env.example
+.env.example
 
 # Local Database Files & Runtime Data
 .data/
