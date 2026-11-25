@@ -378,7 +378,7 @@ Safe placeholders are documented below. **Never commit production credentials or
 | `NODE_ENV` | Yes | `development` | Set to `production` in live deployments. Enforces `COOKIE_SECURE=true` and disables dev login routes. |
 | `PORT` | No | `5000` | Local port for Express API server. |
 | `CLIENT_ORIGIN` | Yes | `http://localhost:5173` | Allowed frontend HTTPS origin for CORS and CSRF verification. |
-| `MONGODB_URI` | Yes | `mongodb://127.0.0.1:27017/guided_planner` | MongoDB Atlas or local connection string with TLS/SSL enabled in production. |
+| `MONGODB_URI` | Yes | `mongodb://` | MongoDB Atlas or local connection string with TLS/SSL enabled in production. |
 | `SESSION_SECRET` | Yes | *(minimum 32 characters)* | Cryptographic key for HMAC-SHA256 session tokens. Server rejects boot if default key is used in production. |
 | `COOKIE_NAME` | No | `planner_session` | Name of the session cookie. |
 | `COOKIE_SECURE` | Yes | `false` | Must be `true` in production to enforce HTTPS-only cookie transmission. |
